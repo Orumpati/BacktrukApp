@@ -1,25 +1,38 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan');
+//const morgan = require('morgan');
 const bodyParser = require('body-parser');
 //const expressValidator = require('express-validator')
 const mongoose = require('mongoose');
-
+const cors = require('cors')
 //import all routes here 
 const userSignupRoutes = require('./routes/userSignupRoute');
-
+const generateQuote = require('./routes/generateQuote')
 
 
 //connect to the mongo
-mongoose.set("strictQuery", false);
+/*mongoose.set("strictQuery", false);
 
 mongoose.connect("mongodb+srv://truckapp:365dDqb@cluster0.j93vm65.mongodb.net/?retryWrites=true&w=majority");
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;*/
+
+//connect to mongodb
+const uri = 'mongodb+srv://Orumpati_1234:9705821087Sai@cluster0.uqgd1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+mongoose.set("strictQuery", false);
+ mongoose.connect(uri)
+.then(response =>{
+   console.log('mongodb is connected')
+})
+.catch(error=>{
+   console.log(error)
+   console.log("error db is not connected")
+});
 
 //provides additional logs in the console
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(cors())
 //app.use(expressValidator());
 //enabling cross origin issue
 app.use((req, res, next)=>{
@@ -44,7 +57,7 @@ const { body, validationResult } = require('express-validator');
 
 //truck app used routes 
 app.use('/TruckAppUsers', userSignupRoutes); 
-
+app.use('/quotes',generateQuote)
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",

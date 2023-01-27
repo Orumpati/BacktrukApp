@@ -16,10 +16,13 @@ const UserProfileSchema = mongoose.Schema({
    _id: mongoose.Schema.Types.ObjectId,
    //username: { type: String, required: true },//email
 //    password: { type: String, required: true },
-   mobileNo: { type: Number, unique:true, required: true },
+   mobileNo: { type: String, unique:true, required: true },
    //address:  subObj,
    firstName:  {type:String, required: true},
    lastName:  {type:String, required: true},
+   role:  {type:String, required: true},
+   city:  {type:String, required: true},
+   companyName:  {type:String, required: true},
 //    email:{type:String, required: true}
    
 });

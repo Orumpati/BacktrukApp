@@ -11,7 +11,6 @@ const { body } = require('express-validator'); //use express validator for few r
 const UserSignup = require('../models/userSignup');
 
 
-
 //post method goes here
 router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, next)=>{
     console.log("User profile is called")
@@ -20,17 +19,21 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         _id: new mongoose.Types.ObjectId,
        // username: req.body.username,
         //password: req.body.password,
-        mobileNo: req.body.mobileno,
+        mobileNo: req.body.mobileNo,
         // address:  req.body.address,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         // email: req.body.email
+        role:req.body.role,
+        city:req.body.city,
+        companyName :req.body.companyName,
+        
 
            });
 
-     var username = req.body.username;
+     var mobileNo = req.body.mobileNo;
   //first check if user is alredy existed 
-  UserSignup.findOne({username:username}).select().exec().then(doc =>{
+  UserSignup.findOne({mobileNo:mobileNo}).select().exec().then(doc =>{
 
     if(doc == null){ //if no user found then create new user
         userSignup.save().then( result=> {
@@ -43,7 +46,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
      }) .catch(err => {
         console.log(err);
         res.status(500).json({
-             error: err
+             error: err,
+             status:"details"
               });
          })
 
@@ -62,6 +66,19 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
  
 
 
+//get all the register data
+router.get('/getRegisterData',async(req, res, next)=> {
+    UserSignup.find((err,docs) =>{
+        if(!err){
+            res.status(200).json({
+                message:"your register data",
+                data:docs
+            });
+        }
+        
+    })
+
+})
 
 
 
