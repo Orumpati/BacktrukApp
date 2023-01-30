@@ -70,7 +70,32 @@ const loadSchema = new mongoose.Schema({
     date:{
         type:String,
         //required:true
-    }
+    },
+    typeOfPay:{
+        type:String,
+        //required:true
+    },
+    length:{
+        type:String,
+        //required:true
+    },
+    breadth:{
+        type:String,
+        //required:true
+    },
+    height:{
+        type:String,
+        //required:true
+    },
+    comments:{
+        type:String,
+        //required:true
+    },
+    data:{
+        type:String,
+        //required:true
+    },
+    
 
 
 })

@@ -22,7 +22,7 @@ const UserProfileSchema = mongoose.Schema({
    lastName:  {type:String, required: true},
    role:  {type:String, required: true},
    city:  {type:String, required: true},
-   companyName:  {type:String, required: true},
+   companyName:  {type:String},
 //    email:{type:String, required: true}
    
 });

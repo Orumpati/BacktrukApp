@@ -129,6 +129,12 @@ router.post('/post', async (req, res) => {
         loadCapacity:req.body.loadCapacity,
         expectedPrice:req.body.expectedPrice,
         date:req.body.date,
+        typeOfPay:req.body.typeOfPay,
+        length:req.body.length,
+        breadth:req.body.breadth,
+        height:req.body.height,
+        comments:req.body.comments,
+        data:req.body.data
          
     })
     

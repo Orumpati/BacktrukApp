@@ -40,14 +40,15 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
             res.status(200).json({
                message: "User signed up susccessfully",
                status:"success",
-               Id: result._id
+               Id: result._id,
+               selectType:result.role
             });
   
      }) .catch(err => {
         console.log(err);
         res.status(500).json({
              error: err,
-             status:"details"
+             status:"failed"
               });
          })
 
