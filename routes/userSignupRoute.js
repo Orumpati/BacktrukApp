@@ -48,7 +48,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         console.log(err);
         res.status(500).json({
              error: err,
-             status:"failed"
+             status:"faileds"
               });
          })
 

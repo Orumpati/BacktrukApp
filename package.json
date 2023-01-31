@@ -2,9 +2,9 @@
   "name": "trukappservices",
   "version": "1.0.0",
   "description": "truckapp backend services",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "./trukAppApi/server.js",
+    "start": "server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "rahulazmeera",
