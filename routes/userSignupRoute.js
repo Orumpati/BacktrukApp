@@ -27,7 +27,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         role:req.body.role,
         city:req.body.city,
         companyName :req.body.companyName,
-        
+        aadharVerify:'notVerified'
 
            });
 
@@ -145,8 +145,108 @@ router.get('/:username', (req, res, next) =>{
  });
  
 
+//put profile details based on login id
+router.put('/putprofile/:id',(req, res)=>{
+    /* if(!ObjectId.isValid(req.params.id))
+     return res.status(400).send(`no record with id :${req.params.id}`);*/
+   var data=  {addressType :req.body.addressType,
+     
+    doorNo:req.body.doorNo,
+    
+    
+        areaName :req.body.areaName,
+        landMark:req.body.landMark,
+       city:req.body.city,
+       pincode:req.body.pincode,
+       routes:req.body.routes
+     };
+
+ 
+     UserSignup.findByIdAndUpdate(req.params.id,
+         {$set:
+             data
+         }  , {new: true},(err,docs)=>{
+             if(!err){
+                 res.send(docs);
+             }else{
+                 console.log('error in  update:' +JSON.stringify(err,undefined,2));
+             }
+         })
+     })
 
 
+
+     router.get('/getprofiledetails/:_id',async(req, res, next)=> {
+  
+        let query = {_id: req.params._id};
+    
+        UserSignup.find(query).exec().then(async docs =>{
+        
+    
+        
+        try {
+          
+                res.status(200).json({
+                    message:"your profile data",
+                    data :docs, 
+            
+                });
+           
+        
+        }catch(err){
+            console.log(err)
+        }
+        }).catch(err=>{
+            console.log(err)
+        })
+    
+    })
+    
+
+    //update profile
+    router.put('/updateprofile/:_id',(req, res)=>{
+       // var mobileNo = req.body.mobileNo ;
+        /* if(!ObjectId.isValid(req.params.id))
+         return res.status(400).send(`no record with id :${req.params.id}`);*/
+      var data=  req.body;
+    
+      // UserSignup.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
+
+       // var em = req.body.mobileNo;
+       // if(em == doc.mobileNo){
+            UserSignup.findByIdAndUpdate(req.params._id,
+                {$set:
+                    data
+                }  , {new: true},(err,docs)=>{
+                    if(!err){
+                        res.send(docs);
+                    }else if(err.codeName == 'Duplicatekey'){
+                               console.log('num alraedy exist')
+                    }
+                    else{
+                        console.log('error in status  update:' +JSON.stringify(err,undefined,2));
+                    }
+                })
+   
+               
+           
+       // }
+   
+           /* else{
+            res.status(400).json({Authentication:"Mobile NO already exist",
+                   message:"failed",
+                   status:"failed",
+               
+                   
+           });
+         
+        }*/
+
+    
+    })
+
+
+        // })
 
 
       

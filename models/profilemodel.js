@@ -11,21 +11,11 @@ const mongoose= require("mongoose");
 // } 
 
 //define the schema here
-const UserProfileSchema = mongoose.Schema({
+const ProfileSchema = mongoose.Schema({
     //define the object ID
    _id: mongoose.Schema.Types.ObjectId,
    //username: { type: String, required: true },//email
 //    password: { type: String, required: true },
-   mobileNo: { type: Number, unique:true,  },
-   //address:  subObj,
-   firstName:  {type:String, },
-   lastName:  {type:String, },
-   role:  {type:String, },
-   city:  {type:String, },
-   companyName:  {type:String},
-
-
-
    addressType: { type: String  },
    //address:  subObj,
    doorNo:  {type:String },
@@ -33,15 +23,10 @@ const UserProfileSchema = mongoose.Schema({
    landMark:  {type:String },
    city:  {type:String },
    pincode:  {type:String},
-
-   routes:{type:Array},
-   aadharVerify:{
-    type:String
-   }
 //    email:{type:String, required: true}
    
 });
 
 
 //export this mongoose module
-module.exports = mongoose.model('UserSignUp', UserProfileSchema);
+module.exports = mongoose.model('ProfileDetails', ProfileSchema);

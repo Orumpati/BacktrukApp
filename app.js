@@ -8,8 +8,8 @@ const cors = require('cors')
 //import all routes here 
 const userSignupRoutes = require('./routes/userSignupRoute');
 const generateQuote = require('./routes/generateQuote')
-
-
+const login= require('./routes/loginroute')
+const profile =require('./routes/profile')
 //connect to the mongo
 /*mongoose.set("strictQuery", false);
 
@@ -28,11 +28,29 @@ mongoose.set("strictQuery", false);
    console.log("error db is not connected")
 });
 
+
+const images = [
+    {
+      id: 1,
+      url: 'https://picsum.photos/id/10/900/500'
+    },
+    {
+      id: 2,
+      url: 'https://picsum.photos/id/20/900/500'
+    },
+    {
+      id: 3,
+      url: 'https://picsum.photos/id/30/900/500'
+    }
+  ];
+  
+
 //provides additional logs in the console
 //app.use(morgan('dev'));
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(cors())
+
 //app.use(expressValidator());
 //enabling cross origin issue
 app.use((req, res, next)=>{
@@ -58,13 +76,18 @@ const { body, validationResult } = require('express-validator');
 
 //truck app used routes 
 app.use('/TruckAppUsers', userSignupRoutes); 
-app.use('/quotes',generateQuote)
+app.use('/quotes',generateQuote);
+app.use('/login',login);
+app.use('/profile',profile)
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",
         message:"i am working"
     })
 })
+app.get('/images', (req, res) => {
+    res.send(images);
+  });
 //to handle error 
 app.use((req, res, next) => {
 
