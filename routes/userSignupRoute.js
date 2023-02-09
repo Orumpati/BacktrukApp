@@ -17,7 +17,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
 
     const userSignup = new UserSignup({
         _id: new mongoose.Types.ObjectId,
-       // username: req.body.username,
+        userNumber: req.body.userNumber,
         //password: req.body.password,
         mobileNo: req.body.mobileNo,
         // address:  req.body.address,
@@ -27,7 +27,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         role:req.body.role,
         city:req.body.city,
         companyName :req.body.companyName,
-        aadharVerify:'notVerified'
+        aadharVerify:'notVerified',
+        
 
            });
 
@@ -158,7 +159,7 @@ router.put('/putprofile/:id',(req, res)=>{
         landMark:req.body.landMark,
        city:req.body.city,
        pincode:req.body.pincode,
-       routes:req.body.routes
+       
      };
 
  
@@ -174,6 +175,28 @@ router.put('/putprofile/:id',(req, res)=>{
          })
      })
 
+     //put profile details based on login id
+router.put('/putroutes/:id',(req, res)=>{
+    /* if(!ObjectId.isValid(req.params.id))
+     return res.status(400).send(`no record with id :${req.params.id}`);*/
+   var data=  {
+    
+    routes:req.body.routes
+       
+     };
+
+ 
+     UserSignup.findByIdAndUpdate(req.params.id,
+         {$set:
+             data
+         }  , {new: true},(err,docs)=>{
+             if(!err){
+                 res.send(docs);
+             }else{
+                 console.log('error in  update:' +JSON.stringify(err,undefined,2));
+             }
+         })
+     })
 
 
      router.get('/getprofiledetails/:_id',async(req, res, next)=> {

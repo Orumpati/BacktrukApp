@@ -10,6 +10,7 @@ const userSignupRoutes = require('./routes/userSignupRoute');
 const generateQuote = require('./routes/generateQuote')
 const login= require('./routes/loginroute')
 const profile =require('./routes/profile')
+const vehicle =require('./routes/vehicleroute')
 //connect to the mongo
 /*mongoose.set("strictQuery", false);
 
@@ -79,6 +80,7 @@ app.use('/TruckAppUsers', userSignupRoutes);
 app.use('/quotes',generateQuote);
 app.use('/login',login);
 app.use('/profile',profile)
+app.use('/addTruk',vehicle)
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",

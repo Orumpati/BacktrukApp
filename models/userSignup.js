@@ -2,41 +2,43 @@
 const mongoose= require("mongoose");
 
 // const subObj={
-//     streetName:{type: String, required:true},
-//     houseNo:{type: String, required: true},
+//     addressType:{type: String, required:true},
+//     doorNo:{type: String, required: true},
+//     areaName:{type: String, required:true},
+//     landMark:{type: String, required:true},
 //     city:{type: String, required:true},
-//     state:{type: String, required:true},
-//     zipCode:{type: String, required:true},
-//     landMark:{type: String}
+//     pincode:{type: String}
 // } 
 
 //define the schema here
 const UserProfileSchema = mongoose.Schema({
     //define the object ID
    _id: mongoose.Schema.Types.ObjectId,
-   //username: { type: String, required: true },//email
+   userNumber: { type: String, required: true },//email
 //    password: { type: String, required: true },
    mobileNo: { type: Number, unique:true,  },
-   //address:  subObj,
    firstName:  {type:String, },
    lastName:  {type:String, },
    role:  {type:String, },
    city:  {type:String, },
    companyName:  {type:String},
-
+  // address:  subObj,
 
 
    addressType: { type: String  },
-   //address:  subObj,
    doorNo:  {type:String },
    areaName:  {type:String },
    landMark:  {type:String },
-   city:  {type:String },
+   
    pincode:  {type:String},
 
    routes:{type:Array},
    aadharVerify:{
     type:String
+   },
+   gstVerify:{
+      type:String,
+      default:'notVerified'
    }
 //    email:{type:String, required: true}
    

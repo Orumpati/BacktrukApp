@@ -34,6 +34,8 @@ router.post('/loginDetails',async(req,res,next)=>{
                          role:doc.role,
                          city:doc.city,
                          companyName:doc.companyName,
+                         aadharVerify:doc.aadharVerify,
+                         gstVerify:doc.gstVerify
                      
                         
                     })
