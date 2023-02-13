@@ -19,7 +19,7 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
     const vehicle = new AddVehicle({
         vehiclenumber: req.body.vehiclenumber,
         currentLocation: req.body.currentLocation,
-        selectedItems: req.body.selectedItems,
+        operatingRoutes: req.body.operatingRoutes,
         capacity: req.body.capacity,
         data: req.body.data,
         date:req.body.date,
@@ -74,7 +74,7 @@ if(!vehicle){
     }
 });
 
-/* router.get('/allVehicles/:mobileNo', (req, res, next)=>{
+router.get('/allVehicles/:mobileNo', (req, res, next)=>{
 
     AddVehicle.find({mobileNo:req.params.mobileNo}).exec().then(
          docs =>{
@@ -88,11 +88,11 @@ if(!vehicle){
         })
     });
 
-}) */
+}) 
 
 router.put('/updateLoads/:id', async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['vehiclenumber', 'currentLocation','selectedItems','capacity','data','date','mobileNo'] // updates that are allowed
+    const allowedUpdates = ['vehiclenumber', 'currentLocation','operatingRoutes','capacity','data','date','mobileNo'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)

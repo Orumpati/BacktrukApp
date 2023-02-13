@@ -10,7 +10,19 @@ const bidsData=mongoose.Schema({
     tentativefinalPrice:{type: Number}
 })
 
-
+const VehicleData=mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    vehicleNo:{type: String},
+    vehicleType:{type: String},
+    vehicleCurrentLocation:{type: String},
+    vehicleCapacity:{type: String}, 
+    agentNo:{type: String},
+    BidID:{type: String}, 
+    DriverName:{type: String},
+    DriverNumber:{type: String},
+    operatingRoutes:{type:Array},
+    date:{type:String}
+})
 
 //define the schema here
 const generateQuoteSchema = mongoose.Schema({
@@ -88,7 +100,8 @@ isActive:{
    
    
    quoteSentTo:{type: Array, required: true},
-   bids:[bidsData]
+   bids:[bidsData],
+   vehicleInformation:VehicleData
 });
 
 

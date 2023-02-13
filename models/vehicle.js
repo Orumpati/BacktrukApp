@@ -10,7 +10,7 @@ const Vehicle = mongoose.Schema({
         type: String,
         //required: true
     },
-    selectedItems: {
+    operatingRoutes: {
         type: Array,
         //required: true
     },

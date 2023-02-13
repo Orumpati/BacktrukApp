@@ -1,21 +1,21 @@
 const express = require('express');
 const app = express();
-//const morgan = require('morgan');
 const bodyParser = require('body-parser');
-//const expressValidator = require('express-validator')
 const mongoose = require('mongoose');
 const cors = require('cors')
+var FCM = require('fcm-node')
+var firebaseToken = "AAAAtmxKQK4:APA91bHVjwrWQPJq3ZiaRm9-SDWa83XDoz1GH5JBx9Nivcbjpt908fJOpd9FPGY6LQWewTqk7IsNKRTketnzSSlh9xel5MazKqkU1MOGcX_zrfbW5mEJphpNdWQQ9RpoIcmcqWi-w45W"
+//import * as OneSignal from '@onesignal/node-onesignal';
+const OneSignal=require('@onesignal/node-onesignal')
 //import all routes here 
 const userSignupRoutes = require('./routes/userSignupRoute');
 const generateQuote = require('./routes/generateQuote')
 const login= require('./routes/loginroute')
 const profile =require('./routes/profile')
 const vehicle =require('./routes/vehicleroute')
-//connect to the mongo
-/*mongoose.set("strictQuery", false);
+const home = require('./routes/homeroute')
+const notification =require('./routes/notificationroute')
 
-mongoose.connect("mongodb+srv://truckapp:365dDqb@cluster0.j93vm65.mongodb.net/?retryWrites=true&w=majority");
-mongoose.Promise = global.Promise;*/
 
 //connect to mongodb
 const uri = 'mongodb+srv://Orumpati_1234:9705821087Sai@cluster0.uqgd1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
@@ -30,29 +30,14 @@ mongoose.set("strictQuery", false);
 });
 
 
-const images = [
-    {
-      id: 1,
-      url: 'https://picsum.photos/id/10/900/500'
-    },
-    {
-      id: 2,
-      url: 'https://picsum.photos/id/20/900/500'
-    },
-    {
-      id: 3,
-      url: 'https://picsum.photos/id/30/900/500'
-    }
-  ];
+
   
 
-//provides additional logs in the console
-//app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-//app.use(expressValidator());
+
 //enabling cross origin issue
 app.use((req, res, next)=>{
     res.header('Access-Control-Allow-Origin', '*');
@@ -70,9 +55,7 @@ if(req.method === 'OPTIONS'){
 });
 
 
-// Routes which should handle routes
-// ...rest of the initial code omitted for simplicity.
-const { body, validationResult } = require('express-validator');
+
 
 
 //truck app used routes 
@@ -80,16 +63,89 @@ app.use('/TruckAppUsers', userSignupRoutes);
 app.use('/quotes',generateQuote);
 app.use('/login',login);
 app.use('/profile',profile)
-app.use('/addTruk',vehicle)
+app.use('/addTruk',vehicle);
+app.use('/truckinfo',home)
+app.use('/notificationss',notification)
+
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",
         message:"i am working"
     })
 })
-app.get('/images', (req, res) => {
-    res.send(images);
-  });
+
+
+//send notification using firebase
+  app.post('/send', (req, res, next)=>{
+
+    try{
+let fcm = new FCM(firebaseToken)
+
+const message ={
+    to:"/topics/" + req.body.topic,
+    notification:{
+        title:req.body.title,
+        body:req.body.body,
+        sound:'default',
+        click_action:"FCM_PLUGIN_ACTIVITY",
+        "icon":"fcm_push_icon"
+    },
+    data:req.body.data
+}
+fcm.send(message,(err,response)=>{
+    if(err){
+        next(err)
+    }else{
+        res.json(response)
+    }
+})
+    }catch(err){
+        next(err);
+    }
+
+})
+
+//send notifiation using One signal
+app.post('/onesignal', async (req, res, next)=>{
+
+   /* OneSignal.idsAvailable(new OneSignal.idsAvailableHandler(),{
+     idsAvailable(userId,registrationId){
+        console.log(userId)
+        if(registration !=null)
+            console.log(registrationId)
+        
+     }
+    })*/
+   
+    const ONESIGNAL_APP_ID = '913bcc8c-f580-44fb-94e5-1e5f97a80546';
+    
+    const app_key_provider = {
+        getToken() {
+            return 'ZTk0Y2I0NmEtMTVmZC00MDJjLTljYjYtOTNjYWYyZTBjODlh';
+        }
+    };
+    
+    const configuration = OneSignal.createConfiguration({
+        authMethods: {
+            app_key: {
+                tokenProvider: app_key_provider
+            }
+        }
+    });
+    const client = new OneSignal.DefaultApi(configuration);
+    
+    const notification = new OneSignal.Notification();
+    notification.app_id = ONESIGNAL_APP_ID;
+    notification.included_segments = ['Subscribed Users'];
+    notification.contents = {
+        en: "Hello OneSignal!"
+    };
+    const {id} = await client.createNotification(notification);
+    
+    const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+    console.log(response)
+    res.json(response)
+})
 //to handle error 
 app.use((req, res, next) => {
 
@@ -110,9 +166,6 @@ app.use((error, req, res, next) =>{
          }
 
      });
-
-
-
 })
 
 

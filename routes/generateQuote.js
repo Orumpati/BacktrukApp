@@ -445,7 +445,66 @@ router.post('/showAgentBids', (req, res, next)=>{
 
 
 
+//add vehicle to load, its a post call
+/***
+ * find the laod by its ID and then attach the vehicle to it
+ * 
+ * 
+ */
+router.post('/attachVehicleToLoad', (req, res, next)=>{
 
+    //data needed for attaching load
+    const vehicleData={
+      vehicleNo:req.body.vehicleNo,
+      vehicleType:req.body.vehicleType,
+      vehicleCurrentLocation:req.body.vehicleCurrentLocation,
+      vehicleCapacity:req.body.vehicleCapacity, 
+      agentNo:req.body.agentNo,
+      BidID:req.body.BidID,
+      DriverName:req.body.DriverName,
+      DriverNumber:req.body.DriverNumber,
+      operatingRoutes:req.body.operatingRoutes,
+      date:req.body.date,
+      
+    }
+
+   
+    //query find by the ID
+   var query={"_id":req.body._id};
+    //form the query here
+    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true }}  //$set for setting the variable value
+    console.log(query)
+    //find the docID or quote ID
+   //  quoteGenerate.findOneAndUpdate(query, updateData).select().exec().then(
+       quoteGenerate.findOneAndUpdate(query,updateData).select().exec().then(
+        doc=>{
+            console.log(doc)
+            //check if it has matching docs then send response
+            if(doc){
+            res.status(200).json({
+                data: doc,
+                message:"attaching load to the vehicle",
+                status:"success"
+            })
+        }else{
+            res.status(200).json({
+                message:"no vehicles attached",
+                status:"failed"
+            })
+
+        }
+        }
+    ).catch(err=>{
+        res.status(200).json({
+            message:"failed to attach vehicle",
+            status: "failed",
+            error:err
+        })
+    })
+
+
+})
+ 
 
 
 
