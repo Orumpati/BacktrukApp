@@ -1,17 +1,4 @@
-//in this we will take the user from location and to location and create a algorithm to create a quote
 
-// db.inventory.find( { areas: { $all: ["warangal", "delhi"] } } )
-
-
-// db.inventory.insertMany([
-//     { agent: "venkateshwara", qty: 4, areas: ["warangal", "bhupapally", "mahabubabad"], dim_cm: [ 14, 21 ] },
-//     { agent: "mukta", qty: 5, areas: ["warangal", "bhupalpally","miryalaguda", "gandhinagar"], dim_cm: [ 14, 21 ] },
-//     { agent: "crosser", qty: 10, areas: ["warangal", "bhupalpally","miryalaguda", "gandhinagar", "uppal", "vijayawada", "chennai"], dim_cm: [ 14, 21 ] },
-//     { agent: "kalamani", qty: 8, areas: ["warangal", "bhupalpally","miryalaguda", "gandhinagar", "delhi"], dim_cm: [ 22.85, 30 ] },
-//     { agent: "balaji", qty: 20, areas: ["warangal", "bhupalpally","miryalaguda", "gandhinagar", "delhi"], dim_cm: [ 10, 15.25 ] }
-//  ]);
-
-//first import the express
 const express = require("express");
 //define the router
  const router = express.Router();
