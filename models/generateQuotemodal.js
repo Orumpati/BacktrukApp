@@ -5,9 +5,19 @@ const mongoose= require("mongoose");
 const bidsData=mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     mobileNo:{type: Number},
+    BidActivity: { type: Array },
     Bidprice: {type: Array},
     Negotiate:{type: Array},
-    tentativefinalPrice:{type: Number}
+    tentativefinalPrice:{type: Number},
+
+    isAgentAccepted:{
+        type:Boolean,
+        default:false
+    } ,
+    isShipperAccepted:{
+type:Boolean,
+default:false
+    } 
 })
 
 const VehicleData=mongoose.Schema({
@@ -96,6 +106,10 @@ data:{
 isActive:{
     type:String,
     default:'Active'
+},
+userAcceptedPrice: {
+    type: String,
+    default:"0"
 },
    
    

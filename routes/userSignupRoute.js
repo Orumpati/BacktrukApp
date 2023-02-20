@@ -17,7 +17,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
 
     const userSignup = new UserSignup({
         _id: new mongoose.Types.ObjectId,
-        userNumber: req.body.userNumber,
+        userName: req.body.userName,
         //password: req.body.password,
         mobileNo: req.body.mobileNo,
         // address:  req.body.address,
@@ -28,7 +28,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         city:req.body.city,
         companyName :req.body.companyName,
         aadharVerify:'notVerified',
-        
+        routes:req.body.routes
 
            });
 

@@ -14,7 +14,7 @@ const mongoose= require("mongoose");
 const UserProfileSchema = mongoose.Schema({
     //define the object ID
    _id: mongoose.Schema.Types.ObjectId,
-   userNumber: { type: String, required: true },//email
+   userName: { type: String, required: true },//email
 //    password: { type: String, required: true },
    mobileNo: { type: Number, unique:true,  },
    firstName:  {type:String, },
@@ -22,6 +22,7 @@ const UserProfileSchema = mongoose.Schema({
    role:  {type:String, },
    city:  {type:String, },
    companyName:  {type:String},
+   routes:{type: Array},
   // address:  subObj,
 
 

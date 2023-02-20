@@ -2,9 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const cors = require('cors')
-var FCM = require('fcm-node')
-var firebaseToken = "AAAAtmxKQK4:APA91bHVjwrWQPJq3ZiaRm9-SDWa83XDoz1GH5JBx9Nivcbjpt908fJOpd9FPGY6LQWewTqk7IsNKRTketnzSSlh9xel5MazKqkU1MOGcX_zrfbW5mEJphpNdWQQ9RpoIcmcqWi-w45W"
+const cors = require('cors');
 //import * as OneSignal from '@onesignal/node-onesignal';
 const OneSignal=require('@onesignal/node-onesignal')
 //import all routes here 
@@ -75,77 +73,8 @@ app.get("/", (req, res, next)=>{
 })
 
 
-//send notification using firebase
-  app.post('/send', (req, res, next)=>{
 
-    try{
-let fcm = new FCM(firebaseToken)
 
-const message ={
-    to:"/topics/" + req.body.topic,
-    notification:{
-        title:req.body.title,
-        body:req.body.body,
-        sound:'default',
-        click_action:"FCM_PLUGIN_ACTIVITY",
-        "icon":"fcm_push_icon"
-    },
-    data:req.body.data
-}
-fcm.send(message,(err,response)=>{
-    if(err){
-        next(err)
-    }else{
-        res.json(response)
-    }
-})
-    }catch(err){
-        next(err);
-    }
-
-})
-
-//send notifiation using One signal
-app.post('/onesignal', async (req, res, next)=>{
-
-   /* OneSignal.idsAvailable(new OneSignal.idsAvailableHandler(),{
-     idsAvailable(userId,registrationId){
-        console.log(userId)
-        if(registration !=null)
-            console.log(registrationId)
-        
-     }
-    })*/
-   
-    const ONESIGNAL_APP_ID = '913bcc8c-f580-44fb-94e5-1e5f97a80546';
-    
-    const app_key_provider = {
-        getToken() {
-            return 'ZTk0Y2I0NmEtMTVmZC00MDJjLTljYjYtOTNjYWYyZTBjODlh';
-        }
-    };
-    
-    const configuration = OneSignal.createConfiguration({
-        authMethods: {
-            app_key: {
-                tokenProvider: app_key_provider
-            }
-        }
-    });
-    const client = new OneSignal.DefaultApi(configuration);
-    
-    const notification = new OneSignal.Notification();
-    notification.app_id = ONESIGNAL_APP_ID;
-    notification.included_segments = ['Subscribed Users'];
-    notification.contents = {
-        en: "Hello OneSignal!"
-    };
-    const {id} = await client.createNotification(notification);
-    
-    const response = await client.getNotification(ONESIGNAL_APP_ID, id);
-    console.log(response)
-    res.json(response)
-})
 //to handle error 
 app.use((req, res, next) => {
 
