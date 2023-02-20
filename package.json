@@ -15,8 +15,6 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
-    "fcm-node": "^1.6.1",
-    "firebase-admin": "^11.5.0",
     "mongoose": "^6.8.4",
     "nodemon": "^2.0.20"
   }
