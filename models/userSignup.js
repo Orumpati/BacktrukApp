@@ -40,6 +40,9 @@ const UserProfileSchema = mongoose.Schema({
    gstVerify:{
       type:String,
       default:'notVerified'
+   },
+   uniqueDeviceId:{
+      type:String
    }
 //    email:{type:String, required: true}
    

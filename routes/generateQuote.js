@@ -30,14 +30,28 @@ router.post('/generateQuote', (req, res, next) => {
         if (doc.length) { //if no provider available then throw error
             //get the list of peeple here loop throuh each doc and get the 
             var provider = []; //provider be an empty array first
+            var externalids =[];
             for (item of doc) {
                 console.log(item.mobileNo);
                 provider.push(item.mobileNo)
+                provider.push(item.uuid)
                 console.log(provider)
             }
 
             //insert empty array of bids
             var bids;
+
+
+
+             //use this when posting from truck market tab
+        const truckMarketVehicleData={
+            trukvehiclenumber:req.body.trukvehiclenumber,
+            trukcurrentLocation:req.body.trukcurrentLocation,
+            trukoperatingRoutes:req.body.trukoperatingRoutes,
+            trukcapacity:req.body.trukcapacity,
+            trukname:req.body.trukname,
+            trukOwnerNumber:req.body.trukOwnerNumber
+          }
 
             //get the details for the quote generating
             const quote = new quoteGenerate({
@@ -58,11 +72,13 @@ router.post('/generateQuote', (req, res, next) => {
                 comments: req.body.comments,
                 quoteStatus: req.body.quoteStatus,
                 quoteSentTo: provider,
-                bids: bids
+                bids: bids,
+                TruckMarketVehicle: truckMarketVehicleData
             });
 
             quote.save().then(result => {
                 console.log(quote);
+                this.sendnotification(result._id,externalids)
                 //send mobile notification to every user in the array with their quote ID in notification
                 res.status(200).json({
                     message: "quote generate and sent succeesfully",
@@ -767,7 +783,92 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
 
 
 })
- 
 
+
+
+
+
+
+
+
+
+
+
+//Add truck market vehicle to existing vehcile to existing Load and send notification to vehicle
+router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
+
+
+
+
+    var query = { _id: req.body._id };
+
+    //data needed for truck Market vehicle
+    const truckMarketVehicleData = {
+        // TruckMarketVehicleNumber:req.body.TruckMarketVehicleNumber,
+        // TruckMarketVehicleOwnerMobNumber:req.body.TruckMarketVehicleOwnerMobNumber,
+        // TruckMarketVehicleType:req.body.TruckMarketVehicleType,
+        // TruckMarketVehicleCapacity:req.body.TruckMarketVehicleCapacity,
+        // TruckReeuestedPickupLocation:req.body.TruckReeuestedPickupLocation,
+        // TruckRequestedDropOffLocation:req.body.TruckRequestedDropOffLocation
+
+
+        trukvehiclenumber:req.body.trukvehiclenumber,
+        trukcurrentLocation:req.body.trukcurrentLocation,
+        trukoperatingRoutes:req.body.trukoperatingRoutes,
+        trukcapacity:req.body.trukcapacity,
+        trukname:req.body.trukname,
+        trukOwnerNumber:req.body.trukOwnerNumber
+
+
+
+    }
+
+    var updateTruckMarketData = { $push: { TruckMarketVehicle: truckMarketVehicleData } }
+    //get the load information query, get load by the ID and add the Vehicle to array. 
+    quoteGenerate.findOneAndUpdate(query, updateTruckMarketData).select().exec().then(doc => {
+        console.log(doc)
+        res.status(200).json({
+            message: doc
+        })
+    })
+
+
+
+})
+
+
+ 
+//notification function
+async function sendnotification(mess,Externalids){
+    const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+    
+    const app_key_provider = {
+        getToken() {
+            return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+        }
+    };
+    
+    const configuration = OneSignal.createConfiguration({
+        authMethods: {
+            app_key: {
+                tokenProvider: app_key_provider
+            }
+        }
+    });
+    const client = new OneSignal.DefaultApi(configuration);
+    
+    const notification = new OneSignal.Notification();
+    notification.app_id = ONESIGNAL_APP_ID;
+    //notification.included_segments = ['Subscribed Users'];
+    notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+    notification.contents = {
+        en: "Hello OneSignal!"
+    };
+    const {id} = await client.createNotification(notification);
+    
+    const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+    console.log(response)
+    res.json(response)
+}
 
 module.exports = router;

@@ -10,6 +10,9 @@ const { body } = require('express-validator'); //use express validator for few r
 //import the schema here
 const UserSignup = require('../models/userSignup');
 const AddVehicle= require('../models/vehicle');
+const vehicle = require("../models/vehicle");
+const { response } = require("../app");
+
 
 
 
@@ -17,13 +20,13 @@ const AddVehicle= require('../models/vehicle');
 
 router.post('/vehiclepost', async(req, res, next) => {        // want to create product details
     const vehicle = new AddVehicle({
-        vehiclenumber: req.body.vehiclenumber,
-        currentLocation: req.body.currentLocation,
-        operatingRoutes: req.body.operatingRoutes,
-        capacity: req.body.capacity,
-        data: req.body.data,
-        date:req.body.date,
-        mobileNo:req.body.mobileNo
+        trukvehiclenumber: req.body.trukvehiclenumber,
+        trukcurrentLocation: req.body.trukcurrentLocation,
+        trukoperatingRoutes: req.body.trukoperatingRoutes,
+        trukcapacity: req.body.trukcapacity,
+        trukname: req.body.trukname,
+        trukdate:req.body.trukdate,
+        trukOwnerNumber:req.body.trukOwnerNumber
 
 
     });
@@ -41,7 +44,7 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
     }
 
 })
-
+//get vehicles
 router.get('/allVehicles', async (req, res) => {
     try {
         const Load = await AddVehicle.find()
@@ -56,10 +59,10 @@ router.get('/allVehicles', async (req, res) => {
     }
 });
 
-
-router.get('/filterByVehicle/:data', async (req, res) => {
+//filterByVehicle API 
+router.get('/filterByVehicle/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
     try {
-        const vehicle = await AddVehicle.find({data:req.params.data})
+        const vehicle = await AddVehicle.find({trukname:req.params.trukname, trukoperatingRoutes: { $all: [req.params.trukpickupLocation, req.params.trukdropLocation]  }})
        
 if(!vehicle){
     res.status(404).json({message:"Vehicle not fount"})
@@ -74,9 +77,11 @@ if(!vehicle){
     }
 });
 
-router.get('/allVehicles/:mobileNo', (req, res, next)=>{
+// GetbymobileNo API
 
-    AddVehicle.find({mobileNo:req.params.mobileNo}).exec().then(
+ router.get('/allVehicles/:trukOwnerNumber', (req, res, next)=>{
+
+    AddVehicle.find({trukOwnerNumber:req.params.trukOwnerNumber}).exec().then(
          docs =>{
              res.status(200).json({
                         data: docs
@@ -90,9 +95,12 @@ router.get('/allVehicles/:mobileNo', (req, res, next)=>{
 
 }) 
 
+
+//update API
+
 router.put('/updateLoads/:id', async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['vehiclenumber', 'currentLocation','operatingRoutes','capacity','data','date','mobileNo'] // updates that are allowed
+    const allowedUpdates = ['trukvehiclenumber', 'trukcurrentLocation','trukoperatingRoutes','trukcapacity','trukname','trukdate','trukOwnerNumber'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)
@@ -113,10 +121,10 @@ router.put('/updateLoads/:id', async (req, res) => {
         res.status(400).json({ error })
     }
 })
-
+// deactive API
 router.put('/TrukDeactive/:id', async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['isActive'] // updates that are allowed
+    const allowedUpdates = ['trukisActive'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)
@@ -138,7 +146,7 @@ router.put('/TrukDeactive/:id', async (req, res) => {
     }
 })
 
-
+//delete API
 router.delete('/deleteTruk/:_id' ,async(req,res)=> {
     try{
         const deletedProduct = await AddVehicle.findByIdAndDelete ( {_id:req.params._id} )
@@ -153,11 +161,11 @@ router.delete('/deleteTruk/:_id' ,async(req,res)=> {
     }
     
 })
-//Get the load by isActive
+//Get the truk by isActive
 
 router.get('/trukByStatus/:isActive',async(req,res)=>{
     try{
-        const vehicle= await AddVehicle.find({isActive:req.params.isActive})
+        const vehicle= await AddVehicle.find({trukisActive:req.params.trukisActive})
         if(!vehicle){
             res.status(404).send({error: "truks not found"})
         }
@@ -169,6 +177,28 @@ router.get('/trukByStatus/:isActive',async(req,res)=>{
         console.log(error)
     }
 })
+
+//show truks in truk market
+
+
+// UserSignup.find({routes: { $all: ["Warangal", "delhi"] } } ).select().exec().then(doc =>{ 
+//    console.log(doc.length)
+
+// })
+
+
+// vehicle search based on location
+router.post('/vehicleSearch', async(req, res, next) => {   
+   
+    vehicle.find({trukoperatingRoutes: { $all: [req.body.trukpickupLocation, req.body.trukdropLocation] } } ).select().exec().then(doc =>{ 
+        console.log(doc.length)
+     
+        res.status(400).json({
+           doc})
+     })
+
+})
+
 
 
 module.exports= router

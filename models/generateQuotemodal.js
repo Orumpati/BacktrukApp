@@ -33,6 +33,27 @@ const VehicleData=mongoose.Schema({
     operatingRoutes:{type:Array},
     date:{type:String}
 })
+const TruckMarketVehicleInformation= new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    // TruckMarketVehicleNumber:{type: String},
+
+    // TruckMarketVehicleOwnerMobNumber:{type: Number},
+    // TruckMarketVehicleType:{type: String},
+    // TruckMarketVehicleCapacity:{type: String},
+    // TruckReeuestedPickupLocation:{type: String},
+    // TruckRequestedDropOffLocation:{type: String}
+
+
+    trukvehiclenumber:{type: String},
+    trukcurrentLocation:{type: String},
+    trukoperatingRoutes:{type: Array},
+    trukcapacity:{type: String},
+    trukname:{type: String},
+    trukOwnerNumber:{type:String}
+
+  
+
+})
 
 //define the schema here
 const generateQuoteSchema = mongoose.Schema({
@@ -111,11 +132,18 @@ userAcceptedPrice: {
     type: String,
     default:"0"
 },
-   
+bidAcceptedTo:{
+    type:Number
+},
+   isPaymentCompleted:{
+    type:Boolean,
+    default:false
+   },
    
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
-   vehicleInformation:VehicleData
+   vehicleInformation:VehicleData,
+   TruckMarketVehicle:[TruckMarketVehicleInformation]
 });
 
 

@@ -2,34 +2,40 @@ const mongoose = require('mongoose');
 
 const Vehicle = mongoose.Schema({
 
-    vehiclenumber: {
+    trukvehiclenumber: {
         type: String,
         //require: true
     },
-    currentLocation: {
+    trukcurrentLocation: {
         type: String,
         //required: true
     },
-    operatingRoutes: {
+    trukoperatingRoutes: {
         type: Array,
         //required: true
     },
-    capacity: {
+    trukcapacity: {
         type: String,
         //required: true
     },
-    data: {
+    trukname: {
         type: String,
     },
-    date: {
+    trukdate: {
         type: String,
     },
 
-    isActive:{
+    trukisActive:{
         type:String,
         default:"Active"
     },
-    mobileNo:{
+    trukOwnerNumber:{
+        type:String
+    },
+    trukpickupLocation:{
+        type:String
+    },
+    trukdropLocation:{
         type:String
     }
 })
