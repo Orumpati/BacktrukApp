@@ -28,8 +28,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         city:req.body.city,
         companyName :req.body.companyName,
         aadharVerify:'notVerified',
-        routes:req.body.routes
-
+        routes:req.body.routes,
+        uniqueDeviceId:req.body.uniqueDeviceId
            });
 
      var mobileNo = req.body.mobileNo;
