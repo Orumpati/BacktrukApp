@@ -272,7 +272,49 @@ router.put('/putroutes/:id',(req, res)=>{
         // })
 
 
-      
+        
+      //update profile
+      router.put('/updatedeviceid/:_id',(req, res)=>{
+        // var mobileNo = req.body.mobileNo ;
+         /* if(!ObjectId.isValid(req.params.id))
+          return res.status(400).send(`no record with id :${req.params.id}`);*/
+       var data=  req.body;
+     
+       // UserSignup.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
+ 
+        // var em = req.body.mobileNo;
+        // if(em == doc.mobileNo){
+             UserSignup.findByIdAndUpdate(req.params._id,
+                 {$set:
+                     data
+                 }  , {new: true},(err,docs)=>{
+                     if(!err){
+                         res.send(docs);
+                     }else if(err.codeName == 'Duplicatekey'){
+                                console.log('num alraedy exist')
+                     }
+                     else{
+                         console.log('error in status  update:' +JSON.stringify(err,undefined,2));
+                     }
+                 })
+    
+                
+            
+        // }
+    
+            /* else{
+             res.status(400).json({Authentication:"Mobile NO already exist",
+                    message:"failed",
+                    status:"failed",
+                
+                    
+            });
+          
+         }*/
+ 
+     
+     })     
+        
     
 
 module.exports = router;

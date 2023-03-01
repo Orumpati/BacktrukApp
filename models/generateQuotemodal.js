@@ -123,7 +123,12 @@ comments:{
 data:{
     type:String
 },
-
+dropupState:{
+    type:String
+},
+pickupState:{
+    type:String
+},
 isActive:{
     type:String,
     default:'Active'

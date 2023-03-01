@@ -4,17 +4,21 @@ const express = require("express");
  const router = express.Router();
 //next mongoose is required
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
 //express validator
-const { body } = require('express-validator'); //use express validator for few required things
+const OneSignal=require('@onesignal/node-onesignal')
+router.use(bodyParser.urlencoded({ extended: false }));
 
+// parse application/json
+router.use(bodyParser.json());
 //import the schema here
 const quoteGenerate = require('../models/generateQuotemodal');
-const { db } = require("../models/generateQuotemodal");
+
 const UserSignup = require("../models/userSignup");
 
 
 
-const generateQuote = require("../models/generateQuotemodal");
+
 
 
 //post method goes here
@@ -24,20 +28,21 @@ router.post('/generateQuote', (req, res, next) => {
 
 
     //find the agents avaibale in the given locations
-    UserSignup.find({ routes: { $all: ["Warangal", "delhi"]} }).select().exec().then(doc => {
+    UserSignup.find({ routes: { $all: [req.body.pickupState, req.body.dropupState]} }).select().exec().then(doc => {
         console.log(doc.length)
 
         if (doc.length) { //if no provider available then throw error
             //get the list of peeple here loop throuh each doc and get the 
             var provider = []; //provider be an empty array first
-            var externalids =[];
+           var externalids =[];
             for (item of doc) {
-                console.log(item.mobileNo);
+                //console.log(item.mobileNo);
                 provider.push(item.mobileNo)
-                provider.push(item.uuid)
+                externalids.push(item.uniqueDeviceId)
+                console.log(item.uniqueDeviceId)
                 console.log(provider)
             }
-
+//console.log(externalids)
             //insert empty array of bids
             var bids;
 
@@ -59,9 +64,10 @@ router.post('/generateQuote', (req, res, next) => {
                 OriginLocation: req.body.OriginLocation,
                 Number: req.body.Number,
                 DestinationLocation: req.body.DestinationLocation,
+                dropupState:req.body.dropupState,
                 product: req.body.product,
                 Quantity: req.body.Quantity,
-                state: req.body.state,
+                pickupState: req.body.pickupState,
                 data: req.body.data,
                 expectedPrice: req.body.expectedPrice,
                 date: req.body.date,
@@ -77,10 +83,14 @@ router.post('/generateQuote', (req, res, next) => {
             });
 
             quote.save().then(result => {
-                console.log(quote);
-                this.sendnotification(result._id,externalids)
+                console.log(result);
+           
+                sendnotification(req.body.mess,req.body.LoadPosterName,externalids)
                 //send mobile notification to every user in the array with their quote ID in notification
-                res.status(200).json({
+                res.status(200).json(
+                   
+                    {
+                    
                     message: "quote generate and sent succeesfully",
                     status: "success",
                     Id: result._id
@@ -124,6 +134,37 @@ router.get('/allQuotes', async (req, res) => {
     }
 });
 
+
+//Loads in mkyloads tab for specific user number
+
+router.post('/myLoadsForSpecificNumber', (req, res, next) => {
+    quoteGenerate.find({ Number: req.body.Number }).select().exec().then(
+        doc => {
+            console.log(doc)
+            //check if it has matching docs then send response
+            if (doc.length) {
+                res.status(200).json({
+                    Loads:doc.length,
+                    data: doc,
+                    message: "got the matching loads based on the profile",
+                    status: "success"
+                })
+            } else {
+                res.status(200).json({
+                    message: "no matching loads found",
+                    status: "success"
+                })
+
+            }
+        }
+    ).catch(err => {
+        res.status.json({
+            message: "failed to get loads",
+            status: "failed",
+            error: err
+        })
+    })
+})
 //get by id
 
 router.get('/quoteById/:id', async (req, res) => {
@@ -143,7 +184,7 @@ router.get('/quoteById/:id', async (req, res) => {
 
 router.put('/updateQuotes/:id', async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['OriginLocation', 'DestinationLocation', 'Number', 'product', 'Quantity', 'expectedPrice',
+    const allowedUpdates = ['OriginLocation', 'DestinationLocation', 'Number', 'product', 'Quantity', 'expectedPrice','dropupState',
         'date', 'typeOfPay', 'length', 'breadth', 'height', 'comments', 'data'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
@@ -176,7 +217,7 @@ router.put('/quoteDeactivate/:id', async (req, res) => {
         return res.status(400).json({ error: 'invalid updates' })
     }
     try { // used to catch errors
-        const product = await quoteGenerate.find({ _id: req.params.id }) //finding the products based on id
+        const product = await quoteGenerate.findOne({ _id: req.params.id }) //finding the products based on id
         if (!product) {
             return res.status(404).json({ message: 'Invalid Product' }) //error status
         }
@@ -222,24 +263,26 @@ function sendQuote(orgin, destination) {
 }
 
 
-
-
 //LoadMarket APIS where trukers and agents get to see the loads based on their profile. 
 router.post('/LoadMarket', (req, res, next) => {
-    quoteGenerate.find({ quoteSentTo: req.body.mobileNo }).select().exec().then(
+    quoteGenerate.find({quoteSentTo: { $all: [req.body.mobileNo] } }).select().exec().then(
         doc => {
-            console.log(doc)
+           
+            var load = doc.filter(data=>{
+                return data.isActive == req.body.isActive
+              })
+              console.log(load)
             //check if it has matching docs then send response
-            if (doc.length) {
+            if (load) {
                 res.status(200).json({
-                    data: doc,
+                    item: load,
                     message: "got the matching loads based on the profile",
                     status: "success"
                 })
             } else {
                 res.status(200).json({
                     message: "no matching loads found",
-                    status: "success"
+                    status: "failed"
                 })
 
             }
@@ -273,24 +316,7 @@ router.post('/LoadMarket', (req, res, next) => {
  */
 router.post('/placeBid', (req, res, next)=>{
 
-    /***
-     * case 1:  place bid by the Trucker
-     *  MobileNo, BidPrice and QuoteID. 
-     *  
-     * Case 2: now customer can see the bid value and clicks on negotiate
-     * and sends negotaited price
-     * bid id, Negotiated price
-     * 
-     */
-     //this is initial place Bid, this first time bid we are sending only trucke quotes for the bid
-     // const placeBid ={    //NOT USING THIS ONE FOR NOW 
-     //     _id: new mongoose.Types.ObjectId,
-     //     mobileNo:req.body.mobileNo,
-     //     Bidprice: [{"price":req.body.Bidprice, "time": new Date().getTime()}],
-     //     Negotiate:[],
-     //     tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
-     //     time: new Date().getTime()
-     // }
+
    
     //alternate bid Current Bid Service
     const placeIniBid ={
@@ -311,18 +337,30 @@ router.post('/placeBid', (req, res, next)=>{
        //form the query here
        var query=   { $push: { bids: placeIniBid }}
  
- 
+       UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+        doc=>{
+         var   loadpostedNumber =  doc
+        
+      console.log(loadpostedNumber)
+      for(let i=0;i<loadpostedNumber.length;i++){
+        var uniqId =loadpostedNumber[i].uniqueDeviceId
+      }
+     
+      console.log(uniqId)
      //find the docID or quote ID
      quoteGenerate.findByIdAndUpdate({_id: req.body._id}, query).select().exec().then(
          doc=>{
              console.log(doc)
              //check if it has matching docs then send response
              if(doc){
+                
              res.status(200).json({
                  data: doc,
                  message:"got the matching loads based on the profile",
                  status:"success"
              })
+             //sendnotificationforplacebid(req.body.Bidprice,uniqId,req.body.Name)
+             sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
          }else{
              res.status(200).json({
                  message:"no matching docs found",
@@ -338,8 +376,38 @@ router.post('/placeBid', (req, res, next)=>{
              error:err
          })
      })
+    })
  } )
  
+ //Get the load by status and mobile number
+
+router.post('/loadsByStatusAndNumber', async (req, res) => {
+    const quote = await quoteGenerate.find()
+  
+    var filter= quote.filter(data=>{
+     return data.Number==req.body.Number
+    })
+    
+   // console.log(filter)
+    
+    try {
+      //  const load = await array.find({ isActive: req.params.isActive })
+      var load = filter.filter(data=>{
+        return data.isActive == req.body.isActive
+      })
+      console.log(load)
+        if (!load) {
+            res.status(404).send({ error: "Loads not found" })
+        }
+        res.status(400).json({
+            TotalLoads: load.length,
+            load
+        })
+    } catch (error) {
+        res.status(401).json({ error })
+        console.log(error)
+    }
+})
  
  
 
@@ -466,14 +534,7 @@ router.post('/updateBids', (req, res, next)=>{
     
         //     console.log(new Date().getTime());
           var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}  //quote id and truker mobile no  always Agent mobile NO
-        //    //form the query here
-        //    var updateBidPrice=   { $push: { "bids.$.Bidprice":{"price":req.body.price, "time": new Date().getTime()}},
-        //                          $set:{"bids.$.tentativefinalPrice":req.body.price}}
-    
-        //    var updateNegotiatePrice={$push:{"bids.$.Negotiate":{"price":req.body.price, "time": new Date().getTime()}},
-        //                         $set:{"bids.$.tentativefinalPrice":req.body.price}}
        
-        //    var updateData="";
     
            //newUpdate query for bids
            var DataToBids={$push:{ "bids.$.BidActivity":{"price":req.body.price,
@@ -491,17 +552,32 @@ router.post('/updateBids', (req, res, next)=>{
            console.log(DataToBids)
            console.log(query)
           // { $push: { "bids.$.Bidprice":req.body.price }}
+
+          UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+            doc=>{
+             var   loadpostedNumber =  doc
+            
+          console.log(loadpostedNumber)
+          for(let i=0;i<loadpostedNumber.length;i++){
+            var uniqId =loadpostedNumber[i].uniqueDeviceId
+          }
+         
+          console.log(uniqId)
+        
          //find the docID or quote ID
          quoteGenerate.findOneAndUpdate(query,DataToBids).select().exec().then(
              doc=>{
                  console.log(doc)
                  //check if it has matching docs then send response
                  if(doc){
+
                  res.status(200).json({
                      data: doc,
                      message:"got the matching loads based on the profile",
                      status:"success"
                  })
+               
+                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
              }else{
                  res.status(200).json({
                      message:"no matching docs found",
@@ -509,6 +585,7 @@ router.post('/updateBids', (req, res, next)=>{
                  })
      
              }
+
              }
          ).catch(err=>{
              res.status(200).json({
@@ -516,7 +593,8 @@ router.post('/updateBids', (req, res, next)=>{
                  status: "failed",
                  error:err
              })
-         }) 
+         })
+        }) 
      } )
      
 
@@ -661,7 +739,7 @@ router.post('/acceptQuoteByUser',(req,res,next)=>{
 
     var query={"_id":req.body._id };
     var update ={$set:{userAcceptedPrice:req.body.acceptedPrice,isActive:"Finalised"}}
-    generateQuote.findOneAndUpdate(query,update).select().exec().then(
+    quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
         doc=>{
             console.log(doc)
             res.status(200).json({
@@ -680,15 +758,28 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
     var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted}}
     console.log(update)
-    generateQuote.findOneAndUpdate(query,update).select().exec().then(
+    UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{
+         var   loadpostedNumber =  doc
+        
+      console.log(loadpostedNumber)
+      for(let i=0;i<loadpostedNumber.length;i++){
+        var uniqId =loadpostedNumber[i].uniqueDeviceId
+      }
+     
+      console.log(uniqId)
+    quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
+        doc=>{
+
             console.log(doc)
+        
             res.status(200).json({
                 message:doc,
                 status:"success"
             })
-        }
-    )
+            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+        } )
+    })
 })
 
 //final aaccept by agent
@@ -698,15 +789,27 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
     var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted}}
     console.log(update)
-    generateQuote.findOneAndUpdate(query,update).select().exec().then(
+    UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{
+         var   loadpostedNumber =  doc
+        
+      console.log(loadpostedNumber)
+      for(let i=0;i<loadpostedNumber.length;i++){
+        var uniqId =loadpostedNumber[i].uniqueDeviceId
+      }
+    quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
+        doc=>{
+            
             console.log(doc)
             res.status(200).json({
                 message:doc,
                 status:"success"
             })
-        }
-    )
+          //  sendnotificationforplacebid(req.body.Bidprice,uniqId,req.body.Name)
+            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+        })
+
+    })
 })
 
 
@@ -717,7 +820,7 @@ router.post('/getsingleloadbids',(req,res,next)=>{
     var query= {"_id":req.body._id}
     
     
-    generateQuote.find(query).select().exec().then(
+    quoteGenerate.find(query).select().exec().then(
         doc=>{
             console.log(doc)
             res.status(200).json({
@@ -827,6 +930,7 @@ router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
     //get the load information query, get load by the ID and add the Vehicle to array. 
     quoteGenerate.findOneAndUpdate(query, updateTruckMarketData).select().exec().then(doc => {
         console.log(doc)
+        
         res.status(200).json({
             message: doc
         })
@@ -839,8 +943,46 @@ router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
 
  
 //notification function
-async function sendnotification(mess,Externalids){
+ async function sendnotification(mess,Name,externalids){
+console.log(externalids)
     const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+
+const app_key_provider = {
+    getToken() {
+        return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+    }
+};
+
+const configuration = OneSignal.createConfiguration({
+    authMethods: {
+        app_key: {
+            tokenProvider: app_key_provider
+        }
+    }
+});
+const client = new OneSignal.DefaultApi(configuration);
+
+const notification = new OneSignal.Notification();
+notification.app_id = ONESIGNAL_APP_ID;
+//notification.included_segments = ['Subscribed Users'];
+//notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+notification.include_external_user_ids = externalids;
+notification.contents = {
+    en:Name+" "+ mess 
+};
+const {id} = await client.createNotification(notification);
+
+const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+console.log(response)
+//res.json(response)
+
+}
+
+
+
+async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
+    
+        const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
     
     const app_key_provider = {
         getToken() {
@@ -860,15 +1002,19 @@ async function sendnotification(mess,Externalids){
     const notification = new OneSignal.Notification();
     notification.app_id = ONESIGNAL_APP_ID;
     //notification.included_segments = ['Subscribed Users'];
-    notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+    //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+    notification.include_external_user_ids = [uniqId];
     notification.contents = {
-        en: "Hello OneSignal!"
+        en: Name +" "+mess+" "+BidPrice
     };
     const {id} = await client.createNotification(notification);
     
     const response = await client.getNotification(ONESIGNAL_APP_ID, id);
     console.log(response)
-    res.json(response)
-}
+    //res.json(response)
+    
+    }
 
+
+   
 module.exports = router;

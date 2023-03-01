@@ -31,12 +31,25 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
 
     });
     try {
-        await vehicle.save()
-        
+        UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+            async doc=>{
+             var   loadpostedNumber =  doc
+            
+          console.log(loadpostedNumber)
+          for(let i=0;i<loadpostedNumber.length;i++){
+            var uniqId =loadpostedNumber[i].uniqueDeviceId
+          }
+         
+          console.log(uniqId)
 
+        await vehicle.save()
+    
         res.status(201).json({
             registeredVehicle: vehicle
         })
+        
+
+    })
         
     } catch (error) {
         console.log(error)
@@ -200,5 +213,41 @@ router.post('/vehicleSearch', async(req, res, next) => {
 })
 
 
+
+
+async function addtrucknotificatio(Bidprice,placebidids,Name){
+    console.log(placebidids)
+        const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+    
+    const app_key_provider = {
+        getToken() {
+            return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+        }
+    };
+    
+    const configuration = OneSignal.createConfiguration({
+        authMethods: {
+            app_key: {
+                tokenProvider: app_key_provider
+            }
+        }
+    });
+    const client = new OneSignal.DefaultApi(configuration);
+    
+    const notification = new OneSignal.Notification();
+    notification.app_id = ONESIGNAL_APP_ID;
+    //notification.included_segments = ['Subscribed Users'];
+    //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+    notification.include_external_user_ids = [placebidids];
+    notification.contents = {
+        en: "Bid accepted by  "+ Name + " for "+Bidprice
+    };
+    const {id} = await client.createNotification(notification);
+    
+    const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+    console.log(response)
+    //res.json(response)
+    
+    }
 
 module.exports= router

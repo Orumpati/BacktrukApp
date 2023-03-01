@@ -21,6 +21,8 @@ mongoose.set("strictQuery", false);
  mongoose.connect(uri)
 .then(response =>{
    console.log('mongodb is connected')
+   const add ='hd,ejhc,jhe,'
+   console.log(add.split(',')[1])
 })
 .catch(error=>{
    console.log(error)
