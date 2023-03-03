@@ -106,7 +106,7 @@ router.post('/generateQuote', (req, res, next) => {
             })
 
         } else { //when no provider available
-            res.status(200).json({
+            res.status(400).json({
                 status: "failed",
                 message: "no providers available"
             })
@@ -150,15 +150,15 @@ router.post('/myLoadsForSpecificNumber', (req, res, next) => {
                     status: "success"
                 })
             } else {
-                res.status(200).json({
+                res.status(400).json({
                     message: "no matching loads found",
-                    status: "success"
+                    status: "no docs"
                 })
 
             }
         }
     ).catch(err => {
-        res.status.json({
+        res.status(400).json({
             message: "failed to get loads",
             status: "failed",
             error: err
@@ -198,7 +198,7 @@ router.put('/updateQuotes/:id', async (req, res) => {
         updates.forEach((update) => product[update] = req.body[update]) //updating the value
 
         await product.save()
-        res.status(400).json({
+        res.status(200).json({
             updatedProduct: product
         })
     } catch (error) {
@@ -224,7 +224,7 @@ router.put('/quoteDeactivate/:id', async (req, res) => {
         updates.forEach((update) => product[update] = req.body[update]) //updating the value
 
         await product.save()
-        res.status(400).json({
+        res.status(200).json({
             updatedProduct: product
         })
     } catch (error) {
@@ -240,7 +240,7 @@ router.get('/loadsByStatus/:isActive', async (req, res) => {
         if (!load) {
             res.status(404).send({ error: "Loads not found" })
         }
-        res.status(400).json({
+        res.status(200).json({
             TotalLoads: load.length,
             load
         })
@@ -362,15 +362,15 @@ router.post('/placeBid', (req, res, next)=>{
              //sendnotificationforplacebid(req.body.Bidprice,uniqId,req.body.Name)
              sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
          }else{
-             res.status(200).json({
+             res.status(400).json({
                  message:"no matching docs found",
-                 status:"success"
+                 status:"no docs"
              })
  
          }
          }
      ).catch(err=>{
-         res.status(200).json({
+         res.status(400).json({
              message:"failed to bid",
              status: "failed",
              error:err
@@ -397,14 +397,14 @@ router.post('/loadsByStatusAndNumber', async (req, res) => {
       })
       console.log(load)
         if (!load) {
-            res.status(404).send({ error: "Loads not found" })
+            res.status(400).send({ error: "Loads not found" })
         }
         res.status(200).json({
             TotalLoads: load.length,
             load
         })
     } catch (error) {
-        res.status(401).json({ error })
+        res.status(400).json({ error })
         console.log(error)
     }
 })
@@ -579,16 +579,16 @@ router.post('/updateBids', (req, res, next)=>{
                
                 sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
              }else{
-                 res.status(200).json({
+                 res.status(400).json({
                      message:"no matching docs found",
-                     status:"success"
+                     status:"no docs"
                  })
      
              }
 
              }
          ).catch(err=>{
-             res.status(200).json({
+             res.status(400).json({
                  message:"failed to bid",
                  status: "failed",
                  error:err
@@ -660,7 +660,7 @@ router.post('/showAgentBids', (req, res, next) => {
                 count: doc.length
             })
         } else {
-            res.status(200).json({
+            res.status(400).json({
                 status: "failed",
                 message: "no bids found"
             })
@@ -721,7 +721,7 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
             count:doc.length
         })
     }else{
-        res.status(200).json({
+        res.status(400).json({
             status:"failed",
             message:"no bids found"
         })
@@ -869,7 +869,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
                 status:"success"
             })
         }else{
-            res.status(200).json({
+            res.status(400).json({
                 message:"no vehicles attached",
                 status:"failed"
             })
@@ -877,7 +877,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
         }
         }
     ).catch(err=>{
-        res.status(200).json({
+        res.status(400).json({
             message:"failed to attach vehicle",
             status: "failed",
             error:err

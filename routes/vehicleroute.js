@@ -44,7 +44,7 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
 
         await vehicle.save()
     
-        res.status(201).json({
+        res.status(200).json({
             registeredVehicle: vehicle
         })
         
@@ -53,7 +53,7 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
         
     } catch (error) {
         console.log(error)
-        res.status(401).json(error)
+        res.status(400).json(error)
     }
 
 })
@@ -68,7 +68,7 @@ router.get('/allVehicles', async (req, res) => {
             Load
         })
     } catch (error) {
-        res.status(401).send(error)
+        res.status(400).send(error)
     }
 });
 
@@ -127,7 +127,7 @@ router.put('/updateLoads/:id', async (req, res) => {
         updates.forEach((update) => product[update] = req.body[update]) //updating the value
 
         await product.save()
-        res.status(400).json({
+        res.status(200).json({
             updatedProduct: product
         })
     } catch (error) {
@@ -151,7 +151,7 @@ router.put('/TrukDeactive/:id', async (req, res) => {
         updates.forEach((update) => product[update] = req.body[update]) //updating the value
 
         await product.save()
-        res.status(400).json({
+        res.status(200).json({
             updatedProduct: product
         })
     } catch (error) {
@@ -167,7 +167,7 @@ router.delete('/deleteTruk/:_id' ,async(req,res)=> {
             res.status(404).json({error: "Product not found"})
 
         }
-        res.status(400).json({message: "Product Deleted",
+        res.status(200).json({message: "Product Deleted",
         deletedProduct})
     } catch (error) {
         res.status(400).send (error)
@@ -182,7 +182,7 @@ router.get('/trukByStatus/:isActive',async(req,res)=>{
         if(!vehicle){
             res.status(404).send({error: "truks not found"})
         }
-        res.status(400).json({
+        res.status(200).json({
             TotalLoads:vehicle.length,
             vehicle})
     }catch(error){
@@ -206,7 +206,7 @@ router.post('/vehicleSearch', async(req, res, next) => {
     vehicle.find({trukoperatingRoutes: { $all: [req.body.trukpickupLocation, req.body.trukdropLocation] } } ).select().exec().then(doc =>{ 
         console.log(doc.length)
      
-        res.status(400).json({
+        res.status(200).json({
            doc})
      })
 

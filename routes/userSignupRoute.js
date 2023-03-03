@@ -54,7 +54,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
          })
 
     }else{
-        res.status(200).json({message:"user aleredy exists",
+        res.status(500).json({message:"user aleredy exists",
                               status:"failed"
     
                              })
