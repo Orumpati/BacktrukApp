@@ -399,7 +399,7 @@ router.post('/loadsByStatusAndNumber', async (req, res) => {
         if (!load) {
             res.status(404).send({ error: "Loads not found" })
         }
-        res.status(400).json({
+        res.status(200).json({
             TotalLoads: load.length,
             load
         })
