@@ -14,7 +14,7 @@ const mongoose= require("mongoose");
 const UserProfileSchema = mongoose.Schema({
     //define the object ID
    _id: mongoose.Schema.Types.ObjectId,
-   userName: { type: String, required: true },//email
+
 //    password: { type: String, required: true },
    mobileNo: { type: Number, unique:true,  },
    firstName:  {type:String, },
@@ -33,7 +33,7 @@ const UserProfileSchema = mongoose.Schema({
    
    pincode:  {type:String},
 
-   routes:{type:Array},
+ 
    aadharVerify:{
     type:String
    },
