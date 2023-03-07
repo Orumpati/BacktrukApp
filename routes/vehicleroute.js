@@ -58,20 +58,50 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
 
 })
 //get vehicles
-router.get('/allVehicles', async (req, res) => {
+router.post('/allVehicles', async (req, res) => {
     try {
-        const Load = await AddVehicle.find()
-
-
+      AddVehicle.find({trukOwnerNumber:req.body.trukOwnerNumber}).select().exec().then(doc =>{
+       
         res.status(200).json({
-            TotalProducts: Load.length,
-            Load
+            TotalProducts: doc.length,
+            doc
         })
+      })
+
+
     } catch (error) {
         res.status(400).send(error)
     }
 });
 
+
+router.post('/truksByStatusAndNumber', async (req, res) => {
+    const truk = await AddVehicle.find()
+  
+    var filter= truk.filter(data=>{
+     return data.trukOwnerNumber==req.body.trukOwnerNumber
+    })
+    
+   // console.log(filter)
+    
+    try {
+      //  const load = await array.find({ isActive: req.params.isActive })
+      var vehicle = filter.filter(data=>{
+        return data.trukisActive == req.body.trukisActive
+      })
+      console.log(vehicle)
+        if (!vehicle) {
+            res.status(404).send({ error: "Vehicles not found" })
+        }
+        res.status(200).json({
+            TotalVehicles: vehicle.length,
+            vehicle
+        })
+    } catch (error) {
+        res.status(401).json({ error })
+        console.log(error)
+    }
+})
 //filterByVehicle API 
 router.get('/filterByVehicle/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
     try {
