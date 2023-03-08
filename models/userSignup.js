@@ -33,7 +33,9 @@ const UserProfileSchema = mongoose.Schema({
    
    pincode:  {type:String},
 
- 
+   aboutCompany:{
+      type:String
+   },
    aadharVerify:{
     type:String
    },

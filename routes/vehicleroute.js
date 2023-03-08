@@ -58,7 +58,7 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
 
 })
 //get vehicles
-router.post('/allVehicles', async (req, res) => {
+router.post('/allVehicless', async (req, res) => {
     try {
       AddVehicle.find({trukOwnerNumber:req.body.trukOwnerNumber}).select().exec().then(doc =>{
        

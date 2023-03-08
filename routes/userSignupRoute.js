@@ -28,6 +28,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         companyName :req.body.companyName,
         aadharVerify:'notVerified',
         routes:req.body.routes,
+        aboutCompany:req.body.aboutCompany,
         uniqueDeviceId:req.body.uniqueDeviceId
            });
 
