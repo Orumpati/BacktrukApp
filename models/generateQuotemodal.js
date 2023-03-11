@@ -17,7 +17,11 @@ const bidsData=mongoose.Schema({
     isShipperAccepted:{
 type:Boolean,
 default:false
-    } 
+    } ,
+    agentInitialBidSend:{
+        type:Boolean,
+        default:false
+            } 
 })
 
 const VehicleData=mongoose.Schema({

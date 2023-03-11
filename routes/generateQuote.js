@@ -328,6 +328,7 @@ router.post('/placeBid', (req, res, next)=>{
                  "userType":req.body.userType,  //this only for trucker side for the first time.
                  "time": new Date().getTime()}],
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
+     agentInitialBidSend:req.body.agentInitialBidSend,
      time: new Date().getTime()
  }
  
@@ -1005,7 +1006,7 @@ async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
     notification.include_external_user_ids = [uniqId];
     notification.contents = {
-        en: Name +" "+mess+" "+BidPrice
+        en:  Name +" "+mess+" "+BidPrice
     };
     const {id} = await client.createNotification(notification);
     
