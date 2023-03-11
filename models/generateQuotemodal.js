@@ -100,7 +100,7 @@ date:{
 },
  
 typeOfPay:{
-    type:Array,
+    type:String,
     //required:true
 },
 
