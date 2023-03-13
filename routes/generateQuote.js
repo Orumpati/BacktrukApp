@@ -165,6 +165,37 @@ router.post('/myLoadsForSpecificNumber', (req, res, next) => {
         })
     })
 })
+
+//contact us get loads by usernumber and active and completed status oloasd
+
+
+router.post('/contactusStatusAndNumber', async (req, res) => {
+    const quote = await quoteGenerate.find()
+  
+    var filter= quote.filter(data=>{
+     return data.Number==req.body.Number
+    })
+    
+   // console.log(filter)
+    
+    try {
+      //  const load = await array.find({ isActive: req.params.isActive })
+      var load = filter.filter(data=>{
+        return data.isActive == req.body.isActive
+      })
+      console.log(load)
+        if (!load) {
+            res.status(400).send({ error: "Loads not found" })
+        }
+        res.status(200).json({
+            TotalLoads: load.length,
+            load
+        })
+    } catch (error) {
+        res.status(400).json({ error })
+        console.log(error)
+    }
+})
 //get by id
 
 router.get('/quoteById/:id', async (req, res) => {

@@ -14,6 +14,8 @@ const vehicle =require('./routes/vehicleroute')
 const home = require('./routes/homeroute')
 const notification =require('./routes/notificationroute')
 
+const contact =require('./routes/menuContactUs')
+
 
 //connect to mongodb
 const uri = 'mongodb+srv://Orumpati_1234:9705821087Sai@cluster0.uqgd1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
@@ -66,6 +68,7 @@ app.use('/profile',profile)
 app.use('/addTruk',vehicle);
 app.use('/truckinfo',home)
 app.use('/notificationss',notification)
+app.use('/contact',contact)
 
 app.get("/", (req, res, next)=>{
     res.json({

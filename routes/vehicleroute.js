@@ -30,33 +30,21 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
 
 
     });
-    try {
-        UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
-            async doc=>{
-             var   loadpostedNumber =  doc
-            
-          console.log(loadpostedNumber)
-          for(let i=0;i<loadpostedNumber.length;i++){
-            var uniqId =loadpostedNumber[i].uniqueDeviceId
-          }
-         
-          console.log(uniqId)
+    
+  
 
         await vehicle.save()
     
         res.status(200).json({
+            status:'success',
             registeredVehicle: vehicle
         })
-        
+    
 
     })
         
-    } catch (error) {
-        console.log(error)
-        res.status(400).json(error)
-    }
 
-})
+
 //get vehicles
 router.post('/allVehicless', async (req, res) => {
     try {
@@ -103,7 +91,7 @@ router.post('/truksByStatusAndNumber', async (req, res) => {
     }
 })
 //filterByVehicle API 
-router.get('/filterByVehicle/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
+/*router.get('/filterByVehicle/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
     try {
         const vehicle = await AddVehicle.find({trukname:req.params.trukname, trukoperatingRoutes: { $all: [req.params.trukpickupLocation, req.params.trukdropLocation]  }})
        
@@ -118,8 +106,58 @@ if(!vehicle){
     } catch (error) {
         res.status(401).send(error)
     }
+});*/
+
+//filterBytrukoperatingRoutes API 
+router.get('/filterBytrukoperatingRoutes/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
+    try {
+        const vehicle = await AddVehicle.find({trukname:req.params.trukname, trukoperatingRoutes: { $all: [req.params.trukpickupLocation, req.params.trukdropLocation]  }})
+       
+if(!vehicle){
+    res.status(404).json({message:"Vehicle not fount"})
+}
+
+        res.status(200).json({
+           
+            vehicle
+        })
+    } catch (error) {
+        res.status(401).send(error) 
+    }
 });
 
+//filterByVehicle API 
+router.get('/filterByVehicle/:trukname', async (req, res) => {
+    try {
+        const vehicle = await AddVehicle.find({trukname:req.params.trukname})
+       
+if(!vehicle){
+    res.status(404).json({message:"Vehicle not fount"})
+}
+
+        res.status(200).json({
+           
+            vehicle
+        })
+    } catch (error) {
+        res.status(401).send(error) 
+    }
+});
+
+//get vehicles
+router.get('/allVehicles', async (req, res) => {
+    try {
+        const Load = await AddVehicle.find()
+
+
+        res.status(200).json({
+            TotalProducts: Load.length,
+            Load
+        })
+    } catch (error) {
+        res.status(401).send(error)
+    }
+});
 // GetbymobileNo API
 
  router.get('/allVehicles/:trukOwnerNumber', (req, res, next)=>{
