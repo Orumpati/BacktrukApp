@@ -36,7 +36,8 @@ router.post('/loginDetails',async(req,res,next)=>{
                          companyName:doc.companyName,
                          aadharVerify:doc.aadharVerify,
                          gstVerify:doc.gstVerify,
-                         uniqueDeviceId:doc.uniqueDeviceId
+                         uniqueDeviceId:doc.uniqueDeviceId,
+                         data:doc
                      
                         
                     })
