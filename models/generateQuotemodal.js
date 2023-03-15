@@ -21,7 +21,11 @@ default:false
     agentInitialBidSend:{
         type:Boolean,
         default:false
-            } 
+            } ,
+            TohideAcceptBtn:{
+                type:Boolean,
+                default:false
+                    } 
 })
 
 const VehicleData=mongoose.Schema({
@@ -103,7 +107,12 @@ typeOfPay:{
     type:String,
     //required:true
 },
-
+paymentTypeForOffline:{
+    type:String
+},
+advance:{
+    type:String
+},
 length:{
     type:String,
    // required:true
