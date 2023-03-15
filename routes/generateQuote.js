@@ -362,7 +362,7 @@ router.post('/placeBid', (req, res, next)=>{
                  "time": new Date().getTime()}],
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
      agentInitialBidSend:req.body.agentInitialBidSend,
-    TohideAcceptBtn:req.body.TohideAcceptBtn,
+    
 
      time: new Date().getTime()
  }
@@ -573,11 +573,15 @@ router.post('/updateBids', (req, res, next)=>{
        
     
            //newUpdate query for bids
-           var DataToBids={$push:{ "bids.$.BidActivity":{"price":req.body.price,
+           var DataToBids={$push:{ "bids.$.BidActivity":{
+                         "price":req.body.price,
                           "userNo": req.body.userNo, 
                           "userType":req.body.userType, 
-                          "time": new Date().getTime()}},
-                          $set:{"bids.$.tentativefinalPrice":req.body.price}}
+                          "time": new Date().getTime()}
+                        },
+                          $set:{"bids.$.tentativefinalPrice":req.body.price,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"multi": true },
+                
+                        }
             
         //    if(req.body.isAgent){
         //       updateData=updateBidPrice;
