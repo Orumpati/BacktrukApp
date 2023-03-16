@@ -6,7 +6,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 //express validator
 const { body } = require('express-validator'); //use express validator for few required things
-
+const OneSignal=require('@onesignal/node-onesignal')
 //import the schema here
 const UserSignup = require('../models/userSignup');
 
@@ -38,6 +38,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
 
     if(doc == null){ //if no user found then create new user
         userSignup.save().then( result=> {
+            sendnotificationforplacebid(req.body.firstName + req.body.lastName,"You Registered As",req.body.role,req.body.uniqueDeviceId)
             res.status(200).json({
                message: "User signed up susccessfully",
                status:"success",
@@ -317,4 +318,38 @@ router.put('/putroutes/:id',(req, res)=>{
         
     
 
+     async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
+    console.log(uniqId)
+        const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+    
+    const app_key_provider = {
+        getToken() {
+            return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+        }
+    };
+    
+    const configuration = OneSignal.createConfiguration({
+        authMethods: {
+            app_key: {
+                tokenProvider: app_key_provider
+            }
+        }
+    });
+    const client = new OneSignal.DefaultApi(configuration);
+    
+    const notification = new OneSignal.Notification();
+    notification.app_id = ONESIGNAL_APP_ID;
+    //notification.included_segments = ['Subscribed Users'];
+    //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+    notification.include_external_user_ids = uniqId;
+    notification.contents = {
+        en:  mess +" "+Name+" "+BidPrice
+    };
+    const {id} = await client.createNotification(notification);
+    
+    const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+    console.log(response)
+   // res.json(response)
+    
+    }
 module.exports = router;

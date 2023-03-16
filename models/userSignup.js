@@ -45,6 +45,10 @@ const UserProfileSchema = mongoose.Schema({
    },
    uniqueDeviceId:{
       type:String
+   },
+   firstTimeSignup:{
+      type:String,
+      default:"first"
    }
 //    email:{type:String, required: true}
    

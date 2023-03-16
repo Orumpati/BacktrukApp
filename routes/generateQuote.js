@@ -389,14 +389,14 @@ router.post('/placeBid', (req, res, next)=>{
              console.log(doc)
              //check if it has matching docs then send response
              if(doc){
-                
+                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
              res.status(200).json({
                  data: doc,
                  message:"got the matching loads based on the profile",
                  status:"success"
              })
              //sendnotificationforplacebid(req.body.Bidprice,uniqId,req.body.Name)
-             sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+            
          }else{
              res.status(400).json({
                  message:"no matching docs found",
@@ -610,14 +610,14 @@ router.post('/updateBids', (req, res, next)=>{
                  console.log(doc)
                  //check if it has matching docs then send response
                  if(doc){
-
+                    sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
                  res.status(200).json({
                      data: doc,
                      message:"got the matching loads based on the profile",
                      status:"success"
                  })
                
-                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+               
              }else{
                  res.status(400).json({
                      message:"no matching docs found",
@@ -839,14 +839,14 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
       }
     quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
         doc=>{
-            
+            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
             console.log(doc)
             res.status(200).json({
                 message:doc,
                 status:"success"
             })
           //  sendnotificationforplacebid(req.body.Bidprice,uniqId,req.body.Name)
-            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+            //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
         })
 
     })
