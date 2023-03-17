@@ -37,6 +37,9 @@ const Vehicle = mongoose.Schema({
     },
     trukdropLocation:{
         type:String
+    },
+    isTrukOpenOrClose:{
+        type:String
     }
 })
 

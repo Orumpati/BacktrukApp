@@ -39,7 +39,8 @@ const VehicleData=mongoose.Schema({
     DriverName:{type: String},
     DriverNumber:{type: String},
     operatingRoutes:{type:Array},
-    date:{type:String}
+    date:{type:String},
+    isTrukOpenOrClose:{type:String}
 })
 const TruckMarketVehicleInformation= new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -134,6 +135,9 @@ comments:{
 },
 
 data:{
+    type:String
+},
+isTrukOpenOrClose:{
     type:String
 },
 dropupState:{

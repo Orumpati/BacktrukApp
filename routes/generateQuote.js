@@ -16,11 +16,6 @@ const quoteGenerate = require('../models/generateQuotemodal');
 
 const UserSignup = require("../models/userSignup");
 
-
-
-
-
-
 //post method goes here
 //post method goes here
 router.post('/generateQuote', (req, res, next) => {
@@ -69,6 +64,7 @@ router.post('/generateQuote', (req, res, next) => {
                 Quantity: req.body.Quantity,
                 pickupState: req.body.pickupState,
                 data: req.body.data,
+                isTrukOpenOrClose:req.body.isTrukOpenOrClose,
                 expectedPrice: req.body.expectedPrice,
                 date: req.body.date,
                 typeOfPay: req.body.typeOfPay,
@@ -141,6 +137,38 @@ router.get('/allQuotes', async (req, res) => {
 
 router.post('/myLoadsForSpecificNumber', (req, res, next) => {
     quoteGenerate.find({ Number: req.body.Number }).select().exec().then(
+        doc => {
+            console.log(doc)
+            //check if it has matching docs then send response
+            if (doc.length) {
+                res.status(200).json({
+                    Loads:doc.length,
+                    data: doc,
+                    message: "got the matching loads based on the profile",
+                    status: "success"
+                })
+            } else {
+                res.status(400).json({
+                    message: "no matching loads found",
+                    status: "no docs"
+                })
+
+            }
+        }
+    ).catch(err => {
+        res.status(400).json({
+            message: "failed to get loads",
+            status: "failed",
+            error: err
+        })
+    })
+})
+
+
+//Loads for Specific truck
+router.post('/LoadsForSpecificTruck', (req, res, next) => {
+    
+    quoteGenerate.find({"TruckMarketVehicle.trukOwnerNumber":req.body.trukOwnerNumber}).select().exec().then(
         doc => {
             console.log(doc)
             //check if it has matching docs then send response

@@ -26,7 +26,8 @@ router.post('/vehiclepost', async(req, res, next) => {        // want to create 
         trukcapacity: req.body.trukcapacity,
         trukname: req.body.trukname,
         trukdate:req.body.trukdate,
-        trukOwnerNumber:req.body.trukOwnerNumber
+        trukOwnerNumber:req.body.trukOwnerNumber,
+        isTrukOpenOrClose:req.body.isTrukOpenOrClose
 
 
     });
