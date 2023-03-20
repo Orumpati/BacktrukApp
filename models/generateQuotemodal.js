@@ -25,7 +25,12 @@ default:false
             TohideAcceptBtn:{
                 type:Boolean,
                 default:false
-                    } 
+                    },
+                    
+                    isPaymentCompleted:{
+                        type:Boolean,
+                        default:false
+                       },
 })
 
 const VehicleData=mongoose.Schema({
@@ -40,7 +45,11 @@ const VehicleData=mongoose.Schema({
     DriverNumber:{type: String},
     operatingRoutes:{type:Array},
     date:{type:String},
-    isTrukOpenOrClose:{type:String}
+    isTrukOpenOrClose:{type:String},
+    transporterName:{type:String},
+    companyName:{type:String},
+    mobileNumber:{type:String},
+    city:{type:String}
 })
 const TruckMarketVehicleInformation= new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -157,10 +166,7 @@ userAcceptedPrice: {
 bidAcceptedTo:{
     type:Number
 },
-   isPaymentCompleted:{
-    type:Boolean,
-    default:false
-   },
+ 
    
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
