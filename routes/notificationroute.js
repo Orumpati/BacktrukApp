@@ -37,7 +37,7 @@ router.post('/send', async (req, res, next)=>{
     const notification = new OneSignal.Notification();
     notification.app_id = ONESIGNAL_APP_ID;
     //notification.included_segments = ['Subscribed Users'];
-    notification.include_external_user_ids=["32bacb89-5d9b-4f43-bff4-674688e5e388"];
+    notification.include_external_user_ids=["374e0dc6-4534-4656-9366-8157aae14ac8"];
     notification.contents = {
         en: "Hello OneSignal!"
     };

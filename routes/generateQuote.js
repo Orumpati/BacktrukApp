@@ -15,7 +15,7 @@ router.use(bodyParser.json());
 const quoteGenerate = require('../models/generateQuotemodal');
 
 const UserSignup = require("../models/userSignup");
-
+const vehiclemodal = require("../models/vehicle")
 //post method goes here
 //post method goes here
 router.post('/generateQuote', (req, res, next) => {
@@ -168,7 +168,7 @@ router.post('/myLoadsForSpecificNumber', (req, res, next) => {
 //Loads for Specific truck
 router.post('/LoadsForSpecificTruck', (req, res, next) => {
     
-    quoteGenerate.find({"TruckMarketVehicle.trukOwnerNumber":req.body.trukOwnerNumber}).select().exec().then(
+    quoteGenerate.find({"TruckMarketVehicle.trukvehiclenumber":req.body.trukvehiclenumber}).select().exec().then(
         doc => {
             console.log(doc)
             //check if it has matching docs then send response
@@ -1007,8 +1007,32 @@ router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
 
 
 })
+//attach load to vehicle in vehicle.js
+router.post('/addloadtotruck', (req, res, next) => {
 
 
+
+
+    var query = { _id: req.body._id };
+
+    const placeIniBid ={
+        _id: new mongoose.Types.ObjectId,
+        loadids:req.body.loadids
+    }
+
+    var updateTruckMarketData = { $push: { attachedLoadIds: placeIniBid } }
+    //get the load information query, get load by the ID and add the Vehicle to array. 
+    vehiclemodal.findOneAndUpdate(query, updateTruckMarketData).select().exec().then(doc => {
+        console.log(doc)
+        
+        res.status(200).json({
+            message: doc
+        })
+    })
+
+
+
+})
  
 //notification function
  async function sendnotification(mess,Name,externalids){

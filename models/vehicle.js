@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const generateQuoteSchema =mongoose.Schema({
+    loadids :{
+        type:String
+    }
+})
 
 const Vehicle = mongoose.Schema({
 
@@ -40,7 +45,8 @@ const Vehicle = mongoose.Schema({
     },
     isTrukOpenOrClose:{
         type:String
-    }
+    },
+    attachedLoadIds:[generateQuoteSchema],
 })
 
 
