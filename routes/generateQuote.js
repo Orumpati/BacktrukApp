@@ -65,6 +65,9 @@ router.post('/generateQuote', (req, res, next) => {
                 pickupState: req.body.pickupState,
                 data: req.body.data,
                 isTrukOpenOrClose:req.body.isTrukOpenOrClose,
+                typeOfHyva:req.body.typeOfHyva,
+                typeOfTrailer:req.body.typeOfTrailer,
+                typeOfContainer:req.body.typeOfContainer,
                 expectedPrice: req.body.expectedPrice,
                 date: req.body.date,
                 typeOfPay: req.body.typeOfPay,
@@ -915,6 +918,10 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
       DriverNumber:req.body.DriverNumber,
       operatingRoutes:req.body.operatingRoutes,
       date:req.body.date,
+      transporterName:req.body.transporterName,
+      companyName:req.body.companyName,
+      mobileNumber:req.body.mobileNumber,
+      city:req.bodycity
       
     }
 

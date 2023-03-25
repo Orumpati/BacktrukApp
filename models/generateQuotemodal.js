@@ -31,6 +31,7 @@ default:false
                         type:Boolean,
                         default:false
                        },
+                   
 })
 
 const VehicleData=mongoose.Schema({
@@ -149,6 +150,15 @@ data:{
 isTrukOpenOrClose:{
     type:String
 },
+typeOfHyva:{
+    type:String
+},
+typeOfTrailer:{
+    type:String
+},
+typeOfContainer:{
+    type:String
+},
 dropupState:{
     type:String
 },
@@ -166,7 +176,10 @@ userAcceptedPrice: {
 bidAcceptedTo:{
     type:Number
 },
- 
+shareContact:{
+    type:Boolean,
+    default:false
+   },
    
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
