@@ -31,6 +31,7 @@ default:false
                         type:Boolean,
                         default:false
                        },
+                     
                    
 })
 
@@ -180,7 +181,9 @@ shareContact:{
     type:Boolean,
     default:false
    },
-   
+   paymentId:{
+    type:String
+   },
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
    vehicleInformation:VehicleData,

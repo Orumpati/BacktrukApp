@@ -446,6 +446,7 @@ router.post('/placeBid', (req, res, next)=>{
     })
  } )
  
+ 
  //Get the load by status and mobile number
 
 router.post('/loadsByStatusAndNumber', async (req, res) => {
@@ -668,6 +669,75 @@ router.post('/updateBids', (req, res, next)=>{
         }) 
      } )
      
+//payment confirm
+router.post('/paymentconfirm', (req, res, next)=>{
+
+        //     console.log(new Date().getTime());
+          var query= {"_id":req.body._id}  //quote id and truker mobile no  always Agent mobile NO
+       
+   
+    //alternate bid Current Bid Service
+   /* const placeIniBid ={
+        
+      
+        paymentId:req.body.paymentId,
+       
+   
+       // time: new Date().getTime()
+    }*/
+    
+         
+    
+    
+          //form the query here
+         /* var data=   { $push: { bids: placeIniBid }}
+           console.log(query)*/
+          // { $push: { "bids.$.Bidprice":req.body.price }}
+
+         /* UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+            doc=>{
+             var   loadpostedNumber =  doc
+            
+          console.log(loadpostedNumber)
+          for(let i=0;i<loadpostedNumber.length;i++){
+            var uniqId =loadpostedNumber[i].uniqueDeviceId
+          }*/
+         
+        //  console.log(uniqId)
+        
+         //find the docID or quote ID
+         quoteGenerate.findOneAndUpdate(query,{paymentId:req.body.paymentId}).select().exec().then(
+             doc=>{
+                 console.log(doc)
+                 //check if it has matching docs then send response
+                 if(doc){
+                    //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                 res.status(200).json({
+                     data: doc,
+                     message:"got the matching loads based on the profile",
+                     status:"success"
+                 })
+               
+               
+             }else{
+                 res.status(400).json({
+                     message:"no matching docs found",
+                     status:"no docs"
+                 })
+     
+             }
+
+             }
+         ).catch(err=>{
+             res.status(400).json({
+                 message:"failed to bid",
+                 status: "failed",
+                 error:err
+             })
+         })
+       // }) 
+     } )
+     
 
 
 //ShowBids to customer
@@ -827,7 +897,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted}}
+    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{
@@ -921,7 +991,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
       transporterName:req.body.transporterName,
       companyName:req.body.companyName,
       mobileNumber:req.body.mobileNumber,
-      city:req.bodycity
+      city:req.body.city
       
     }
 
@@ -929,7 +999,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
     //query find by the ID
    var query={"_id":req.body._id};
     //form the query here
-    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true }}  //$set for setting the variable value
+    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact }}  //$set for setting the variable value
     console.log(query)
     //find the docID or quote ID
    //  quoteGenerate.findOneAndUpdate(query, updateData).select().exec().then(
