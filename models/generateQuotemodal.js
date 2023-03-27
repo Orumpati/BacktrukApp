@@ -186,7 +186,7 @@ shareContact:{
    },
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
-   vehicleInformation:VehicleData,
+   vehicleInformation:[VehicleData],
    TruckMarketVehicle:[TruckMarketVehicleInformation]
 });
 
