@@ -826,6 +826,7 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
             var tempData;
            for(item of doc){
             for(i of item.bids){
+                for(j of item.vehicleInformation){
                 if(i.mobileNo==req.body.mobileNo){
                     console.log(i.mobileNo);
                     var obj={
@@ -845,11 +846,14 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         height:item.height,
                         comments:item.comments,
                         quoteStatus:item.quoteStatus,
-                        quoteBid:i
+                        shareContact:item.shareContact,
+                        quoteBid:i,
+                        vehicleInformation:j
+                       
                     }
                     bidData.push(obj);
                 }
-                
+            }
             }
            }
 
@@ -929,7 +933,7 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted}}
+    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn ,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{
