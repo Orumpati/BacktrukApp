@@ -825,8 +825,9 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
         if(doc){
             var tempData;
            for(item of doc){
+            //for(j of item.vehicleInformation){
             for(i of item.bids){
-                for(j of item.vehicleInformation){
+              
                 if(i.mobileNo==req.body.mobileNo){
                     console.log(i.mobileNo);
                     var obj={
@@ -848,13 +849,13 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         quoteStatus:item.quoteStatus,
                         shareContact:item.shareContact,
                         quoteBid:i,
-                        vehicleInformation:j
+                        vehicleInformation:item.vehicleInformation
                        
                     }
                     bidData.push(obj);
                 }
             }
-            }
+           // }
            }
 
 
