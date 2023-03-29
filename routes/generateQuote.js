@@ -80,7 +80,7 @@ router.post('/generateQuote', (req, res, next) => {
                 quoteStatus: req.body.quoteStatus,
                 quoteSentTo: provider,
                 bids: bids,
-                //TruckMarketVehicle: truckMarketVehicleData
+                TruckMarketVehicle: truckMarketVehicleData
             });
 
             quote.save().then(result => {
@@ -295,6 +295,7 @@ router.put('/quoteDeactivate/:id', async (req, res) => {
         res.status(400).json({ error })
     }
 });
+
 
 //Get the load by isActive
 
