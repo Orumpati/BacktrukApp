@@ -153,9 +153,9 @@ router.put('/putprofile/:id',(req, res)=>{
      return res.status(400).send(`no record with id :${req.params.id}`);*/
    var data=  {addressType :req.body.addressType,
      
-    doorNo:req.body.doorNo,
-    
-    
+        doorNo:req.body.doorNo,
+        aadharVerify:req.body.aadharVerify,
+        gstVerify:req.body.gstVerify,
         areaName :req.body.areaName,
         landMark:req.body.landMark,
        city:req.body.city,

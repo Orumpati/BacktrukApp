@@ -21,13 +21,17 @@ const { response } = require("../app");
 router.post('/vehiclepost', async(req, res, next) => {        // want to create product details
     const vehicle = new AddVehicle({
         trukvehiclenumber: req.body.trukvehiclenumber,
-        trukcurrentLocation: req.body.trukcurrentLocation,
+        OriginLocation: req.body.OriginLocation,
         trukoperatingRoutes: req.body.trukoperatingRoutes,
         trukcapacity: req.body.trukcapacity,
         trukname: req.body.trukname,
         trukdate:req.body.trukdate,
         trukOwnerNumber:req.body.trukOwnerNumber,
-        isTrukOpenOrClose:req.body.isTrukOpenOrClose
+        isTrukOpenOrClose:req.body.isTrukOpenOrClose,
+        typeofHyva:req.body.typeofHyva,
+        typeOfTrailer:req.body.typeOfTrailer,
+        typeOfContainer:req.body.typeOfContainer,
+        typeofTanker:req.body.typeofTanker
 
 
     });
@@ -227,6 +231,7 @@ router.put('/TrukDeactive/:id', async (req, res) => {
         res.status(400).json({ error })
     }
 })
+//complete Status
 
 //delete API
 router.delete('/deleteTruk/:_id' ,async(req,res)=> {

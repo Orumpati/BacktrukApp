@@ -11,7 +11,7 @@ const Vehicle = mongoose.Schema({
         type: String,
         //require: true
     },
-    trukcurrentLocation: {
+    OriginLocation: {
         type: String,
         //required: true
     },
@@ -46,6 +46,19 @@ const Vehicle = mongoose.Schema({
     isTrukOpenOrClose:{
         type:String
     },
+    typeOfHyva:{
+        type:String
+    },
+    typeOfTrailer:{
+        type:String
+    },
+    typeOfContainer:{
+        type:String
+    },
+    typeofTanker:{
+        type:String
+    },
+
     attachedLoadIds:[generateQuoteSchema],
 })
 

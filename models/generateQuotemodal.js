@@ -181,6 +181,10 @@ shareContact:{
     type:Boolean,
     default:false
    },
+   initialAccept:{
+    type:String,
+    default:"notAccepted"
+   },
    paymentId:{
     type:String
    },

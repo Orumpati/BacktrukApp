@@ -846,6 +846,7 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         length:item.length,
                         breadth:item.breadth,
                         height:item.height,
+                        initialAccept:item.initialAccept,
                         comments:item.comments,
                         quoteStatus:item.quoteStatus,
                         shareContact:item.shareContact,
