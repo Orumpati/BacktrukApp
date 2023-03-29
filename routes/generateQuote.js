@@ -68,6 +68,7 @@ router.post('/generateQuote', (req, res, next) => {
                 typeOfHyva:req.body.typeOfHyva,
                 typeOfTrailer:req.body.typeOfTrailer,
                 typeOfContainer:req.body.typeOfContainer,
+                typeofTanker:req.body.typeofTanker,
                 expectedPrice: req.body.expectedPrice,
                 date: req.body.date,
                 typeOfPay: req.body.typeOfPay,
