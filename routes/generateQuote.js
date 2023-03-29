@@ -709,7 +709,7 @@ router.post('/paymentconfirm', (req, res, next)=>{
         //  console.log(uniqId)
         
          //find the docID or quote ID
-         quoteGenerate.findOneAndUpdate(query,{paymentId:req.body.paymentId}).select().exec().then(
+         quoteGenerate.findOneAndUpdate(query,{paymentId:req.body.paymentId,isPaymentCompleted:req.body.isPaymentCompleted}).select().exec().then(
              doc=>{
                  console.log(doc)
                  //check if it has matching docs then send response
@@ -851,6 +851,8 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         comments:item.comments,
                         quoteStatus:item.quoteStatus,
                         shareContact:item.shareContact,
+                        paymentId:item.paymentId,
+                        isPaymentCompleted:item.isPaymentCompleted,
                         quoteBid:i,
                         vehicleInformation:item.vehicleInformation
                        

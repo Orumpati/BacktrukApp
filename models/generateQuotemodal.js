@@ -27,10 +27,7 @@ default:false
                 default:false
                     },
                     
-                    isPaymentCompleted:{
-                        type:Boolean,
-                        default:false
-                       },
+                  
                      
                    
 })
@@ -157,6 +154,9 @@ typeOfHyva:{
 typeOfTrailer:{
     type:String
 },
+typeofTanker:{
+    type:String
+},
 typeOfContainer:{
     type:String
 },
@@ -184,6 +184,10 @@ shareContact:{
    initialAccept:{
     type:String,
     default:"notAccepted"
+   },
+   isPaymentCompleted:{
+    type:Boolean,
+    default:false
    },
    paymentId:{
     type:String
