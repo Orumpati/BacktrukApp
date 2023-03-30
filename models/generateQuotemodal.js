@@ -189,6 +189,10 @@ shareContact:{
     type:Boolean,
     default:false
    },
+   TohideNegoshit:{
+    type:Boolean,
+    default:false
+   },
    paymentId:{
     type:String
    },

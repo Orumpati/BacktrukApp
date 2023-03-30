@@ -418,7 +418,7 @@ router.post('/placeBid', (req, res, next)=>{
      
       console.log(uniqId)
      //find the docID or quote ID
-     quoteGenerate.findByIdAndUpdate({_id: req.body._id}, query).select().exec().then(
+     quoteGenerate.findByIdAndUpdate({_id: req.body._id}, query,{TohideNegoshit:req.body.TohideNegoshit}).select().exec().then(
          doc=>{
              console.log(doc)
              //check if it has matching docs then send response
@@ -851,6 +851,7 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         comments:item.comments,
                         quoteStatus:item.quoteStatus,
                         shareContact:item.shareContact,
+                        TohideNegoshit:item.TohideNegoshit,
                         paymentId:item.paymentId,
                         isPaymentCompleted:item.isPaymentCompleted,
                         quoteBid:i,
