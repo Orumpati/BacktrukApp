@@ -151,7 +151,8 @@ router.get('/:username', (req, res, next) =>{
 router.put('/putprofile/:id',(req, res)=>{
     /* if(!ObjectId.isValid(req.params.id))
      return res.status(400).send(`no record with id :${req.params.id}`);*/
-   var data=  {addressType :req.body.addressType,
+   var data=  {
+    addressType :req.body.addressType,
      
         doorNo:req.body.doorNo,
         aadharVerify:req.body.aadharVerify,

@@ -271,6 +271,30 @@ router.put('/updateQuotes/:id', async (req, res) => {
     }
 })
 
+
+//update NegoSghiy
+router.put('/updateNego/:id', async (req, res) => {
+    const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
+    const allowedUpdates = ['TohideNegoshit'] // updates that are allowed
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
+    if (!isValidOperation) {
+        return res.status(400).json({ error: 'invalid updates' })
+    }
+    try { // used to catch errors
+        const product = await quoteGenerate.findOne({ _id: req.params.id }) //finding the products based on id
+        if (!product) {
+            return res.status(404).json({ message: 'Invalid Product' }) //error status
+        }
+        updates.forEach((update) => product[update] = req.body[update]) //updating the value
+
+        await product.save()
+        res.status(200).json({
+            updatedProduct: product
+        })
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+})
 //Isactive to Deactive Funtion
 
 
@@ -418,7 +442,7 @@ router.post('/placeBid', (req, res, next)=>{
      
       console.log(uniqId)
      //find the docID or quote ID
-     quoteGenerate.findByIdAndUpdate({_id: req.body._id}, query,{TohideNegoshit:req.body.TohideNegoshit}).select().exec().then(
+     quoteGenerate.findByIdAndUpdate({_id: req.body._id}, query).select().exec().then(
          doc=>{
              console.log(doc)
              //check if it has matching docs then send response
