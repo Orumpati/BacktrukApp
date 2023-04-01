@@ -1,14 +1,24 @@
 //get the reuired libraries
 const mongoose= require("mongoose");
 
-// const subObj={
-//     addressType:{type: String, required:true},
-//     doorNo:{type: String, required: true},
-//     areaName:{type: String, required:true},
-//     landMark:{type: String, required:true},
-//     city:{type: String, required:true},
-//     pincode:{type: String}
-// } 
+const subObj={
+   _id: mongoose.Schema.Types.ObjectId,
+    TrukType:{type: String},
+    TrukNumber:{type: String },
+    TrukCapacity:{type: String},
+    TrukImage:{type: String},
+    RcImage:{type: String},
+    DrivingLienceImage:{type: String},
+    AadharImage:{type: String},
+    PanImage:{type: String},
+    DriverName:{type: String},
+    DriverNumber:{type: String},
+    Availability:{
+      default:false,
+      type:Boolean
+    }
+
+ } 
 
 //define the schema here
 const UserProfileSchema = mongoose.Schema({
@@ -49,8 +59,8 @@ const UserProfileSchema = mongoose.Schema({
    firstTimeSignup:{
       type:String,
       default:"first"
-   }
-//    email:{type:String, required: true}
+   },
+   Drivers:[subObj]
    
 });
 

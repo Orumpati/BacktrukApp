@@ -36,7 +36,7 @@ const VehicleData=mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     vehicleNo:{type: String},
     vehicleType:{type: String},
-    vehicleCurrentLocation:{type: String},
+    OriginLocation:{type: String},
     vehicleCapacity:{type: String}, 
     agentNo:{type: String},
     BidID:{type: String}, 
@@ -62,7 +62,7 @@ const TruckMarketVehicleInformation= new mongoose.Schema({
 
 
     trukvehiclenumber:{type: String},
-    trukcurrentLocation:{type: String},
+    OriginLocation:{type: String},
     trukoperatingRoutes:{type: Array},
     trukcapacity:{type: String},
     trukname:{type: String},

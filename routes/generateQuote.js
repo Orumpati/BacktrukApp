@@ -1097,7 +1097,7 @@ router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
 
 
         trukvehiclenumber:req.body.trukvehiclenumber,
-        trukcurrentLocation:req.body.trukcurrentLocation,
+        OriginLocation:req.body.OriginLocation,
         trukoperatingRoutes:req.body.trukoperatingRoutes,
         trukcapacity:req.body.trukcapacity,
         trukname:req.body.trukname,

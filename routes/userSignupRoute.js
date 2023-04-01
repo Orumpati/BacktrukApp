@@ -4,13 +4,37 @@ const express = require("express");
  const router = express.Router();
 //next mongoose is required
 const mongoose = require("mongoose");
+const aws = require('aws-sdk')
+const multer = require('multer')
+const multerS3 = require('multer-s3-v2');
 //express validator
 const { body } = require('express-validator'); //use express validator for few required things
 const OneSignal=require('@onesignal/node-onesignal')
 //import the schema here
 const UserSignup = require('../models/userSignup');
+const userSignup = require("../models/userSignup");
 
+aws.config.update({
+    secretAccessKey: 'YJTJljNdeg1IgSWZKcY4aPd4ObTgeAyN3+hBjceF',
+    accessKeyId: 'AKIAQV7PAMQ75KVD3CZM',
+    region: 'ap-south-1',
+    
 
+});
+const BUCKET = '3-nodejs123';
+const s3 = new aws.S3();
+
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        acl: "public-read",
+        bucket: BUCKET,
+        key: function (req, file, cb) {
+            console.log(file);
+            cb(null, file.originalname)
+        }
+    })
+})
 //post method goes here
 router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, next)=>{
     console.log("User profile is called")
@@ -317,7 +341,128 @@ router.put('/putroutes/:id',(req, res)=>{
      
      })     
         
+     router.post('/AddDrivers', (req, res, next)=>{
+
+        //     console.log(new Date().getTime());
+          var query= {_id:req.body._id}  //Transporter userSignup Id
+       const body ={
+        TrukType:req.body.TrukType,
+        TrukNumber:req.body.TrukNumber,
+        TrukCapacity:req.body.TrukCapacity,
+        TrukImage:req.body.TrukImage,
+        RcImage:req.body.RcImage,
+        DrivingLienceImage:req.body.DrivingLienceImage,
+        AadharImage:req.body.AadharImage,
+        PanImage:req.body.PanImage,
+        DriverName:req.body.DriverName,
+        DriverNumber:req.body.DriverNumber
+       }
+   
+       var data=   { $push: { Drivers: body }}
+         userSignup.findOneAndUpdate(query,data).select().exec().then(
+             doc=>{
+                 console.log(doc)
+
+                 if(doc){
+                    //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                 res.status(200).json({
+                     data: doc,
+                     message:"Driver added Successfull",
+                     status:"success"
+                 })
+               
+               
+             }else{
+                 res.status(400).json({
+                     message:"no matching docs found",
+                     status:"no docs"
+                 })
+     
+             }
+
+             }
+         ).catch(err=>{
+             res.status(400).json({
+                 message:"failed to Add Drivers",
+                 status: "failed",
+                 error:err
+             })
+         })
+       // }) 
+     } )
+
+
+     router.post('/updateAvailability', (req, res, next)=>{
+        
+            //     console.log(new Date().getTime());
+              var query= {"_id":req.body._id,"Drivers.DriverNumber":req.body.DriverNumber}  //quote id and truker mobile no  always Agent mobile NO
+           
+        
+               //newUpdate query for bids
+               var DataToBids={
+                              $set:{"Drivers.$.Availability":req.body.Availability },
+                    
+                            }
+      console.log(DataToBids)
+             userSignup.findOneAndUpdate(query,DataToBids).select().exec().then(
+                 doc=>{
+                     console.log(doc)
+                     //check if it has matching docs then send response
+                     if(doc){
+                       // sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                     res.status(200).json({
+                         data: doc,
+                         message:"status Updated",
+                         status:"success"
+                     })
+                   
+                   
+                 }else{
+                     res.status(400).json({
+                         message:"no matching docs found",
+                         status:"no docs"
+                     })
+         
+                 }
     
+                 }
+             ).catch(err=>{
+                 res.status(400).json({
+                     message:"failed to Update",
+                     status: "failed",
+                     error:err
+                 })
+             })
+            }) 
+         
+
+
+
+        //upload file path  to hospitaldatas in mongodb 
+        router.post('/uploadImages/:id', upload.single('file'),  function (req, res, next) {
+        
+    
+           // res.send('Successfully uploaded ' + req.file.location + ' location!')
+
+            var data=  {
+                DrivingLienceImage:req.file.location,
+        
+            };
+             userSignup.findByIdAndUpdate(req.params.id,
+                    {$set:
+                        data
+                    }  , {new: true},(err,docs)=>{
+                        if(!err){
+                            res.send(docs);
+                        }else{
+                            console.log('error in file upload:' +JSON.stringify(err,undefined,2));
+                        }
+                    })
+                
+            //await s3bucket.update({filePath:req.file.location})
+            //await s3bucket.create({filePath:req.file.location});
+        })
+
 
      async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     console.log(uniqId)
