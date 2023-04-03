@@ -12,7 +12,7 @@ const subObj={
     AadharImage:{type: String},
     PanImage:{type: String},
     DriverName:{type: String},
-    DriverNumber:{type: String},
+    DriverNumber:{type: String, unique:false },
     Availability:{
       default:false,
       type:Boolean
@@ -26,7 +26,7 @@ const UserProfileSchema = mongoose.Schema({
    _id: mongoose.Schema.Types.ObjectId,
 
 //    password: { type: String, required: true },
-   mobileNo: { type: Number, unique:true,  },
+   mobileNo: { type: Number, unique:false  },
    firstName:  {type:String, },
    lastName:  {type:String, },
    role:  {type:String, },
@@ -60,7 +60,25 @@ const UserProfileSchema = mongoose.Schema({
       type:String,
       default:"first"
    },
-   Drivers:[subObj]
+   Drivers:[subObj],
+   TrukType:{type: String},
+   TrukNumber:{type: String },
+   TrukCapacity:{type: String},
+   TrukImage:{type: String},
+   RcImage:{type: String},
+   DrivingLienceImage:{type: String},
+   AadharImage:{type: String},
+   PanImage:{type: String},
+   DriverName:{type: String},
+   DriverNumber:{type: String,unique:false },
+   Availability:{
+     default:false,
+     type:Boolean
+   },
+   userRole:{
+      type:String
+      
+   }
    
 });
 

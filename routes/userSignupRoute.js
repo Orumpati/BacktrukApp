@@ -13,7 +13,8 @@ const OneSignal=require('@onesignal/node-onesignal')
 //import the schema here
 const UserSignup = require('../models/userSignup');
 const userSignup = require("../models/userSignup");
-
+const Drivers =require('../models/drivers');
+const drivers = require("../models/drivers");
 aws.config.update({
     secretAccessKey: 'YJTJljNdeg1IgSWZKcY4aPd4ObTgeAyN3+hBjceF',
     accessKeyId: 'AKIAQV7PAMQ75KVD3CZM',
@@ -38,7 +39,6 @@ const upload = multer({
 //post method goes here
 router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, next)=>{
     console.log("User profile is called")
-
     const userSignup = new UserSignup({
         _id: new mongoose.Types.ObjectId,
         //password: req.body.password,
@@ -53,12 +53,14 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         aadharVerify:'notVerified',
         routes:req.body.routes,
         aboutCompany:req.body.aboutCompany,
-        uniqueDeviceId:req.body.uniqueDeviceId
+        uniqueDeviceId:req.body.uniqueDeviceId, 
+      
            });
 
      var mobileNo = req.body.mobileNo;
+ 
   //first check if user is alredy existed 
-  UserSignup.findOne({mobileNo:mobileNo}).select().exec().then(doc =>{
+  UserSignup.findOne({mobileNo:mobileNo }).select().exec().then(doc =>{
 
     if(doc == null){ //if no user found then create new user
         userSignup.save().then( result=> {
@@ -68,6 +70,64 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
                status:"success",
                Id: result._id,
                selectType:result.role
+            });
+  
+     }) .catch(err => {
+        console.log(err);
+        res.status(500).json({
+             error: err,
+             status:"faileds"
+              });
+         })
+
+    }else{
+        res.status(500).json({message:"user aleredy exists",
+                              status:"failed"
+    
+                             })
+    }
+    
+
+    });
+
+
+});
+ 
+
+//add driver
+
+router.post('/signupDriver',(req, res, next)=>{
+    console.log("User ")
+    const driverSignup = new UserSignup({
+        _id: new mongoose.Types.ObjectId,
+
+        uniqueDeviceId:req.body.uniqueDeviceId, 
+        TrukType:req.body.TrukType,
+        TrukNumber:req.body.TrukNumber,
+        TrukCapacity:req.body.TrukCapacity,
+        TrukImage:req.body.TrukImage,
+        RcImage:req.body.RcImage,
+        DrivingLienceImage:req.body.DrivingLienceImage,
+        AadharImage:req.body.AadharImage,
+        PanImage:req.body.PanImage,
+        DriverName:req.body.DriverName,
+        DriverNumber:req.body.DriverNumber,
+        userRole:req.body.userRole
+           });
+
+   
+     var DriverNumber = req.body.DriverNumber;
+  //first check if user is alredy existed 
+  UserSignup.findOne({ DriverNumber:DriverNumber}).select().exec().then(doc =>{
+console.log(doc)
+    if(doc == null){ //if no user found then create new user
+        driverSignup.save().then( result=> {
+       //     sendnotificationforplacebid(req.body.firstName + req.body.lastName,"You Registered As",req.body.role,req.body.uniqueDeviceId)
+            res.status(200).json({
+               message: "Driver signed up susccessfully",
+               status:"success",
+               Id: result._id,
+               selectType:result.userRole
             });
   
      }) .catch(err => {
@@ -436,6 +496,47 @@ router.put('/putroutes/:id',(req, res)=>{
             }) 
          
 
+           /* router.post('/addnewDrivers', (req, res, next) => {
+                const newdriber =new drivers({
+                    _id:new mongoose.Types.ObjectId,
+                    TrukType:req.body.TrukType,
+                    TrukNumber:req.body.TrukNumber,
+                    TrukCapacity:req.body.TrukCapacity,
+                    TrukImage:req.body.TrukImage,
+                    RcImage:req.body.RcImage,
+                    DrivingLienceImage:req.body.DrivingLienceImage,
+                    AadharImage:req.body.AadharImage,
+                    PanImage:req.body.PanImage,
+                    DriverName:req.body.DriverName,
+                    DriverNumber:req.body.DriverNumber
+                })
+                newdriber.save().then(
+                    doc => {
+                        console.log(doc)
+                        //check if it has matching docs then send response
+                        if (doc) {
+                            res.status(200).json({
+                                Loads:doc.length,
+                                data: doc,
+                                message: "driver added",
+                                status: "success"
+                            })
+                        } else {
+                            res.status(400).json({
+                                message: "no matching lo found",
+                                status: "no docs"
+                            })
+            
+                        }
+                    }
+                ).catch(err => {
+                    res.status(400).json({
+                        message: "failed to add driver",
+                        status: "failed",
+                        error: err
+                    })
+                })
+            })*/
 
 
         //upload file path  to hospitaldatas in mongodb 
