@@ -26,7 +26,7 @@ const UserProfileSchema = mongoose.Schema({
    _id: mongoose.Schema.Types.ObjectId,
 
 //    password: { type: String, required: true },
-   mobileNo: { type: Number, unique:false  },
+   mobileNo: { type: Number, unique:true  },
    firstName:  {type:String, },
    lastName:  {type:String, },
    role:  {type:String, },
@@ -70,7 +70,6 @@ const UserProfileSchema = mongoose.Schema({
    AadharImage:{type: String},
    PanImage:{type: String},
    DriverName:{type: String},
-   DriverNumber:{type: String,unique:false },
    Availability:{
      default:false,
      type:Boolean

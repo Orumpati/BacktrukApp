@@ -111,14 +111,14 @@ router.post('/signupDriver',(req, res, next)=>{
         AadharImage:req.body.AadharImage,
         PanImage:req.body.PanImage,
         DriverName:req.body.DriverName,
-        DriverNumber:req.body.DriverNumber,
+        mobileNo:req.body.mobileNo,
         userRole:req.body.userRole
            });
 
    
-     var DriverNumber = req.body.DriverNumber;
+     var mobileNo = req.body.mobileNo;
   //first check if user is alredy existed 
-  UserSignup.findOne({ DriverNumber:DriverNumber}).select().exec().then(doc =>{
+  UserSignup.findOne({ mobileNo:mobileNo}).select().exec().then(doc =>{
 console.log(doc)
     if(doc == null){ //if no user found then create new user
         driverSignup.save().then( result=> {
@@ -419,6 +419,11 @@ router.put('/putroutes/:id',(req, res)=>{
        }
    
        var data=   { $push: { Drivers: body }}
+       var DriverNumber = req.body.DriverNumber;
+       //first check if user is alredy existed 
+       UserSignup.findOne({ DriverNumber:DriverNumber}).select().exec().then(doc =>{
+     console.log(doc)
+         if(doc == null){ //if no user found then create new user
          userSignup.findOneAndUpdate(query,data).select().exec().then(
              doc=>{
                  console.log(doc)
@@ -439,6 +444,7 @@ router.put('/putroutes/:id',(req, res)=>{
                  })
      
              }
+            
 
              }
          ).catch(err=>{
@@ -448,7 +454,15 @@ router.put('/putroutes/:id',(req, res)=>{
                  error:err
              })
          })
-       // }) 
+        }else{
+            res.status(500).json({message:"user aleredy exists",
+                                  status:"failed"
+        
+                                 })
+        }
+        
+    
+        });
      } )
 
 
@@ -496,7 +510,7 @@ router.put('/putroutes/:id',(req, res)=>{
             }) 
          
 
-           /* router.post('/addnewDrivers', (req, res, next) => {
+            router.post('/addnewDrivers', (req, res, next) => {
                 const newdriber =new drivers({
                     _id:new mongoose.Types.ObjectId,
                     TrukType:req.body.TrukType,
@@ -536,7 +550,7 @@ router.put('/putroutes/:id',(req, res)=>{
                         error: err
                     })
                 })
-            })*/
+            })
 
 
         //upload file path  to hospitaldatas in mongodb 

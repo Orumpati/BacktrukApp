@@ -37,7 +37,14 @@ router.post('/loginDetails',async(req,res,next)=>{
                          aadharVerify:doc.aadharVerify,
                          gstVerify:doc.gstVerify,
                          uniqueDeviceId:doc.uniqueDeviceId,
-                         data:doc
+                         data:doc,
+                         userRole:doc.userRole,
+                         Availability:doc.Availability,
+                         DriverName:doc.DriverName,
+                         TrukCapacity:doc.TrukCapacity,
+                         TrukNumber:doc.TrukNumber,
+                         TrukType:doc.TrukType,
+                         
                      
                         
                     })
