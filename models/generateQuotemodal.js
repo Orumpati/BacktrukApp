@@ -196,6 +196,14 @@ shareContact:{
    paymentId:{
     type:String
    },
+   DriverStatus:{
+    type:String,
+    default:'open'
+ },
+ ProofOfdelivery:{
+    type:Array,
+    
+ },
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
    vehicleInformation:[VehicleData],

@@ -150,6 +150,51 @@ console.log(doc)
 
 
 });
+
+//transporter details who attached the particular driver
+
+router.post('/findtransporterbydrivers', (req, res, next)=>{
+
+  
+
+    
+    //     console.log(new Date().getTime());
+      var query= {"Drivers.DriverNumber":req.body.mobileNo}  //quote id and truker mobile no  always Agent mobile NO
+   
+
+   
+
+      UserSignup.find(query).select().exec().then(
+         doc=>{
+             console.log(doc)
+             //check if it has matching docs then send response
+             if(doc){
+                //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+             res.status(200).json({
+                 data: doc,
+                 message:"got the matching transporter based on the profile",
+                 status:"success"
+             })
+           
+           
+         }else{
+             res.status(400).json({
+                 message:"no matching docs found",
+                 status:"no docs"
+             })
+ 
+         }
+
+         }
+     ).catch(err=>{
+         res.status(400).json({
+             message:"no load found",
+             status: "failed",
+             error:err
+         })
+     })
+    }) 
+ 
  
 
 

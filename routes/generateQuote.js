@@ -705,7 +705,7 @@ router.post('/findloadbydrivers', (req, res, next)=>{
 
     
         //     console.log(new Date().getTime());
-          var query= {"vehicleInformation.DriverNumber":req.body.mobileNo}  //quote id and truker mobile no  always Agent mobile NO
+          var query= {"vehicleInformation.DriverNumber":req.body.mobileNo,"DriverStatus":req.body.DriverStatus}  //quote id and truker mobile no  always Agent mobile NO
        
     
        

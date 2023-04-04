@@ -77,8 +77,8 @@ const UserProfileSchema = mongoose.Schema({
    userRole:{
       type:String
       
-   }
-   
+   },
+
 });
 
 
