@@ -198,7 +198,7 @@ shareContact:{
    },
    DriverStatus:{
     type:String,
-    default:'open'
+    default:'Active'
  },
  ProofOfdelivery:{
     type:Array,
