@@ -14,7 +14,7 @@ const subObj={
     DriverName:{type: String},
     DriverNumber:{type: String, unique:false },
     Availability:{
-      default:false,
+      default:true,
       type:Boolean
     }
 

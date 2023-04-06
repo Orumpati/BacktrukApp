@@ -72,6 +72,15 @@ const TruckMarketVehicleInformation= new mongoose.Schema({
 
 })
 
+const podInfo= new mongoose.Schema({
+    waybill:{type: String},
+    orderId:{type: String},
+    ConsigneeName:{type: String},
+    Address:{type: String},
+    Finalstatus:{type: String},
+    DeliveredOn:{type:String}
+})
+
 //define the schema here
 const generateQuoteSchema = mongoose.Schema({
     //define the object ID
@@ -200,10 +209,7 @@ shareContact:{
     type:String,
     default:'Active'
  },
- ProofOfdelivery:{
-    type:Array,
-    
- },
+ ProofOfdelivery:[podInfo],
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
    vehicleInformation:[VehicleData],

@@ -1080,7 +1080,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
     }
 
    
-    //query find by the ID
+    //query find by the IDAddDrivers
    var query={"_id":req.body._id};
     //form the query here
     var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact }}  //$set for setting the variable value
@@ -1116,6 +1116,56 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
 
 })
 
+router.post('/attachPod', (req, res, next)=>{
+
+    //     console.log(new Date().getTime());
+      var query= {_id:req.body._id}  //Transporter userSignup Id
+   const body ={
+    waybill:req.body.waybill,
+    orderId:req.body.orderId,
+    ConsigneeName:req.body.ConsigneeName,
+    Address:req.body.Address,
+    Finalstatus:req.body.Finalstatus,
+    DeliveredOn:req.body.DeliveredOn
+   }
+
+   var data=   { $set: { ProofOfdelivery: body, DriverStatus:req.body.DriverStatus}}
+  
+   quoteGenerate.findOneAndUpdate(query,data).select().exec().then(
+         doc=>{
+             console.log(doc)
+
+             if(doc){
+                //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+             res.status(200).json({
+                 data: doc,
+                 message:"POD added Successfull",
+                 status:"success"
+             })
+           
+           
+         }else{
+             res.status(400).json({
+                 message:"no matching Loads found",
+                 status:"no docs"
+             })
+ 
+         }
+        
+
+         }
+     ).catch(err=>{
+         res.status(400).json({
+             message:"failed to Add POD",
+             status: "failed",
+             error:err
+         })
+     })
+    
+    
+
+    });
+ 
 
 
 
