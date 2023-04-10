@@ -20,6 +20,15 @@ const subObj={
 
  } 
 
+ const referdata ={
+   userName:{
+      type:String
+   },
+   mobileNo:{
+      type:String
+   }
+ }
+
 //define the schema here
 const UserProfileSchema = mongoose.Schema({
     //define the object ID
@@ -80,7 +89,11 @@ const UserProfileSchema = mongoose.Schema({
    },
    referalCode:{
       type:String
-   }
+   },
+   signupReferalCode:{
+      type:String
+   },
+   refferedBy:[referdata]
 
 });
 

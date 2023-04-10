@@ -659,4 +659,88 @@ router.put('/putroutes/:id',(req, res)=>{
    // res.json(response)
     
     }
+
+
+    
+router.get('/allQuotes', async (req, res) => {
+    try {
+        const quote = await quoteGenerate.find()
+
+
+        res.status(200).json({
+
+            Loads: quote
+        })
+    } catch (error) {
+        res.status(401).send(error)
+    }
+});
+
+
+//Loads in mkyloads tab for specific user number
+
+router.post('/refferedBy', (req, res, next) => {
+    userSignup.findOne({ referalCode: req.body.referalCode }).select().exec().then(
+        doc => {
+            console.log(doc)
+            //check if it has matching docs then send response
+            if (doc) {
+                res.status(200).json({
+                    Loads:doc.length,
+                    ref:doc.referalCode,
+                    _id:doc._id,
+                    data: doc,
+                    message: "got the matching loads based on the profile",
+                    status: "success"
+                })
+            } else {
+                res.status(400).json({
+                    message: "no matching loads found",
+                    status: "no docs"
+                })
+
+            }
+        }
+    ).catch(err => {
+        res.status(400).json({
+            message: "failed to get loads",
+            status: "failed",
+            error: err
+        })
+    })
+})
+
+
+//Add truck market vehicle to existing vehcile to existing Load and send notification to vehicle
+router.post('/refereduserdata', (req, res, next) => {
+    var query = { _id: req.body._id };
+
+    //data needed for truck Market vehicle
+    const truckMarketVehicleData = {
+        // TruckMarketVehicleNumber:req.body.TruckMarketVehicleNumber,
+        // TruckMarketVehicleOwnerMobNumber:req.body.TruckMarketVehicleOwnerMobNumber,
+        // TruckMarketVehicleType:req.body.TruckMarketVehicleType,
+        // TruckMarketVehicleCapacity:req.body.TruckMarketVehicleCapacity,
+        // TruckReeuestedPickupLocation:req.body.TruckReeuestedPickupLocation,
+        // TruckRequestedDropOffLocation:req.body.TruckRequestedDropOffLocation
+
+
+        userName:req.body.firstName + req.body.lastName,
+        mobileNo:req.body.mobileNo,
+    
+    }
+
+    var updateTruckMarketData = { $push: { refferedBy: truckMarketVehicleData } }
+    //get the load information query, get load by the ID and add the Vehicle to array. 
+    quoteGenerate.findOneAndUpdate(query, updateTruckMarketData).select().exec().then(doc => {
+        console.log(doc)
+        
+        res.status(200).json({
+            message: doc
+        })
+    })
+
+
+
+})
 module.exports = router;
