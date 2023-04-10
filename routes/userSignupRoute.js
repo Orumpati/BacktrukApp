@@ -54,6 +54,7 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         routes:req.body.routes,
         aboutCompany:req.body.aboutCompany,
         uniqueDeviceId:req.body.uniqueDeviceId, 
+        referalCode:req.body.referalCode
       
            });
 
