@@ -24,7 +24,7 @@ router.post('/emailnotification', (req, res, next)=>{
          to: req.body.To,
          subject: req.body.Name,
          //subject: req.body.PhoneNumber,
-         text:req.body.Query,
+         text:[req.body.PhoneNumber,req.body.Name,req.boby.Query],
         // recipients:req.body.PhoneNumber
     }
     // if( req.body.Name ==''||  req.body.PhoneNumber=='' || req.body.To=='' || req.body.Query){

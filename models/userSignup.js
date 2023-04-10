@@ -78,6 +78,9 @@ const UserProfileSchema = mongoose.Schema({
       type:String
       
    },
+   referalCode:{
+      type:String
+   }
 
 });
 

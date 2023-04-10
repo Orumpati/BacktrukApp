@@ -13,7 +13,7 @@ const profile =require('./routes/profile')
 const vehicle =require('./routes/vehicleroute')
 const home = require('./routes/homeroute')
 const notification =require('./routes/notificationroute')
-
+const points = require('./routes/pointswithdrawroutes')
 const contact =require('./routes/menuContactUs')
 
 
@@ -69,7 +69,7 @@ app.use('/addTruk',vehicle);
 app.use('/truckinfo',home)
 app.use('/notificationss',notification)
 app.use('/contact',contact)
-
+app.use('/point',points);
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",

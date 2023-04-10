@@ -95,23 +95,7 @@ router.post('/truksByStatusAndNumber', async (req, res) => {
         console.log(error)
     }
 })
-//filterByVehicle API 
-/*router.get('/filterByVehicle/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
-    try {
-        const vehicle = await AddVehicle.find({trukname:req.params.trukname, trukoperatingRoutes: { $all: [req.params.trukpickupLocation, req.params.trukdropLocation]  }})
-       
-if(!vehicle){
-    res.status(404).json({message:"Vehicle not fount"})
-}
 
-        res.status(200).json({
-           
-            vehicle
-        })
-    } catch (error) {
-        res.status(401).send(error)
-    }
-});*/
 
 //filterBytrukoperatingRoutes API 
 router.get('/filterBytrukoperatingRoutes/:trukname/:trukpickupLocation/:trukdropLocation', async (req, res) => {
@@ -265,13 +249,7 @@ router.get('/trukByStatus/:isActive',async(req,res)=>{
     }
 })
 
-//show truks in truk market
 
-
-// UserSignup.find({routes: { $all: ["Warangal", "delhi"] } } ).select().exec().then(doc =>{ 
-//    console.log(doc.length)
-
-// })
 
 
 // vehicle search based on location

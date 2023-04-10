@@ -17,7 +17,6 @@ const quoteGenerate = require('../models/generateQuotemodal');
 const UserSignup = require("../models/userSignup");
 const vehiclemodal = require("../models/vehicle")
 //post method goes here
-//post method goes here
 router.post('/generateQuote', (req, res, next) => {
     console.log("generate quotes api is called")
 
@@ -505,127 +504,11 @@ router.post('/loadsByStatusAndNumber', async (req, res) => {
 })
  
  
-
-//Update Bids by the trukers and Customers
-// router.post('/updateBids', (req, res, next)=>{
-
-  
-//     /** 
-//          //trucker update bid if bid is update by the truker
-//          const TruckrUpdateBid ={
-//              mobileNo:req.body.mobileNo,
-//              Bidprice: req.body.price,
-//              tentativefinalPrice: req.body.Bidprice,
-//              time: new Date().now
-//          }
-//          //if customer updates the bid
-//          const CustomerUpdateBid={
-//             Negotiate:req.body.price,
-//             tentativefinalPrice: req.body.Bidprice,
-//             time: new Date().now
-//          }
-//       */
-    
-//         //     console.log(new Date().getTime());
-//         //    var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}  //quote id and truker mobile no  always Agent mobile NO
-//         //    //form the query here
-//         //    var updateBidPrice=   { $push: { "bids.$.Bidprice":{"price":req.body.price, "time": new Date().getTime()}},
-//         //                          $set:{"bids.$.tentativefinalPrice":req.body.price}}
-    
-//         //    var updateNegotiatePrice={$push:{"bids.$.Negotiate":{"price":req.body.price, "time": new Date().getTime()}},
-//         //                         $set:{"bids.$.tentativefinalPrice":req.body.price}}
-       
-//         //    var updateData="";
-    
-//            //newUpdate query for bids
-//            var DataToBids={
-                         
-//                           "price":req.body.price,
-//                         //   "userNo": req.body.userNo, 
-//                           "userType":req.body.userType, 
-//                           "time": new Date().getTime()
-//            }
-//                         //   $set:{"bids.$.tentativefinalPrice":req.body.price}}
-
-//                     //       var obj = {
-//                     //         "price":req.body.price,
-//                     //         //   "userNo": req.body.userNo, 
-//                     //           "userType":req.body.userType, 
-//                     //           "time": new Date().getTime()
-//                     //       }
-
-//                     //    const data = bids.BidActivity.push(obj)
-//                     //    console.log(data)
-
-//                          /* var DataToBids={
-//                             BidActivity: [{"price":req.body.price,
-//                                         "userNo": req.body.userNo,
-//                                         "userType":req.body.userType,  //this only for trucker side for the first time.
-//                                         "time": new Date().getTime()}],
-//                             $set:{"bids.$.tentativefinalPrice":req.body.price}}*/
-
-
-                   
-            
-//         //    if(req.body.isAgent){
-//         //       updateData=updateBidPrice;
-//         //    }else{
-//         //       updateData=updateNegotiatePrice
-//         //    }
-    
-//            console.log(DataToBids)
-//            var query=   { $push: { bids: DataToBids }}
-//           // { $push: { "bids.$.Bidprice":req.body.price }}
-//          //find the docID or quote ID
-//          quoteGenerate.findOneAndUpdate({_id: req.body._id}, {$set: {"bids.$.[BidActivity]":DataToBids}}).select().exec().then(
-//              doc=>{
-//                  console.log(doc)
-//                  //check if it has matching docs then send response
-//                  if(doc){
-//                  res.status(200).json({
-//                      data: doc,
-//                      message:"got the matching loads based on the profile",
-//                      status:"success"
-//                  })
-//              }else{
-//                  res.status(200).json({
-//                      message:"no matching docs found",
-//                      status:"success"
-//                  })
-     
-//              }
-//              }
-//          ).catch(err=>{
-//              res.status(200).json({
-//                  message:"failed to bid",
-//                  status: "failed",
-//                  error:console.log(err)
-//              })
-
-//          }) 
-//      } )
-
      
 
 //Update Bids by the trukers and Customers
 router.post('/updateBids', (req, res, next)=>{
 
-  
-    /** 
-         //trucker update bid if bid is update by the truker
-         const TruckrUpdateBid ={
-             mobileNo:req.body.mobileNo,
-             Bidprice: req.body.price,
-             tentativefinalPrice: req.body.Bidprice,
-             time: new Date().now
-         }
-         //if customer updates the bid
-         const CustomerUpdateBid={
-            Negotiate:req.body.price,
-            tentativefinalPrice: req.body.Bidprice,
-            time: new Date().now
-         }
-      */
     
         //     console.log(new Date().getTime());
           var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}  //quote id and truker mobile no  always Agent mobile NO
@@ -641,13 +524,7 @@ router.post('/updateBids', (req, res, next)=>{
                           $set:{"bids.$.tentativefinalPrice":req.body.price,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"multi": true },
                 
                         }
-            
-        //    if(req.body.isAgent){
-        //       updateData=updateBidPrice;
-        //    }else{
-        //       updateData=updateNegotiatePrice
-        //    }
-    
+  
            console.log(DataToBids)
            console.log(query)
           // { $push: { "bids.$.Bidprice":req.body.price }}
@@ -700,15 +577,8 @@ router.post('/updateBids', (req, res, next)=>{
 //dfghju
 //Update Bids by the trukers and Customers
 router.post('/findloadbydrivers', (req, res, next)=>{
-
-  
-
-    
         //     console.log(new Date().getTime());
           var query= {"vehicleInformation.DriverNumber":req.body.mobileNo,"DriverStatus":req.body.DriverStatus}  //quote id and truker mobile no  always Agent mobile NO
-       
-    
-       
 
          quoteGenerate.find(query).select().exec().then(
              doc=>{
@@ -749,36 +619,7 @@ router.post('/paymentconfirm', (req, res, next)=>{
 
         //     console.log(new Date().getTime());
           var query= {"_id":req.body._id}  //quote id and truker mobile no  always Agent mobile NO
-       
-   
-    //alternate bid Current Bid Service
-   /* const placeIniBid ={
-        
-      
-        paymentId:req.body.paymentId,
-       
-   
-       // time: new Date().getTime()
-    }*/
-    
-         
-    
-    
-          //form the query here
-         /* var data=   { $push: { bids: placeIniBid }}
-           console.log(query)*/
-          // { $push: { "bids.$.Bidprice":req.body.price }}
-
-         /* UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
-            doc=>{
-             var   loadpostedNumber =  doc
-            
-          console.log(loadpostedNumber)
-          for(let i=0;i<loadpostedNumber.length;i++){
-            var uniqId =loadpostedNumber[i].uniqueDeviceId
-          }*/
-         
-        //  console.log(uniqId)
+ 
         
          //find the docID or quote ID
          quoteGenerate.findOneAndUpdate(query,{paymentId:req.body.paymentId,isPaymentCompleted:req.body.isPaymentCompleted}).select().exec().then(
@@ -813,7 +654,6 @@ router.post('/paymentconfirm', (req, res, next)=>{
        // }) 
      } )
      
-
 
 //ShowBids to customer
 router.post('/showCustomerBids', (req, res, next) => {
@@ -927,7 +767,8 @@ router.post('/showAgentSideBidConversation', (req, res, next)=>{
                         paymentId:item.paymentId,
                         isPaymentCompleted:item.isPaymentCompleted,
                         quoteBid:i,
-                        vehicleInformation:item.vehicleInformation
+                        vehicleInformation:item.vehicleInformation,
+                        
                        
                     }
                     bidData.push(obj);
@@ -1057,7 +898,6 @@ router.post('/getsingleloadbids',(req,res,next)=>{
 })
 
 
-
 router.post('/attachVehicleToLoad', (req, res, next)=>{
 
     //data needed for attaching load
@@ -1166,22 +1006,8 @@ router.post('/attachPod', (req, res, next)=>{
 
     });
  
-
-
-
-
-
-
-
-
-
-
 //Add truck market vehicle to existing vehcile to existing Load and send notification to vehicle
 router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
-
-
-
-
     var query = { _id: req.body._id };
 
     //data needed for truck Market vehicle
@@ -1200,9 +1026,6 @@ router.post('/addTruckMarketVehicleToLoad', (req, res, next) => {
         trukcapacity:req.body.trukcapacity,
         trukname:req.body.trukname,
         trukOwnerNumber:req.body.trukOwnerNumber
-
-
-
     }
 
     var updateTruckMarketData = { $push: { TruckMarketVehicle: truckMarketVehicleData } }
