@@ -54,7 +54,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         routes:req.body.routes,
         aboutCompany:req.body.aboutCompany,
         uniqueDeviceId:req.body.uniqueDeviceId, 
-        referalCode:req.body.referalCode
+        referalCode:req.body.referalCode,
+        signupReferalCode:req.body.signupReferalCode
       
            });
 
@@ -716,23 +717,16 @@ router.post('/refereduserdata', (req, res, next) => {
     var query = { _id: req.body._id };
 
     //data needed for truck Market vehicle
-    const truckMarketVehicleData = {
-        // TruckMarketVehicleNumber:req.body.TruckMarketVehicleNumber,
-        // TruckMarketVehicleOwnerMobNumber:req.body.TruckMarketVehicleOwnerMobNumber,
-        // TruckMarketVehicleType:req.body.TruckMarketVehicleType,
-        // TruckMarketVehicleCapacity:req.body.TruckMarketVehicleCapacity,
-        // TruckReeuestedPickupLocation:req.body.TruckReeuestedPickupLocation,
-        // TruckRequestedDropOffLocation:req.body.TruckRequestedDropOffLocation
-
+    const referToData = {
 
         userName:req.body.firstName + req.body.lastName,
         mobileNo:req.body.mobileNo,
     
     }
 
-    var updateTruckMarketData = { $push: { refferedBy: truckMarketVehicleData } }
+    var referData = { $push: { refferedTo: referToData } }
     //get the load information query, get load by the ID and add the Vehicle to array. 
-    quoteGenerate.findOneAndUpdate(query, updateTruckMarketData).select().exec().then(doc => {
+    quoteGenerate.findOneAndUpdate(query, referData).select().exec().then(doc => {
         console.log(doc)
         
         res.status(200).json({
