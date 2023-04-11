@@ -93,7 +93,7 @@ const UserProfileSchema = mongoose.Schema({
    signupReferalCode:{
       type:String
    },
-   refferedBy:[referdata]
+   refferedTo:[referdata]
 
 });
 
