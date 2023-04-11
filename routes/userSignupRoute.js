@@ -726,7 +726,7 @@ router.post('/refereduserdata', (req, res, next) => {
 
     var referData = { $push: { refferedTo: referToData } }
     //get the load information query, get load by the ID and add the Vehicle to array. 
-    quoteGenerate.findOneAndUpdate(query, referData).select().exec().then(doc => {
+    userSignup.findOneAndUpdate(query, referData).select().exec().then(doc => {
         console.log(doc)
         
         res.status(200).json({
