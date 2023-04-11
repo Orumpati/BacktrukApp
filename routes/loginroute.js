@@ -44,7 +44,10 @@ router.post('/loginDetails',async(req,res,next)=>{
                          TrukCapacity:doc.TrukCapacity,
                          TrukNumber:doc.TrukNumber,
                          TrukType:doc.TrukType,
-                         referalCode:doc.referalCode
+                         referalCode:doc.referalCode,
+                         referTo:doc.refferedTo,
+                         signupReferalCode:doc.signupReferalCode
+
                      
                         
                     })
