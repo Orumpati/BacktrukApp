@@ -55,7 +55,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         aboutCompany:req.body.aboutCompany,
         uniqueDeviceId:req.body.uniqueDeviceId, 
         referalCode:req.body.referalCode,
-        signupReferalCode:req.body.signupReferalCode
+        signupReferalCode:req.body.signupReferalCode,
+        SignupDate:req.body.SignupDate
       
            });
 
@@ -345,6 +346,7 @@ router.put('/putroutes/:id',(req, res)=>{
                 res.status(200).json({
                     message:"your profile data",
                     data :docs, 
+                    doclen:docs.length
             
                 });
            
