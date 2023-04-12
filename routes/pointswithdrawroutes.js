@@ -89,4 +89,34 @@ router.post('/emailPoints', (req, res, next)=>{
     });
 
 
+    router.post('/reqestedHistory', (req, res, next) => {
+        pointsWithdraw.find({ userNumber: req.body.userNumber }).select().exec().then(
+            doc => {
+                console.log(doc)
+                //check if it has matching docs then send response
+                if (doc) {
+                    res.status(200).json({
+                        Loads:doc.length,
+                        data: doc,
+                        message: "got the matching history based on the profile",
+                        status: "success"
+                    })
+                } else {
+                    res.status(400).json({
+                        message: "no history found",
+                        status: "no docs"
+                    })
+    
+                }
+            }
+        ).catch(err => {
+            res.status(400).json({
+                message: "failed to get history",
+                status: "failed",
+                error: err
+            })
+        })
+    })
+
+
 module.exports = router;
