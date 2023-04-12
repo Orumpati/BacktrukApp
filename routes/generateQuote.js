@@ -387,14 +387,14 @@ router.post('/placeBid', (req, res, next)=>{
      mobileNo:req.body.mobileNo,
      BidActivity: [{"price":req.body.Bidprice,
                  "userNo": req.body.mobileNo,
-                 "initialAccept":req.body.initialAccept,
+             
                  "userType":req.body.userType,  //this only for trucker side for the first time.
                  "time": new Date().getTime()}],
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
      TohideAcceptBtn:req.body.TohideAcceptBtn,
      agentInitialBidSend:req.body.agentInitialBidSend,
-    
-
+     initialAccept:req.body.initialAccept,
+     isAgentAccepted:req.body.isAgentAccepted,
      time: new Date().getTime()
  }
  
