@@ -48,15 +48,27 @@ router.post('/pointsPost', async(req, res, next) => {        // want to create p
 router.post('/emailPoints', (req, res, next)=>{ 
  
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth:{
-            user:'neelisettylakshminarayana@gmail.com',
-            pass:'vkovfqrwfiswrppm'  
-        }
+        // service: 'gmail',
+//         Outgoing Server Name: smtp.zoho.in
+// Port: 465
+// Security Type: SSL 
+// Require Authentication: Yes
+        // auth:{
+        //     user:'neelisettylakshminarayana@gmail.com',
+        //     pass:'vkovfqrwfiswrppm'  
+        // }
+        host: 'smtppro.zoho.in',
+        secure: 'SSL',
+        port: 465,
+        auth: {
+          user: 'jayadeep.mettela@ro-one.in',
+          pass: 'pUxdfkTc9iLp',
+        },
     
     })
     var mailOptions = {
-        from: 'neelisettylakshminarayana@gmail.com',
+       
+        from: 'jayadeep.mettela@ro-one.in',
          to: 'deepumettela007@gmail.com',
          subject: "Points Mail",
          text:req.body.text,

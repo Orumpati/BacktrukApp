@@ -11,20 +11,63 @@ const contactUs = require("../models/menuContactUs")
 
 const nodemailer = require('nodemailer')
 
+// router.post('/emailnotification', (req, res, next)=>{ 
+//     var transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth:{
+//             user:'neelisettylakshminarayana@gmail.com',
+//             pass:'vkovfqrwfiswrppm'  
+//         }
+//     })
+//     var mailOptions = {
+//         from: 'neelisettylakshminarayana@gmail.com',
+//          to: req.body.To,
+//          subject: 'Query',
+//          //subject: req.body.PhoneNumber,
+//          text:req.body.text,
+//         // recipients:req.body.PhoneNumber
+//     }
+//     // if( req.body.Name ==''||  req.body.PhoneNumber=='' || req.body.To=='' || req.body.Query){
+//     //     console.log("Something Went Wrong");
+//     // }else{
+//     transporter.sendMail(mailOptions, function(err, info){
+//         if(err){
+//            return console.log(err);
+//         }
+//         else{
+//             console.log("Email Sent"+ info.response)
+//         }
+//     })
+//     //}
+//     });
+
 router.post('/emailnotification', (req, res, next)=>{ 
+ 
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth:{
-            user:'neelisettylakshminarayana@gmail.com',
-            pass:'vkovfqrwfiswrppm'  
-        }
+        // service: 'gmail',
+//         Outgoing Server Name: smtp.zoho.in
+// Port: 465
+// Security Type: SSL 
+// Require Authentication: Yes
+        // auth:{
+        //     user:'neelisettylakshminarayana@gmail.com',
+        //     pass:'vkovfqrwfiswrppm'  
+        // }
+        host: 'smtppro.zoho.in',
+        secure: 'SSL',
+        port: 465,
+        auth: {
+          user: 'jayadeep.mettela@ro-one.in',
+          pass: 'pUxdfkTc9iLp',
+        },
+    
     })
     var mailOptions = {
-        from: 'neelisettylakshminarayana@gmail.com',
-         to: req.body.To,
-         subject: req.body.Name,
-         //subject: req.body.PhoneNumber,
-         text:req.body.Query,
+       
+        from: 'jayadeep.mettela@ro-one.in',
+         to: 'lakshminarayana161100@gmail.com',
+         subject: "Query",
+         text:req.body.text,
         // recipients:req.body.PhoneNumber
     }
     // if( req.body.Name ==''||  req.body.PhoneNumber=='' || req.body.To=='' || req.body.Query){
@@ -40,8 +83,6 @@ router.post('/emailnotification', (req, res, next)=>{
     })
     //}
     });
-
-
     
 router.post('/addcontact', async(req, res, next) => {        // want to create product details
     const contact = new contactUs({

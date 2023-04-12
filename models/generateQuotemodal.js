@@ -209,6 +209,9 @@ shareContact:{
     type:String,
     default:'Active'
  },
+ LoadId:{
+    type:String
+ },
  ProofOfdelivery:[podInfo],
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
