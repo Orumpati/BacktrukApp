@@ -53,23 +53,23 @@ router.post('/emailPoints', (req, res, next)=>{
 // Port: 465
 // Security Type: SSL 
 // Require Authentication: Yes
-        // auth:{
-        //     user:'neelisettylakshminarayana@gmail.com',
-        //     pass:'vkovfqrwfiswrppm'  
-        // }
-        host: 'smtppro.zoho.in',
-        secure: 'SSL',
-        port: 465,
-        auth: {
-          user: 'jayadeep.mettela@ro-one.in',
-          pass: 'pUxdfkTc9iLp',
-        },
+auth:{
+    user:'neelisettylakshminarayana@gmail.com',
+    pass:'vkovfqrwfiswrppm'  
+}
+        // host: 'smtppro.zoho.in',
+        // secure: 'SSL',
+        // port: 465,
+        // auth: {
+        //   user: 'jayadeep.mettela@ro-one.in',
+        //   pass: 'pUxdfkTc9iLp',
+        // },
     
     })
     var mailOptions = {
        
-        from: 'jayadeep.mettela@ro-one.in',
-         to: 'deepumettela007@gmail.com',
+        from: 'neelisettylakshminarayana@gmail.com',
+         to: 'info@trukapp.com',
          subject: "Points Mail",
          text:req.body.text,
         // recipients:req.body.PhoneNumber
