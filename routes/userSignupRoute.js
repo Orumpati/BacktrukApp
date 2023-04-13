@@ -739,4 +739,57 @@ router.post('/refereduserdata', (req, res, next) => {
 
 
 })
+
+
+
+router.post('/addAccDetails', (req, res, next)=>{
+
+    //     console.log(new Date().getTime());
+      var query= {_id:req.body._id}  //Transporter userSignup Id
+   const body ={
+    accountNum:req.body.accountNum,
+     ifscCode:req.body.ifscCode,
+     accHolderName:req.body.accHolderName,
+     upiId:req.body.upiId
+   }
+
+   var data=   { $push: { accDetails: body }}
+   
+     //if no user found then create new user
+     userSignup.findOneAndUpdate(query,data).select().exec().then(
+         doc=>{
+             console.log(doc)
+
+             if(doc){
+                //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+             res.status(200).json({
+                 data: doc,
+                 message:"Account details added Successfull",
+                 status:"success"
+             })
+           
+           
+         }else{
+             res.status(400).json({
+                 message:"no matching docs found",
+                 status:"no docs"
+             })
+ 
+         }
+        
+
+         }
+     ).catch(err=>{
+         res.status(400).json({
+             message:"failed to Add account details",
+             status: "failed",
+             error:err
+         })
+     })
+    
+    
+
+    });
+
+
 module.exports = router;

@@ -26,6 +26,10 @@ default:false
                 type:Boolean,
                 default:false
                     },
+                    BidStatus:{
+                        type:String,
+                        default:"open"
+                    }
                     
                   
                      

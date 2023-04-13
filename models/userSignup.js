@@ -28,6 +28,20 @@ const subObj={
       type:String
    }
  }
+ const bankDetails ={
+   accountNum:{
+      type:String
+   },
+   ifscCode:{
+      type:String
+   },
+   accHolderName:{
+      type:String
+   },
+   upiId:{
+      type:String
+   }
+}
 
 //define the schema here
 const UserProfileSchema = mongoose.Schema({
@@ -96,7 +110,10 @@ const UserProfileSchema = mongoose.Schema({
    refferedTo:[referdata],
 SignupDate:{
    type:String
-}
+},
+
+accDetails:[bankDetails]
+
 });
 
 
