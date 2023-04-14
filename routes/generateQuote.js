@@ -793,7 +793,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"multi": true}}
+    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{
@@ -824,7 +824,7 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn ,"multi": true}}
+    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus ,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
         doc=>{

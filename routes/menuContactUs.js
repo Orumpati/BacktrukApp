@@ -50,8 +50,8 @@ router.post('/emailnotification', (req, res, next)=>{
 // Security Type: SSL 
 // Require Authentication: Yes
 auth:{
-    user:'neelisettylakshminarayana@gmail.com',
-    pass:'vkovfqrwfiswrppm'  
+    user:'info@trukapp.com',
+    pass:'shvncmnxzsoiluat'  
 }
         // host: 'smtppro.zoho.in',
         // secure: 'SSL',
@@ -64,7 +64,7 @@ auth:{
     })
     var mailOptions = {
        
-        from: 'neelisettylakshminarayana@gmail.com',
+        from: 'info@trukapp.com',
         to: 'info@trukapp.com',
          subject: "Query",
          text:req.body.text,
