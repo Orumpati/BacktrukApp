@@ -799,7 +799,7 @@ router.post('/addAccDetails', (req, res, next)=>{
     router.post('/addcoinstoRefered', (req, res, next)=>{
 
         //     console.log(new Date().getTime());
-          var query= {signupReferalCode:req.body.signupReferalCode}  //Transporter userSignup Id
+          var query= {referalCode:req.body.referalCode}  //Transporter userSignup Id
     
        userSignup.find(query).select().exec().then(
         doc=>{
