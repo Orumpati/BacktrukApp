@@ -56,7 +56,8 @@ router.post('/signup', [body('email').isEmail().normalizeEmail()],(req, res, nex
         uniqueDeviceId:req.body.uniqueDeviceId, 
         referalCode:req.body.referalCode,
         signupReferalCode:req.body.signupReferalCode,
-        SignupDate:req.body.SignupDate
+        SignupDate:req.body.SignupDate,
+        TotalCoins:req.body.TotalCoins
       
            });
 
@@ -790,6 +791,113 @@ router.post('/addAccDetails', (req, res, next)=>{
     
 
     });
+
+
+  
+ 
+        
+    router.post('/addcoinstoRefered', (req, res, next)=>{
+
+        //     console.log(new Date().getTime());
+          var query= {signupReferalCode:req.body.signupReferalCode}  //Transporter userSignup Id
+    
+       userSignup.find(query).select().exec().then(
+        doc=>{
+            console.log(doc)
+            for(let i=0;i<doc.length;i++){
+                var coins =doc[i].TotalCoins
+            }
+    
+            console.log(coins)
+            const body ={
+                TotalCoins:coins + 100,
+            
+               }
+         //if no user found then create new user
+         userSignup.findOneAndUpdate(query,body).select().exec().then(
+             doc=>{
+                 console.log(doc)
+    
+                 if(doc){
+                    //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                 res.status(200).json({
+                     data: doc,
+                     message:"Account details added Successfull",
+                     status:"success"
+                 })
+               
+               
+             }else{
+                 res.status(400).json({
+                     message:"no matching docs found",
+                     status:"no docs"
+                 })
+     
+             }}
+
+         ).catch(err=>{
+             res.status(400).json({
+                 message:"failed to Add account details",
+                 status: "failed",
+                 error:err
+             })
+         })
+        
+        })
+    
+        });
+
+        
+        router.post('/withdrawCoins', (req, res, next)=>{
+
+            //     console.log(new Date().getTime());
+              var query= {_id:req.body._id}  //Transporter userSignup Id
+        
+           userSignup.find(query).select().exec().then(
+            doc=>{
+                console.log(doc)
+                for(let i=0;i<doc.length;i++){
+                    var coins =doc[i].TotalCoins
+                }
+        
+                console.log(coins)
+                const body ={
+                    TotalCoins:coins - req.body.withdrawCoins,
+                
+                   }
+             //if no user found then create new user
+             userSignup.findOneAndUpdate(query,body).select().exec().then(
+                 doc=>{
+                     console.log(doc)
+        
+                     if(doc){
+                        //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                     res.status(200).json({
+                         data: doc,
+                         message:"Account details added Successfull",
+                         status:"success"
+                     })
+                   
+                   
+                 }else{
+                     res.status(400).json({
+                         message:"no matching docs found",
+                         status:"no docs"
+                     })
+         
+                 }}
+    
+             ).catch(err=>{
+                 res.status(400).json({
+                     message:"failed to Add account details",
+                     status: "failed",
+                     error:err
+                 })
+             })
+            
+            })
+        
+            });
 
 
 module.exports = router;

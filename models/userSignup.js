@@ -112,7 +112,11 @@ SignupDate:{
    type:String
 },
 
-accDetails:[bankDetails]
+accDetails:[bankDetails],
+TotalCoins:{
+   type:Number,
+   default:0
+}
 
 });
 
