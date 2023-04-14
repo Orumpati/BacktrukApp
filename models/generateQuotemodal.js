@@ -216,6 +216,7 @@ shareContact:{
  LoadId:{
     type:String
  },
+
  ProofOfdelivery:[podInfo],
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],

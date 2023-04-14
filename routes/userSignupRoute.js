@@ -811,6 +811,7 @@ router.post('/addAccDetails', (req, res, next)=>{
             console.log(coins)
             const body ={
                 TotalCoins:coins + 100,
+                PermanetCoins: coins + 100
             
                }
          //if no user found then create new user

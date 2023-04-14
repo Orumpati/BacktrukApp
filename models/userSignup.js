@@ -116,6 +116,10 @@ accDetails:[bankDetails],
 TotalCoins:{
    type:Number,
    default:0
+},
+PermanetCoins:{
+   type:Number,
+   default:0
 }
 
 });
