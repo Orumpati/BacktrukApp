@@ -401,7 +401,7 @@ router.post('/placeBid', (req, res, next)=>{
        //form the query here
        var query=   { $push: { bids: placeIniBid }}
  
-       UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+       UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
          var   loadpostedNumber =  doc
         
@@ -500,7 +500,7 @@ router.post('/updateBids', (req, res, next)=>{
            console.log(query)
           // { $push: { "bids.$.Bidprice":req.body.price }}
 
-          UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+          UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
             doc=>{
              var   loadpostedNumber =  doc
             
@@ -517,13 +517,13 @@ router.post('/updateBids', (req, res, next)=>{
                  console.log(doc)
                  //check if it has matching docs then send response
                  if(doc){
-                    sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                
                  res.status(200).json({
                      data: doc,
                      message:"got the matching loads based on the profile",
                      status:"success"
                  })
-               
+                 sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
                
              }else{
                  res.status(400).json({
@@ -795,7 +795,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
     var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,"multi": true}}
     console.log(update)
-    UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+    UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
          var   loadpostedNumber =  doc
         
@@ -826,7 +826,7 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
     var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus ,"multi": true}}
     console.log(update)
-    UserSignup.find({mobileNo:req.body.Number}).select().exec().then(
+    UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
          var   loadpostedNumber =  doc
         
@@ -1095,7 +1095,7 @@ async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     notification.app_id = ONESIGNAL_APP_ID;
     //notification.included_segments = ['Subscribed Users'];
     //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
-    notification.include_external_user_ids = uniqId;
+    notification.include_external_user_ids = [uniqId];
     notification.contents = {
         en:  Name +" "+mess+" "+BidPrice
     };
