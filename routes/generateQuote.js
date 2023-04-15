@@ -1095,7 +1095,7 @@ async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     notification.app_id = ONESIGNAL_APP_ID;
     //notification.included_segments = ['Subscribed Users'];
     //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
-    notification.include_external_user_ids = [uniqId];
+    notification.include_external_user_ids = uniqId;
     notification.contents = {
         en:  Name +" "+mess+" "+BidPrice
     };
