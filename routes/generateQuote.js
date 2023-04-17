@@ -1036,7 +1036,7 @@ router.post('/addloadtotruck', (req, res, next) => {
 
 
 router.post('/findLoadsinProgress', (req, res, next)=>{
-    var query = { Number: req.body.Number};
+    var query = { Number: String(req.body.Number)};
 
     const body={
         //shipperAccept:req.body.shipperAccept,
