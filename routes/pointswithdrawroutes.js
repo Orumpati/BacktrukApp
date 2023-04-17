@@ -48,7 +48,7 @@ router.post('/pointsPost', async(req, res, next) => {        // want to create p
 router.post('/emailPoints', (req, res, next)=>{ 
  
     var transporter = nodemailer.createTransport({
-        // service: 'gmail',
+        service: 'gmail',
 //         Outgoing Server Name: smtp.zoho.in
 // Port: 465
 // Security Type: SSL 

@@ -44,7 +44,7 @@ const nodemailer = require('nodemailer')
 router.post('/emailnotification', (req, res, next)=>{ 
  
     var transporter = nodemailer.createTransport({
-        // service: 'gmail',
+         service: 'gmail',
 //         Outgoing Server Name: smtp.zoho.in
 // Port: 465
 // Security Type: SSL 

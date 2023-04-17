@@ -490,6 +490,7 @@ router.post('/updateBids', (req, res, next)=>{
                          "price":req.body.price,
                           "userNo": req.body.userNo, 
                           "userType":req.body.userType, 
+                          "UserName":req.body.Name,
                           "time": new Date().getTime()}
                         },
                           $set:{"bids.$.tentativefinalPrice":req.body.price,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"multi": true },
