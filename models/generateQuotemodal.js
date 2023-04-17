@@ -216,7 +216,10 @@ shareContact:{
  LoadId:{
     type:String
  },
-
+ shipperAccept:{
+type:Boolean,
+default:false
+ },
  ProofOfdelivery:[podInfo],
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],

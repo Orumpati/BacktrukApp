@@ -863,7 +863,7 @@ router.post('/addAccDetails', (req, res, next)=>{
         
                 console.log(coins)
                 const body ={
-                    TotalCoins:coins - req.body.withdrawCoins,
+                    TotalCoins:coins - Number(req.body.withdrawCoins),
                 
                    }
              //if no user found then create new user
@@ -875,7 +875,7 @@ router.post('/addAccDetails', (req, res, next)=>{
                         //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
                      res.status(200).json({
                          data: doc,
-                         message:"Account details added Successfull",
+                         message:"Coins Updated Success",
                          status:"success"
                      })
                    
@@ -890,7 +890,7 @@ router.post('/addAccDetails', (req, res, next)=>{
     
              ).catch(err=>{
                  res.status(400).json({
-                     message:"failed to Add account details",
+                     message:"failed to update coins",
                      status: "failed",
                      error:err
                  })

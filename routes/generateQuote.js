@@ -1033,6 +1033,86 @@ router.post('/addloadtotruck', (req, res, next) => {
 
 
 })
+
+
+router.post('/findLoadsinProgress', (req, res, next)=>{
+    var query = { Number: req.body.Number};
+
+    const body={
+        //shipperAccept:req.body.shipperAccept,
+       // "bids.isAgentAccepted":req.body.isAgentAccepted,
+        shareContact:req.body.shareContact
+    }  
+
+     quoteGenerate.find(query,body).select().exec().then(
+         doc=>{
+             console.log(doc)
+            
+             if(doc){
+                
+             res.status(200).json({
+                 data: doc,
+                 message:"got the matching loads based on the profile",
+                 status:"success"
+             })
+           
+           
+         }else{
+             res.status(400).json({
+                 message:"no matching docs found",
+                 status:"no docs"
+             })
+ 
+         }
+
+         }
+     ).catch(err=>{
+         res.status(400).json({
+             message:"no load found",
+             status: "failed",
+             error:err
+         })
+     })
+    })
+
+
+    //LoadMarket APIS where trukers and agents get to see the loads based on their profile. 
+router.post('/transporteinprogress', (req, res, next) => {
+    var query = {quoteSentTo: { $all: [req.body.mobileNo] } }
+console.log(query)
+ 
+
+    quoteGenerate.find({quoteSentTo: { $all: [req.body.mobileNo] }}).select().exec().then(
+        doc => {
+ 
+            var load = doc.filter(data=>{
+                return data.shareContact == req.body.shareContact
+              })
+
+            //check if it has matching docs then send response
+            if (load) {
+                res.status(200).json({
+                    item: load,
+                    message: "got the matching loads based on the profile",
+                    status: "success"
+                })
+            } else {
+                res.status(201).json({
+                    message: "no matching loads found",
+                    status: "failed"
+                })
+            
+            }
+        
+        }
+    ).catch(err => {
+        res.status(400).json({
+            message: "failed to get loads",
+            status: "failed",
+            error: err
+        })
+    })
+})
  
 //notification function
  async function sendnotification(mess,Name,externalids){
