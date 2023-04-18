@@ -387,7 +387,7 @@ router.post('/placeBid', (req, res, next)=>{
      mobileNo:req.body.mobileNo,
      BidActivity: [{"price":req.body.Bidprice,
                  "userNo": req.body.mobileNo,
-             
+                 "UserName":req.body.Name,
                  "userType":req.body.userType,  //this only for trucker side for the first time.
                  "time": new Date().getTime()}],
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
@@ -395,6 +395,7 @@ router.post('/placeBid', (req, res, next)=>{
      agentInitialBidSend:req.body.agentInitialBidSend,
      initialAccept:req.body.initialAccept,
      isAgentAccepted:req.body.isAgentAccepted,
+     UserName:req.body.Name,
      time: new Date().getTime()
  }
  
@@ -458,7 +459,9 @@ router.post('/loadsByStatusAndNumber', async (req, res) => {
     try {
       //  const load = await array.find({ isActive: req.params.isActive })
       var load = filter.filter(data=>{
-        return data.isActive == req.body.isActive
+        return(
+            data.isActive == req.body.isActive && "data.bids.$.isShipperAccepted"== req.body.isShipperAccepted
+      ) 
       })
       console.log(load)
         if (!load) {
@@ -794,7 +797,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,"multi": true}}
+    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,shipperAccept:req.body.shipperAccept,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{

@@ -29,6 +29,9 @@ default:false
                     BidStatus:{
                         type:String,
                         default:"open"
+                    },
+                    UserName:{
+                        type:String
                     }
                     
                   
