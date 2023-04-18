@@ -459,9 +459,8 @@ router.post('/loadsByStatusAndNumber', async (req, res) => {
     try {
       //  const load = await array.find({ isActive: req.params.isActive })
       var load = filter.filter(data=>{
-        return(
-            data.isActive == req.body.isActive && "data.bids.$.isShipperAccepted"== req.body.isShipperAccepted
-      ) 
+        return data.isActive == req.body.isActive 
+      
       })
       console.log(load)
         if (!load) {
