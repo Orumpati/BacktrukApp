@@ -187,6 +187,10 @@ isActive:{
     type:String,
     default:'Active'
 },
+contactSharedNum:{
+    type:String,
+},
+
 userAcceptedPrice: {
     type: String,
     default:"0"

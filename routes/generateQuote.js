@@ -897,7 +897,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
     //query find by the IDAddDrivers
    var query={"_id":req.body._id};
     //form the query here
-    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact }}  //$set for setting the variable value
+    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact ,contactSharedNum:req.body.contactSharedNum,"multi": true}}  //$set for setting the variable value
     console.log(query)
     //find the docID or quote ID
    //  quoteGenerate.findOneAndUpdate(query, updateData).select().exec().then(
