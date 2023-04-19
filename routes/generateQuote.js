@@ -400,7 +400,9 @@ router.post('/placeBid', (req, res, next)=>{
  }
  
        //form the query here
-       var query=   { $push: { bids: placeIniBid }}
+       var query=   { $push: { bids: placeIniBid },
+       $set:{shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,"multi": true },
+    }
  
        UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
@@ -796,7 +798,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,shipperAccept:req.body.shipperAccept,"multi": true}}
+    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
@@ -827,7 +829,7 @@ router.post('/finalacceptbyagent',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus ,"multi": true}}
+    var update ={$set:{"bids.$.isAgentAccepted":req.body.isAgentAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus ,shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
@@ -1044,7 +1046,7 @@ router.post('/findLoadsinProgress', (req, res, next)=>{
     const body={
         //shipperAccept:req.body.shipperAccept,
        // "bids.isAgentAccepted":req.body.isAgentAccepted,
-        shareContact:req.body.shareContact
+       shipperAccept:true
     }  
 
      quoteGenerate.find(query,body).select().exec().then(
@@ -1089,7 +1091,7 @@ console.log(query)
         doc => {
  
             var load = doc.filter(data=>{
-                return data.shareContact == req.body.shareContact
+                return data.shipperAccept == true
               })
 
             //check if it has matching docs then send response
