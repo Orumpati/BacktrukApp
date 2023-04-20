@@ -902,12 +902,20 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
     var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact ,contactSharedNum:req.body.contactSharedNum,"multi": true}}  //$set for setting the variable value
     console.log(query)
     //find the docID or quote ID
-   //  quoteGenerate.findOneAndUpdate(query, updateData).select().exec().then(
+    UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
+        doc=>{
+         var   loadpostedNumber =  doc
+        
+      console.log(loadpostedNumber)
+      for(let i=0;i<loadpostedNumber.length;i++){
+        var uniqId =loadpostedNumber[i].uniqueDeviceId
+      }
        quoteGenerate.findOneAndUpdate(query,updateData).select().exec().then(
         doc=>{
             console.log(doc)
             //check if it has matching docs then send response
             if(doc){
+                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.BidPrice,uniqId)
             res.status(200).json({
                 data: doc,
                 message:"attaching load to the vehicle",
@@ -929,7 +937,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
         })
     })
 
-
+        })
 })
 
 router.post('/attachPod', (req, res, next)=>{
