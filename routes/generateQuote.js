@@ -1049,7 +1049,7 @@ router.post('/findLoadsinProgress', (req, res, next)=>{
        shipperAccept:true
     }  
 
-     quoteGenerate.find(query,body).select().exec().then(
+     quoteGenerate.find(query).select().exec().then(
          doc=>{
              console.log(doc)
             
