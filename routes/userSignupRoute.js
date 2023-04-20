@@ -792,7 +792,51 @@ router.post('/addAccDetails', (req, res, next)=>{
 
     });
 
+//add gst details
 
+router.post('/gstDetails', (req, res, next)=>{
+
+    //     console.log(new Date().getTime());
+      var query= {_id:req.body._id}  //Transporter userSignup Id
+
+
+   var data=   { $push: { gstDetails: req.body.gstDetails}}
+   
+     //if no user found then create new user
+     userSignup.findOneAndUpdate(query,data).select().exec().then(
+         doc=>{
+             console.log(doc)
+
+             if(doc){
+                //sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+             res.status(200).json({
+                 data: doc,
+                 message:"gst details added Successfull",
+                 status:"success"
+             })
+           
+           
+         }else{
+             res.status(400).json({
+                 message:"no matching docs found",
+                 status:"no docs"
+             })
+ 
+         }
+        
+
+         }
+     ).catch(err=>{
+         res.status(400).json({
+             message:"failed to Add gst details",
+             status: "failed",
+             error:err
+         })
+     })
+    
+    
+
+    });
   
  
         
