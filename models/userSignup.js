@@ -120,8 +120,11 @@ TotalCoins:{
 PermanetCoins:{
    type:Number,
    default:0
-}
+},
+gstDetails:{
+   type:Array,
 
+}
 });
 
 
