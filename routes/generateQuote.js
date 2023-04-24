@@ -393,7 +393,7 @@ router.post('/placeBid', (req, res, next)=>{
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
      TohideAcceptBtn:req.body.TohideAcceptBtn,
      agentInitialBidSend:req.body.agentInitialBidSend,
-     initialAccept:req.body.initialAccept,
+     
      isAgentAccepted:req.body.isAgentAccepted,
      UserName:req.body.Name,
      time: new Date().getTime()
@@ -401,7 +401,7 @@ router.post('/placeBid', (req, res, next)=>{
  
        //form the query here
        var query=   { $push: { bids: placeIniBid },
-       $set:{shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,"multi": true },
+       $set:{shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,initialAccept:req.body.initialAccept,"multi": true },
     }
  
        UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(

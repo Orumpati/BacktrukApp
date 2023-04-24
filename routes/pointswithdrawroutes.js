@@ -70,7 +70,7 @@ auth:{
        
         from: 'info@trukapp.com',
          to: 'info@trukapp.com',
-         subject: "Points Mail",
+         subject: "Action Needed -Refferal Coins Withdrawal Request",
          text:req.body.text,
         // recipients:req.body.PhoneNumber
     }
