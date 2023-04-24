@@ -392,8 +392,7 @@ router.post('/placeBid', (req, res, next)=>{
                  "time": new Date().getTime()}],
      tentativefinalPrice: req.body.Bidprice,  //first time placed bid by trucker
      TohideAcceptBtn:req.body.TohideAcceptBtn,
-     agentInitialBidSend:req.body.agentInitialBidSend,
-     
+     agentInitialBidSend:req.body.agentInitialBidSend, 
      isAgentAccepted:req.body.isAgentAccepted,
      UserName:req.body.Name,
      time: new Date().getTime()
@@ -798,7 +797,7 @@ router.post('/initialacceptbyshipper',(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
-    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,"multi": true}}
+    var update ={$set:{"bids.$.isShipperAccepted":req.body.isShipperAccepted,"bids.$.TohideAcceptBtn":req.body.TohideAcceptBtn,"bids.$.BidStatus":req.body.BidStatus,shipperAccept:req.body.shipperAccept,contactSharedNum:req.body.contactSharedNum,bidAcceptedTo:req.body.bidAcceptedTo,"multi": true}}
     console.log(update)
     UserSignup.find({mobileNo:Number(req.body.Number)}).select().exec().then(
         doc=>{
