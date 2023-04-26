@@ -1122,11 +1122,11 @@ console.log(query)
 //notification function
  async function sendnotification(mess,Name,externalids){
 console.log(externalids)
-    const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+    const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
 
 const app_key_provider = {
     getToken() {
-        return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+        return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
     }
 };
 
@@ -1159,11 +1159,11 @@ console.log(response)
 
 async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     
-        const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+        const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
     
     const app_key_provider = {
         getToken() {
-            return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+            return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
         }
     };
     

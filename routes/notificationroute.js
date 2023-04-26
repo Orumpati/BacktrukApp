@@ -16,12 +16,13 @@ router.use(bodyParser.json());
 //creating a post request user registe
 
 router.post('/send', async (req, res, next)=>{
-
-        const ONESIGNAL_APP_ID = '79da642e-49a6-4af9-8e6e-252680709d15';
+//8fda6cf4-bdbe-4f2e-a709-24f8990ad307
+        const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
     
     const app_key_provider = {
         getToken() {
-            return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+            //return 'ZjA4ZTMyOGEtOTEzMy00MzQyLTg2MmItYWM3YTExMTM2YzI2';
+            return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm'
         }
     };
     
@@ -37,7 +38,7 @@ router.post('/send', async (req, res, next)=>{
     const notification = new OneSignal.Notification();
     notification.app_id = ONESIGNAL_APP_ID;
     //notification.included_segments = ['Subscribed Users'];
-    notification.include_external_user_ids=["374e0dc6-4534-4656-9366-8157aae14ac8"];
+   // notification.include_external_user_ids=["b1a196d9-6836-4321-a337-5d9b5eb3da72"];
     notification.contents = {
         en: "Hello OneSignal!"
     };
