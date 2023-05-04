@@ -81,7 +81,8 @@ router.post('/generateQuote', (req, res, next) => {
                 quoteSentTo: provider,
                 bids: bids,
                 TruckMarketVehicle: truckMarketVehicleData,
-                LoadId:req.body.LoadId
+                LoadId:req.body.LoadId,
+                UserName:req.body.LoadPosterName
             });
 
             quote.save().then(result => {

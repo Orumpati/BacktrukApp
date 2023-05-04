@@ -228,6 +228,9 @@ shareContact:{
 type:Boolean,
 default:false
  },
+ UserName:{
+    type:String
+ },
  ProofOfdelivery:[podInfo],
    quoteSentTo:{type: Array, required: true},
    bids:[bidsData],
