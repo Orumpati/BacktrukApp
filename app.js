@@ -18,7 +18,8 @@ const contact =require('./routes/menuContactUs')
 
 
 //connect to mongodb
-const uri = 'mongodb+srv://Orumpati_1234:9705821087Sai@cluster0.uqgd1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const uri ='mongodb+srv://trukapp:truk@cluster0.guldekj.mongodb.net/?retryWrites=true&w=majority'
+ //'mongodb+srv://Orumpati_1234:9705821087Sai@cluster0.uqgd1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 mongoose.set("strictQuery", false);
  mongoose.connect(uri)
 .then(response =>{

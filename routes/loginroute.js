@@ -46,13 +46,8 @@ router.post('/loginDetails',async(req,res,next)=>{
                          TrukType:doc.TrukType,
                          referalCode:doc.referalCode,
                          referTo:doc.refferedTo,
-                         signupReferalCode:doc.signupReferalCode
-
-                     
-                        
-                    })
-            
-         }
+                         signupReferalCode:doc.signupReferalCod                      
+                    })   }
     
              else{
              res.status(400).json({Authentication:"failed to Read Mobile NO",
