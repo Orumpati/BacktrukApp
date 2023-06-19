@@ -100,6 +100,8 @@ auth:{
                         data: doc,
                         message: "got the matching history based on the profile",
                         status: "success"
+
+                        
                     })
                 } else {
                     res.status(400).json({

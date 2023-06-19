@@ -436,7 +436,7 @@ router.post('/placeBid', (req, res, next)=>{
  
          }
          }
-     ).catch(err=>{
+     ) .catch(err=>{
          res.status(400).json({
              message:"failed to bid",
              status: "failed",

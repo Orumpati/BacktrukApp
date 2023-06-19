@@ -124,6 +124,10 @@ PermanetCoins:{
 gstDetails:{
    type:Array,
 
+},
+widthdrawStatus:{
+   type:String,
+   default:''
 }
 });
 
