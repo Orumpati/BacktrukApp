@@ -15,7 +15,7 @@ const home = require('./routes/homeroute')
 const notification =require('./routes/notificationroute')
 const points = require('./routes/pointswithdrawroutes')
 const contact =require('./routes/menuContactUs')
-
+const admin =require('./routes/admin')
 
 //connect to mongodb
        //const uri ='mongodb+srv://trukapp:truk@cluster0.guldekj.mongodb.net/?retryWrites=true&w=majority'
@@ -71,6 +71,7 @@ app.use('/truckinfo',home)
 app.use('/notificationss',notification)
 app.use('/contact',contact)
 app.use('/point',points);
+app.use('/admin',admin);
 app.get("/", (req, res, next)=>{
     res.json({
         name:"hello",
