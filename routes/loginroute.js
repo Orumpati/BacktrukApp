@@ -4,24 +4,27 @@ const router = express.Router();
 var mongoose =require('mongoose');
 const registerModel= require('../models/userSignup');
 const bodyParser = require('body-parser');
+const jwtAuth = require('../jwtAuth');
 
 
 router.use(bodyParser.urlencoded({ extended: false }));
-
-// parse application/json
 router.use(bodyParser.json());
-//creating a post request user register
+
+
+
 router.post('/loginDetails',async(req,res,next)=>{
     var mobileNo = req.body.mobileNo ;
     
     console.log(mobileNo)
      registerModel.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
-        console.log(mobileNo)  
+     console.log("Response",doc.mobileNo)  
          
          var em = req.body.mobileNo;
+
+         const mobileNo = doc.mobileNo;
+         const token = jwtAuth.generateToken(mobileNo);
+         const refreshToken = jwtAuth.generateRefreshToken(mobileNo);
      
-         
-         //const olduser = registerModel.findOne(Email)
 
          if(em == doc.mobileNo){
             
@@ -46,27 +49,71 @@ router.post('/loginDetails',async(req,res,next)=>{
                          TrukType:doc.TrukType,
                          referalCode:doc.referalCode,
                          referTo:doc.refferedTo,
-                         signupReferalCode:doc.signupReferalCod                      
-                    })   }
-    
-             else{
+                         signupReferalCode:doc.signupReferalCod,
+                         token,
+                         refreshToken                     
+                    })   
+                }else{
              res.status(400).json({Authentication:"failed to Read Mobile NO",
                     message:"failed",
-                    status:"failed",
-                
-                    
+                    status:"failed",     
             });
-          
          }
-         
-        
-
      }).catch(err =>{
          console.log(err);
          res.status(500).json({error :err,
             status:"failed"
         });
      });
- 
      });
+
+
+     router.post('/refresh-token', (req, res) => {
+        const refreshTokenValue = req.body.refreshToken;
+        jwtAuth.refreshToken(req, res, (err, newAccessToken) => {
+            if (err) {
+                return res.status(403).json({ message: "Forbidden"});
+            }
+            res.status(200).json({ accessToken: newAccessToken });
+        });
+    });
+
+
+    router.post('/logout',async(req,res,next)=>{
+
+        var mobileNo = req.body.mobileNo ;
+         registerModel.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
+         console.log("Response",doc.mobileNo)  
+             
+             var em = req.body.mobileNo;
+             const mobileNo = doc.mobileNo;
+             const tokenHeader = req.headers.authorization;
+
+        if (tokenHeader) {
+            const token = tokenHeader.split(' ')[1];
+            jwtAuth.addToBlacklist(token);
+        }
+             if(em == doc.mobileNo){
+                 res.status(200).json({
+                            Authentication :doc._id,
+                             message:"Loggedout successfully",
+                             status:"success",
+                             mobileNo:doc.mobileNo,                     
+                        })   
+                    }else{
+                 res.status(400).json({
+                        message:"Failed to Logout",
+                        status:"failed",     
+                });
+             }
+         }).catch(err =>{
+             console.log(err);
+             res.status(500).json({error :err,
+                status:"failed"
+            });
+         });
+         });
+    
+
+
 module.exports = router;

@@ -9,11 +9,12 @@ const { body } = require('express-validator'); //use express validator for few r
 
 //import the schema here
 const Userprofile = require('../models/profilemodel');
+const jwtAuth = require('../jwtAuth');
 
 
 
 
-router.post('/addprofile',(req, res, next)=>{
+router.post('/addprofile',jwtAuth.verifyToken,(req, res, next)=>{
     console.log("User profile is called")
 
     const userProfile = new Userprofile({

@@ -19,6 +19,7 @@ const adminData = require("../models/adminModel");
 const contact = require("../models/menuContactUs")
 const adminMessage = require("../models/adminMessage");
 const { restart } = require("nodemon");
+const jwtAuth = require('../jwtAuth');
 
 
 //Admin signup

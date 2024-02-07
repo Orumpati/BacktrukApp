@@ -3,11 +3,12 @@ const express = require('express');
 const router = express.Router();
 var mongoose =require('mongoose');
 const homeModel= require('../models/home');
+const jwtAuth = require('../jwtAuth');
 
 
 
 
-router.post('/home', async(req, res, next) => {        // want to create product details
+router.post('/home',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
    const homeModels = new homeModel({
       _id: new mongoose.Types.ObjectId,
       AdsArray: req.body.AdsArray,
@@ -30,7 +31,7 @@ router.post('/home', async(req, res, next) => {        // want to create product
 
 })
 
-router.get('/gethome', async (req, res) => {
+router.get('/gethome',jwtAuth.verifyToken, async (req, res) => {
    try {
        const Load = await homeModel.find()
 
