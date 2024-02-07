@@ -10,6 +10,7 @@ const { body } = require('express-validator'); //use express validator for few r
 const contactUs = require("../models/menuContactUs")
 
 const nodemailer = require('nodemailer')
+const jwtAuth = require('../jwtAuth');
 
 // router.post('/emailnotification', (req, res, next)=>{ 
 //     var transporter = nodemailer.createTransport({
@@ -41,7 +42,7 @@ const nodemailer = require('nodemailer')
 //     //}
 //     });
 
-router.post('/emailnotification', (req, res, next)=>{ 
+router.post('/emailnotification',jwtAuth.verifyToken, (req, res, next)=>{ 
  
     var transporter = nodemailer.createTransport({
          service: 'gmail',
@@ -84,7 +85,7 @@ auth:{
     //}
     });
     
-router.post('/addcontact', async(req, res, next) => {        // want to create product details
+router.post('/addcontact',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
     const contact = new contactUs({
         Name: req.body.Name,
         To: req.body.To,
