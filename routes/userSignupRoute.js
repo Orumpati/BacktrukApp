@@ -337,7 +337,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
      })
 
 
-     router.get('/getprofiledetails/:_id',jwtAuth.verifyToken,async(req, res, next)=> {
+     router.get('/getprofiledetails/:_id',async(req, res, next)=> {
   
         let query = {_id: req.params._id};
     
