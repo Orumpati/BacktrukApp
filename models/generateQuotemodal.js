@@ -113,6 +113,10 @@ Quantity:{
     type:String,
     //required:true
 },
+weight:{
+    type:String,
+    //required:true
+},
 
 // vehicle:{
 //     type:Array,

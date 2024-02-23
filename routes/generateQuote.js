@@ -61,6 +61,7 @@ router.post('/generateQuote',jwtAuth.verifyToken, (req, res, next) => {
                 dropupState:req.body.dropupState,
                 product: req.body.product,
                 Quantity: req.body.Quantity,
+                weight:req.body.weight,
                 pickupState: req.body.pickupState,
                 data: req.body.data,
                 isTrukOpenOrClose:req.body.isTrukOpenOrClose,
