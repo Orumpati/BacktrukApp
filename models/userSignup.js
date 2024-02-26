@@ -111,6 +111,18 @@ const UserProfileSchema = mongoose.Schema({
 SignupDate:{
    type:String
 },
+subscriptionType:{
+   type:String,
+   default:null
+},
+subscriptionStartDate:{
+   type:String,
+   default:null
+},
+subscriptionEndDate:{
+   type:String,
+   default:null
+},
 
 accDetails:[bankDetails],
 TotalCoins:{

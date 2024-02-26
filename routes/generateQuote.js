@@ -17,6 +17,35 @@ const quoteGenerate = require('../models/generateQuotemodal');
 const UserSignup = require("../models/userSignup");
 const vehiclemodal = require("../models/vehicle");
 const jwtAuth = require('../jwtAuth');
+const moment = require('moment');
+const checkSubscription = require('../routes/subscription');
+
+// const checkSubscription = (req, res, next) => {
+//     try {
+//         const signupDateString = req.query.SignupDate; // Extract SignupDate from query parameters
+//         if (!signupDateString) {
+//             return res.status(400).json({ message: "SignupDate is required in the query parameters." });
+//         }
+
+//         const signupDate = moment(signupDateString, "D/M/YYYY, h:mm:ss a"); // Parse SignupDate using moment
+//         const currentDate = moment();
+
+//         const daysSinceSignup = currentDate.diff(signupDate, 'days');
+//         const subscriptionDuration = 30; // Duration of the free trial period in days
+
+//         if (daysSinceSignup > subscriptionDuration) {
+//             return res.status(403).json({ message: "Free trail expired. Please subscribe to continue." });
+//         }
+
+//         // If subscription is active, proceed to the next middleware or API handler
+//         next();
+//     } catch (error) {
+//         console.error("Error:", error);
+//         res.status(500).json({ message: "Internal server error." });
+//     }
+// };
+
+
 
 
 //post method goes here
@@ -121,19 +150,17 @@ router.post('/generateQuote',jwtAuth.verifyToken, (req, res, next) => {
 
 //all Loads
 
-router.get('/allQuotes',jwtAuth.verifyToken, async (req, res) => {
+router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
-        const quote = await quoteGenerate.find()
-
-
-        res.status(200).json({
-
-            Loads: quote
-        })
+       
+        const quotes = await quoteGenerate.find();
+        res.status(200).json({ Loads: quotes });
     } catch (error) {
-        res.status(401).send(error)
+        console.error("Error:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 });
+
 
 
 //Loads in mkyloads tab for specific user number
