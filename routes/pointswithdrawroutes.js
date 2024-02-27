@@ -16,11 +16,12 @@ const { DateTime } = require('luxon');
 const now = DateTime.local();
 const formattedDateTime = now.toFormat('yyyy-MM-dd HH:mm:ss');
 const jwtAuth = require('../jwtAuth');
+const checkSubscription = require('../routes/subscription');
 
 
 
 
-router.post('/pointsPost',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
+router.post('/pointsPost',jwtAuth.verifyToken,checkSubscription, async(req, res, next) => {        // want to create product details
     const pointsData = new pointsWithdraw({
         _id: new mongoose.Types.ObjectId,
         userName:req.body.userName,
@@ -92,7 +93,7 @@ auth:{
     });
 
 
-    router.post('/reqestedHistory',jwtAuth.verifyToken, (req, res, next) => {
+    router.post('/reqestedHistory',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
         pointsWithdraw.find({ userNumber: req.body.userNumber }).select().exec().then(
             doc => {
                 console.log(doc)

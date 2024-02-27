@@ -11,6 +11,7 @@ const contactUs = require("../models/menuContactUs")
 
 const nodemailer = require('nodemailer')
 const jwtAuth = require('../jwtAuth');
+const checkSubscription = require('../routes/subscription');
 
 // router.post('/emailnotification', (req, res, next)=>{ 
 //     var transporter = nodemailer.createTransport({
@@ -42,7 +43,7 @@ const jwtAuth = require('../jwtAuth');
 //     //}
 //     });
 
-router.post('/emailnotification',jwtAuth.verifyToken, (req, res, next)=>{ 
+router.post('/emailnotification',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{ 
  
     var transporter = nodemailer.createTransport({
          service: 'gmail',
@@ -85,7 +86,7 @@ auth:{
     //}
     });
     
-router.post('/addcontact',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
+router.post('/addcontact',jwtAuth.verifyToken,checkSubscription, async(req, res, next) => {        // want to create product details
     const contact = new contactUs({
         Name: req.body.Name,
         To: req.body.To,

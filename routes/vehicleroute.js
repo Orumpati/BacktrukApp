@@ -13,13 +13,13 @@ const AddVehicle= require('../models/vehicle');
 const vehicle = require("../models/vehicle");
 const { response } = require("../app");
 const jwtAuth = require('../jwtAuth');
+const checkSubscription = require('../routes/subscription');
 
 
 
 
 
-
-router.post('/vehiclepost',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
+router.post('/vehiclepost',jwtAuth.verifyToken,checkSubscription, async(req, res, next) => {        // want to create product details
     const vehicle = new AddVehicle({
         trukvehiclenumber: req.body.trukvehiclenumber,
         OriginLocation: req.body.OriginLocation,
@@ -52,7 +52,7 @@ router.post('/vehiclepost',jwtAuth.verifyToken, async(req, res, next) => {      
 
 
 //get vehicles
-router.post('/allVehicless',jwtAuth.verifyToken, async (req, res) => {
+router.post('/allVehicless',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
       AddVehicle.find({trukOwnerNumber:req.body.trukOwnerNumber}).select().exec().then(doc =>{
        
@@ -69,7 +69,7 @@ router.post('/allVehicless',jwtAuth.verifyToken, async (req, res) => {
 });
 
 
-router.post('/truksByStatusAndNumber',jwtAuth.verifyToken, async (req, res) => {
+router.post('/truksByStatusAndNumber',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const truk = await AddVehicle.find()
   
     var filter= truk.filter(data=>{
@@ -99,7 +99,7 @@ router.post('/truksByStatusAndNumber',jwtAuth.verifyToken, async (req, res) => {
 
 
 //filterBytrukoperatingRoutes API 
-router.get('/filterBytrukoperatingRoutes/:trukname/:trukpickupLocation/:trukdropLocation',jwtAuth.verifyToken, async (req, res) => {
+router.get('/filterBytrukoperatingRoutes/:trukname/:trukpickupLocation/:trukdropLocation',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const vehicle = await AddVehicle.find({trukname:req.params.trukname, trukoperatingRoutes: { $all: [req.params.trukpickupLocation, req.params.trukdropLocation]  }})
        
@@ -117,7 +117,7 @@ if(!vehicle){
 });
 
 //filterByVehicle API 
-router.get('/filterByVehicle/:trukname',jwtAuth.verifyToken, async (req, res) => {
+router.get('/filterByVehicle/:trukname',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const vehicle = await AddVehicle.find({trukname:req.params.trukname})
        
@@ -135,7 +135,7 @@ if(!vehicle){
 });
 
 //get vehicles
-router.get('/allVehicles',jwtAuth.verifyToken, async (req, res) => {
+router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const Load = await AddVehicle.find()
 
@@ -150,7 +150,7 @@ router.get('/allVehicles',jwtAuth.verifyToken, async (req, res) => {
 });
 // GetbymobileNo API
 
- router.get('/allVehicles/:trukOwnerNumber',jwtAuth.verifyToken, (req, res, next)=>{
+ router.get('/allVehicles/:trukOwnerNumber',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     AddVehicle.find({trukOwnerNumber:req.params.trukOwnerNumber}).exec().then(
          docs =>{
@@ -169,7 +169,7 @@ router.get('/allVehicles',jwtAuth.verifyToken, async (req, res) => {
 
 //update API
 
-router.put('/updateLoads/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/updateLoads/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['trukvehiclenumber', 'trukcurrentLocation','trukoperatingRoutes','trukcapacity','trukname','trukdate','trukOwnerNumber'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
@@ -195,7 +195,7 @@ router.put('/updateLoads/:id',jwtAuth.verifyToken, async (req, res) => {
 
 
 // deactive API
-router.put('/TrukDeactive/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/TrukDeactive/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['trukisActive'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
@@ -222,7 +222,7 @@ router.put('/TrukDeactive/:id',jwtAuth.verifyToken, async (req, res) => {
 
 
 
-router.put('/vehicleinprogress/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/vehicleinprogress/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['trukisActive'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
@@ -247,7 +247,7 @@ router.put('/vehicleinprogress/:id',jwtAuth.verifyToken, async (req, res) => {
 //complete Status
 
 //delete API
-router.delete('/deleteTruk/:_id' ,jwtAuth.verifyToken,async(req,res)=> {
+router.delete('/deleteTruk/:_id' ,jwtAuth.verifyToken,checkSubscription,async(req,res)=> {
     try{
         const deletedProduct = await AddVehicle.findByIdAndDelete ( {_id:req.params._id} )
         if(!deletedProduct) {
@@ -263,7 +263,7 @@ router.delete('/deleteTruk/:_id' ,jwtAuth.verifyToken,async(req,res)=> {
 })
 //Get the truk by isActive
 
-router.get('/trukByStatus/:isActive',jwtAuth.verifyToken,async(req,res)=>{
+router.get('/trukByStatus/:isActive',jwtAuth.verifyToken,checkSubscription,async(req,res)=>{
     try{
         const vehicle= await AddVehicle.find({trukisActive:req.params.trukisActive})
         if(!vehicle){
@@ -282,7 +282,7 @@ router.get('/trukByStatus/:isActive',jwtAuth.verifyToken,async(req,res)=>{
 
 
 // vehicle search based on location
-router.post('/vehicleSearch',jwtAuth.verifyToken, async(req, res, next) => {   
+router.post('/vehicleSearch',jwtAuth.verifyToken,checkSubscription, async(req, res, next) => {   
    
     vehicle.find({trukoperatingRoutes: { $all: [req.body.trukpickupLocation, req.body.trukdropLocation] } } ).select().exec().then(doc =>{ 
         console.log(doc.length)

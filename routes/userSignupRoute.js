@@ -16,6 +16,7 @@ const userSignup = require("../models/userSignup");
 const Drivers =require('../models/drivers');
 const drivers = require("../models/drivers");
 const jwtAuth = require('../jwtAuth');
+const checkSubscription = require('../routes/subscription');
 
 
 aws.config.update({
@@ -160,7 +161,7 @@ console.log(doc)
 
 //transporter details who attached the particular driver
 
-router.post('/findtransporterbydrivers',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/findtransporterbydrivers',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
   
 
@@ -258,7 +259,7 @@ router.post('/login', (req, res, next)=>{
 
 
 //get user profile
-router.get('/:username',jwtAuth.verifyToken, (req, res, next) =>{
+router.get('/:username',jwtAuth.verifyToken, checkSubscription,(req, res, next) =>{
     UserSignup.findOne({username:req.params.username})
     .exec()
     .then(doc =>{
@@ -337,7 +338,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
      })
 
 
-     router.get('/getprofiledetails/:_id',async(req, res, next)=> {
+     router.get('/getprofiledetails/:_id',checkSubscription,async(req, res, next)=> {
   
         let query = {_id: req.params._id};
     
@@ -366,7 +367,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
     
 
     //update profile
-    router.put('/updateprofile/:_id',jwtAuth.verifyToken,(req, res)=>{
+    router.put('/updateprofile/:_id',jwtAuth.verifyToken,checkSubscription,(req, res)=>{
        // var mobileNo = req.body.mobileNo ;
         /* if(!ObjectId.isValid(req.params.id))
          return res.status(400).send(`no record with id :${req.params.id}`);*/
@@ -454,7 +455,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
      
      })     
         
-     router.post('/AddDrivers',jwtAuth.verifyToken, (req, res, next)=>{
+     router.post('/AddDrivers',jwtAuth.verifyToken, checkSubscription,(req, res, next)=>{
 
         //     console.log(new Date().getTime());
           var query= {_id:req.body._id}  //Transporter userSignup Id
@@ -519,7 +520,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
      } )
 
 
-     router.post('/updateAvailability',jwtAuth.verifyToken, (req, res, next)=>{
+     router.post('/updateAvailability',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
         
             //     console.log(new Date().getTime());
               var query= {"_id":req.body._id,"Drivers.DriverNumber":req.body.DriverNumber}  //quote id and truker mobile no  always Agent mobile NO
@@ -563,7 +564,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
             }) 
          
 
-            router.post('/addnewDrivers',jwtAuth.verifyToken, (req, res, next) => {
+            router.post('/addnewDrivers',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
                 const newdriber =new drivers({
                     _id:new mongoose.Types.ObjectId,
                     TrukType:req.body.TrukType,
@@ -669,7 +670,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
 
 
     
-router.get('/allQuotes',jwtAuth.verifyToken, async (req, res) => {
+router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const quote = await quoteGenerate.find()
 
@@ -686,7 +687,7 @@ router.get('/allQuotes',jwtAuth.verifyToken, async (req, res) => {
 
 //Loads in mkyloads tab for specific user number
 
-router.post('/refferedBy',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/refferedBy',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     userSignup.findOne({ referalCode: req.body.referalCode }).select().exec().then(
         doc => {
             console.log(doc)
@@ -719,7 +720,7 @@ router.post('/refferedBy',jwtAuth.verifyToken, (req, res, next) => {
 
 
 //Add truck market vehicle to existing vehcile to existing Load and send notification to vehicle
-router.post('/refereduserdata',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/refereduserdata',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     var query = { _id: req.body._id };
 
     //data needed for truck Market vehicle
@@ -746,7 +747,7 @@ router.post('/refereduserdata',jwtAuth.verifyToken, (req, res, next) => {
 
 
 
-router.post('/addAccDetails',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/addAccDetails',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     //     console.log(new Date().getTime());
       var query= {_id:req.body._id}  //Transporter userSignup Id
@@ -797,7 +798,7 @@ router.post('/addAccDetails',jwtAuth.verifyToken, (req, res, next)=>{
 
 //add gst details
 
-router.post('/gstDetails',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/gstDetails',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     //     console.log(new Date().getTime());
       var query= {_id:req.body._id}  //Transporter userSignup Id
@@ -843,7 +844,7 @@ router.post('/gstDetails',jwtAuth.verifyToken, (req, res, next)=>{
   
  
         
-    router.post('/addcoinstoRefered',jwtAuth.verifyToken, (req, res, next)=>{
+    router.post('/addcoinstoRefered',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
         //     console.log(new Date().getTime());
           var query= {referalCode:req.body.referalCode}  //Transporter userSignup Id
@@ -896,7 +897,7 @@ router.post('/gstDetails',jwtAuth.verifyToken, (req, res, next)=>{
         });
 
         
-        router.post('/withdrawCoins',jwtAuth.verifyToken, (req, res, next)=>{
+        router.post('/withdrawCoins',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
             //     console.log(new Date().getTime());
               var query= {_id:req.body._id}  //Transporter userSignup Id

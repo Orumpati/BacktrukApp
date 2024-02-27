@@ -4,11 +4,11 @@ const router = express.Router();
 var mongoose =require('mongoose');
 const homeModel= require('../models/home');
 const jwtAuth = require('../jwtAuth');
+const checkSubscription = require('../routes/subscription');
 
 
 
-
-router.post('/home',jwtAuth.verifyToken, async(req, res, next) => {        // want to create product details
+router.post('/home',jwtAuth.verifyToken,checkSubscription, async(req, res, next) => {        // want to create product details
    const homeModels = new homeModel({
       _id: new mongoose.Types.ObjectId,
       AdsArray: req.body.AdsArray,
@@ -31,7 +31,7 @@ router.post('/home',jwtAuth.verifyToken, async(req, res, next) => {        // wa
 
 })
 
-router.get('/gethome',jwtAuth.verifyToken, async (req, res) => {
+router.get('/gethome',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
    try {
        const Load = await homeModel.find()
 

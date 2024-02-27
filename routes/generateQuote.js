@@ -49,7 +49,7 @@ const checkSubscription = require('../routes/subscription');
 
 
 //post method goes here
-router.post('/generateQuote',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     console.log("generate quotes api is called")
 
     //find the agents avaibale in the given locations
@@ -150,7 +150,7 @@ router.post('/generateQuote',jwtAuth.verifyToken, (req, res, next) => {
 
 //all Loads
 
-router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
+router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription,async (req, res) => {
     try {
        
         const quotes = await quoteGenerate.find();
@@ -165,7 +165,7 @@ router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) 
 
 //Loads in mkyloads tab for specific user number
 
-router.post('/myLoadsForSpecificNumber',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/myLoadsForSpecificNumber',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     quoteGenerate.find({ Number: req.body.Number }).select().exec().then(
         doc => {
             console.log(doc)
@@ -196,7 +196,7 @@ router.post('/myLoadsForSpecificNumber',jwtAuth.verifyToken, (req, res, next) =>
 
 
 //Loads for Specific truck
-router.post('/LoadsForSpecificTruck',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/LoadsForSpecificTruck',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     
     quoteGenerate.find({"TruckMarketVehicle.trukvehiclenumber":req.body.trukvehiclenumber}).select().exec().then(
         doc => {
@@ -229,7 +229,7 @@ router.post('/LoadsForSpecificTruck',jwtAuth.verifyToken, (req, res, next) => {
 //contact us get loads by usernumber and active and completed status oloasd
 
 
-router.post('/contactusStatusAndNumber',jwtAuth.verifyToken, async (req, res) => {
+router.post('/contactusStatusAndNumber',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const quote = await quoteGenerate.find()
   
     var filter= quote.filter(data=>{
@@ -258,7 +258,7 @@ router.post('/contactusStatusAndNumber',jwtAuth.verifyToken, async (req, res) =>
 })
 //get by id
 
-router.get('/quoteById/:id', async (req, res) => {
+router.get('/quoteById/:id',checkSubscription, async (req, res) => {
     try {
         const quote = await quoteGenerate.find({ _id: req.params.id })
         console.log(quote)
@@ -273,7 +273,7 @@ router.get('/quoteById/:id', async (req, res) => {
 
 //update Load
 
-router.put('/updateQuotes/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/updateQuotes/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['OriginLocation', 'DestinationLocation', 'Number', 'product', 'Quantity', 'expectedPrice','dropupState','pickupState',
         'date', 'typeOfPay', 'comments', 'data'] // updates that are allowed
@@ -299,7 +299,7 @@ router.put('/updateQuotes/:id',jwtAuth.verifyToken, async (req, res) => {
 
 
 //update NegoSghiy
-router.put('/updateNego/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/updateNego/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['TohideNegoshit'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
@@ -324,7 +324,7 @@ router.put('/updateNego/:id',jwtAuth.verifyToken, async (req, res) => {
 //Isactive to Deactive Funtion
 
 
-router.put('/quoteDeactivate/:id',jwtAuth.verifyToken, async (req, res) => {
+router.put('/quoteDeactivate/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['isActive'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
@@ -350,7 +350,7 @@ router.put('/quoteDeactivate/:id',jwtAuth.verifyToken, async (req, res) => {
 
 //Get the load by isActive
 
-router.get('/loadsByStatus/:isActive',jwtAuth.verifyToken, async (req, res) => {
+router.get('/loadsByStatus/:isActive',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const load = await quoteGenerate.find({ isActive: req.params.isActive })
         if (!load) {
@@ -370,7 +370,7 @@ router.get('/loadsByStatus/:isActive',jwtAuth.verifyToken, async (req, res) => {
 
 
 //LoadMarket APIS where trukers and agents get to see the loads based on their profile. 
-router.post('/LoadMarket',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/LoadMarket',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     quoteGenerate.find({quoteSentTo: { $all: [req.body.mobileNo] } }).select().exec().then(
         doc => {
            
@@ -403,7 +403,7 @@ router.post('/LoadMarket',jwtAuth.verifyToken, (req, res, next) => {
 })
 
 
-router.post('/placeBid',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/placeBid',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     //alternate bid Current Bid Service
     const placeIniBid ={
@@ -472,7 +472,7 @@ router.post('/placeBid',jwtAuth.verifyToken, (req, res, next)=>{
  
  //Get the load by status and mobile number
 
-router.post('/loadsByStatusAndNumber',jwtAuth.verifyToken, async (req, res) => {
+router.post('/loadsByStatusAndNumber',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const quote = await quoteGenerate.find()
   
     var filter= quote.filter(data=>{
@@ -505,7 +505,7 @@ router.post('/loadsByStatusAndNumber',jwtAuth.verifyToken, async (req, res) => {
      
 
 //Update Bids by the trukers and Customers
-router.post('/updateBids',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/updateBids',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     
         //     console.log(new Date().getTime());
@@ -575,7 +575,7 @@ router.post('/updateBids',jwtAuth.verifyToken, (req, res, next)=>{
 
 //dfghju
 //Update Bids by the trukers and Customers
-router.post('/findloadbydrivers',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/findloadbydrivers',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
         //     console.log(new Date().getTime());
           var query= {"vehicleInformation.DriverNumber":req.body.mobileNo,"DriverStatus":req.body.DriverStatus}  //quote id and truker mobile no  always Agent mobile NO
 
@@ -614,7 +614,7 @@ router.post('/findloadbydrivers',jwtAuth.verifyToken, (req, res, next)=>{
 
 
 //payment confirm
-router.post('/paymentconfirm',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/paymentconfirm',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
         //     console.log(new Date().getTime());
           var query= {"_id":req.body._id}  //quote id and truker mobile no  always Agent mobile NO
@@ -655,7 +655,7 @@ router.post('/paymentconfirm',jwtAuth.verifyToken, (req, res, next)=>{
      
 
 //ShowBids to customer
-router.post('/showCustomerBids',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/showCustomerBids',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     quoteGenerate.find({ "userNumber": req.body.mobileNo }).select().exec().then(doc => {
         res.status(200).json({
             status: "success",
@@ -668,7 +668,7 @@ router.post('/showCustomerBids',jwtAuth.verifyToken, (req, res, next) => {
 
 
 //show agent side bids and this should restrict to only his bids not other bids
-router.post('/showAgentBids', (req, res, next) => {
+router.post('/showAgentBids',checkSubscription, (req, res, next) => {
     quoteGenerate.find({ "bids.mobileNo": req.body.mobileNo }).select().exec().then(doc => {
         console.log(doc);
 
@@ -727,7 +727,7 @@ router.post('/showAgentBids', (req, res, next) => {
 })
 
 ///Show agent side bids for particular QUOTE ID and particular Agent Mobile NO
-router.post('/showAgentSideBidConversation',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/showAgentSideBidConversation',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
     console.log(req.body._id)
     console.log(req.body.mobileNo)
     quoteGenerate.find({"bids.mobileNo":req.body.mobileNo, "_id":req.body._id}).select().exec().then(doc=>{
@@ -800,7 +800,7 @@ router.post('/showAgentSideBidConversation',jwtAuth.verifyToken, (req, res, next
 
 
 //Accepting final quote by user
-router.post('/acceptQuoteByUser',jwtAuth.verifyToken,(req,res,next)=>{
+router.post('/acceptQuoteByUser',jwtAuth.verifyToken,checkSubscription,(req,res,next)=>{
 
     var query={"_id":req.body._id };
     var update ={$set:{userAcceptedPrice:req.body.acceptedPrice,isActive:"Finalised"}}
@@ -817,7 +817,7 @@ router.post('/acceptQuoteByUser',jwtAuth.verifyToken,(req,res,next)=>{
 
 
 //initial accept by shipper
-router.post('/initialacceptbyshipper',jwtAuth.verifyToken,(req,res,next)=>{
+router.post('/initialacceptbyshipper',jwtAuth.verifyToken,checkSubscription,(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
@@ -848,7 +848,7 @@ router.post('/initialacceptbyshipper',jwtAuth.verifyToken,(req,res,next)=>{
 })
 
 //final aaccept by agent
-router.post('/finalacceptbyagent',jwtAuth.verifyToken,(req,res,next)=>{
+router.post('/finalacceptbyagent',jwtAuth.verifyToken,checkSubscription,(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id,"bids.mobileNo":req.body.mobileNo}
@@ -879,7 +879,7 @@ router.post('/finalacceptbyagent',jwtAuth.verifyToken,(req,res,next)=>{
 
 
 //final aaccept by agent
-router.post('/getsingleloadbids',jwtAuth.verifyToken,(req,res,next)=>{
+router.post('/getsingleloadbids',jwtAuth.verifyToken,checkSubscription,(req,res,next)=>{
 
     //var query={"_id":req.body._id };
     var query= {"_id":req.body._id}
@@ -897,7 +897,7 @@ router.post('/getsingleloadbids',jwtAuth.verifyToken,(req,res,next)=>{
 })
 
 
-router.post('/attachVehicleToLoad', (req, res, next)=>{
+router.post('/attachVehicleToLoad',checkSubscription, (req, res, next)=>{
 
     //data needed for attaching load
     const vehicleData={
@@ -956,7 +956,7 @@ router.post('/attachVehicleToLoad', (req, res, next)=>{
         })
 })
 
-router.post('/attachPod',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/attachPod',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     //     console.log(new Date().getTime());
       var query= {_id:req.body._id}  //Transporter userSignup Id
@@ -1007,7 +1007,7 @@ router.post('/attachPod',jwtAuth.verifyToken, (req, res, next)=>{
     });
  
 //Add truck market vehicle to existing vehcile to existing Load and send notification to vehicle
-router.post('/addTruckMarketVehicleToLoad',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/addTruckMarketVehicleToLoad',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     var query = { _id: req.body._id };
 
     //data needed for truck Market vehicle
@@ -1037,7 +1037,7 @@ router.post('/addTruckMarketVehicleToLoad',jwtAuth.verifyToken, (req, res, next)
 
 })
 //attach load to vehicle in vehicle.js
-router.post('/addloadtotruck',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/addloadtotruck',jwtAuth.verifyToken, checkSubscription,(req, res, next) => {
 
 
 
@@ -1064,7 +1064,7 @@ router.post('/addloadtotruck',jwtAuth.verifyToken, (req, res, next) => {
 })
 
 
-router.post('/findLoadsinProgress',jwtAuth.verifyToken, (req, res, next)=>{
+router.post('/findLoadsinProgress',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
     var query = { Number: String(req.body.Number)};
 
     const body={
@@ -1106,7 +1106,7 @@ router.post('/findLoadsinProgress',jwtAuth.verifyToken, (req, res, next)=>{
 
 
     //LoadMarket APIS where trukers and agents get to see the loads based on their profile. 
-router.post('/transporteinprogress',jwtAuth.verifyToken, (req, res, next) => {
+router.post('/transporteinprogress',jwtAuth.verifyToken,checkSubscription, (req, res, next) => {
     var query = {quoteSentTo: { $all: [req.body.mobileNo] } }
 console.log(query)
  
