@@ -123,6 +123,10 @@ subscriptionEndDate:{
    type:String,
    default:null
 },
+payment_history:{
+   type:Array,
+   default:null
+},
 
 accDetails:[bankDetails],
 TotalCoins:{
