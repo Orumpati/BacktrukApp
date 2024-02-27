@@ -73,35 +73,78 @@ router.post("/payment/:userId", async (req, res) => {
 });
 
 //payment validation endpoint
+// router.post("/validate", async (req, res) => {
+// 	try {
+// 	  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  
+// 	  const razorpaySecret = process.env.KEY_SECRET;
+  
+// 	  if (!razorpaySecret) {
+// 		return res.status(500).json({ error: "RAZORPAY_SECRET environment variable is not defined." });
+// 	  }
+  
+// 	  const sha = crypto.createHmac("sha256", razorpaySecret);
+// 	  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+// 	  const digest = sha.digest("hex");
+  
+// 	  if (digest !== razorpay_signature) {
+// 		return res.status(400).json({ msg: "Transaction is not legit!" });
+// 	  }
+  
+// 	  res.json({
+// 		msg: "success",
+// 		orderId: razorpay_order_id,
+// 		paymentId: razorpay_payment_id,
+// 	  });
+// 	} catch (err) {
+// 	  console.error(err);
+// 	  res.status(500).json({ error: "Internal Server Error" });
+// 	}
+//   });
+
 router.post("/validate", async (req, res) => {
-	try {
-	  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  
-	  const razorpaySecret = process.env.KEY_SECRET;
-  
-	  if (!razorpaySecret) {
-		return res.status(500).json({ error: "RAZORPAY_SECRET environment variable is not defined." });
-	  }
-  
-	  const sha = crypto.createHmac("sha256", razorpaySecret);
-	  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-	  const digest = sha.digest("hex");
-  
-	  if (digest !== razorpay_signature) {
-		return res.status(400).json({ msg: "Transaction is not legit!" });
-	  }
-  
-	  res.json({
-		msg: "success",
-		orderId: razorpay_order_id,
-		paymentId: razorpay_payment_id,
-	  });
-	} catch (err) {
-	  console.error(err);
-	  res.status(500).json({ error: "Internal Server Error" });
-	}
-  });
-  
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } = req.body;
+
+    const razorpaySecret = process.env.KEY_SECRET;
+
+    if (!razorpaySecret) {
+      return res.status(500).json({ error: "RAZORPAY_SECRET environment variable is not defined." });
+    }
+
+    const sha = crypto.createHmac("sha256", razorpaySecret);
+    sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = sha.digest("hex");
+
+    if (digest !== razorpay_signature) {
+      return res.status(400).json({ msg: "Transaction is not legit!" });
+    }
+
+    console.log("Updating user's payment history...");
+
+    // Update the user's payment history array
+    const user = await User.findByIdAndUpdate(userId, {
+      $push: { payment_history: { orderId: razorpay_order_id, paymentId: razorpay_payment_id } }
+    });
+
+    console.log("User updated:", user);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.json({
+      msg: "success",
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 
 module.exports = router;
 
