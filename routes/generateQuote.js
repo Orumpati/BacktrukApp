@@ -91,6 +91,7 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 product: req.body.product,
                 Quantity: req.body.Quantity,
                 weight:req.body.weight,
+                others:req.body.others,
                 pickupState: req.body.pickupState,
                 data: req.body.data,
                 isTrukOpenOrClose:req.body.isTrukOpenOrClose,

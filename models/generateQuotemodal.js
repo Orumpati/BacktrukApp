@@ -117,6 +117,10 @@ weight:{
     type:String,
     //required:true
 },
+others:{
+    type:String,
+    //required:true
+},
 
 // vehicle:{
 //     type:Array,
