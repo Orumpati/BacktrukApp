@@ -51,7 +51,13 @@ router.post('/loginDetails',async(req,res,next)=>{
                          referTo:doc.refferedTo,
                          signupReferalCode:doc.signupReferalCod,
                          token,
-                         refreshToken                     
+                         refreshToken ,
+                         subscriptionType:doc.subscriptionType,
+                         subscriptionStartDate:doc.subscriptionStartDate,
+                         subscriptionEndDate:doc.subscriptionEndDate,
+                         payment_history:doc.payment_history,
+                         SignupDate:doc.SignupDate
+
                     })   
                 }else{
              res.status(400).json({Authentication:"failed to Read Mobile NO",
