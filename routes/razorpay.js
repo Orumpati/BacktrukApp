@@ -65,42 +65,18 @@ router.post("/payment/:userId", async (req, res) => {
     const createdDate = new Date(order.created_at * 1000);
     order.subscriptionStartDate = createdDate.toLocaleString('en-GB');
 
-    res.json(order);
+    
+    // Add subscription details to the response object
+    order.subscriptionStartDate = new Date().toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    order.subscriptionEndDate = endDate;
+    order.subscriptionType = subscriptionType;
+
+    res.json(order );
   } catch (err) {
     console.log(err);
     res.status(500).send("Error");
   }
 });
-
-//payment validation endpoint
-// router.post("/validate", async (req, res) => {
-// 	try {
-// 	  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  
-// 	  const razorpaySecret = process.env.KEY_SECRET;
-  
-// 	  if (!razorpaySecret) {
-// 		return res.status(500).json({ error: "RAZORPAY_SECRET environment variable is not defined." });
-// 	  }
-  
-// 	  const sha = crypto.createHmac("sha256", razorpaySecret);
-// 	  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-// 	  const digest = sha.digest("hex");
-  
-// 	  if (digest !== razorpay_signature) {
-// 		return res.status(400).json({ msg: "Transaction is not legit!" });
-// 	  }
-  
-// 	  res.json({
-// 		msg: "success",
-// 		orderId: razorpay_order_id,
-// 		paymentId: razorpay_payment_id,
-// 	  });
-// 	} catch (err) {
-// 	  console.error(err);
-// 	  res.status(500).json({ error: "Internal Server Error" });
-// 	}
-//   });
 
 router.post("/validate", async (req, res) => {
   try {
@@ -137,6 +113,7 @@ router.post("/validate", async (req, res) => {
       msg: "success",
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
+      user:user
     });
   } catch (err) {
     console.error(err);
@@ -145,6 +122,37 @@ router.post("/validate", async (req, res) => {
 });
 
 
+
+
+//payment validation endpoint
+// router.post("/validate", async (req, res) => {
+// 	try {
+// 	  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  
+// 	  const razorpaySecret = process.env.KEY_SECRET;
+  
+// 	  if (!razorpaySecret) {
+// 		return res.status(500).json({ error: "RAZORPAY_SECRET environment variable is not defined." });
+// 	  }
+  
+// 	  const sha = crypto.createHmac("sha256", razorpaySecret);
+// 	  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+// 	  const digest = sha.digest("hex");
+  
+// 	  if (digest !== razorpay_signature) {
+// 		return res.status(400).json({ msg: "Transaction is not legit!" });
+// 	  }
+  
+// 	  res.json({
+// 		msg: "success",
+// 		orderId: razorpay_order_id,
+// 		paymentId: razorpay_payment_id,
+// 	  });
+// 	} catch (err) {
+// 	  console.error(err);
+// 	  res.status(500).json({ error: "Internal Server Error" });
+// 	}
+//   });
 
 module.exports = router;
 

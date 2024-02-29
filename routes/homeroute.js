@@ -44,4 +44,6 @@ router.get('/gethome',jwtAuth.verifyToken,checkSubscription, async (req, res) =>
        res.status(401).send(error)
    }
 });
+
+  
 module.exports = router;
