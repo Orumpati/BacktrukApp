@@ -2,15 +2,22 @@ const moment = require('moment');
 
 const checkSubscription = (req, res, next) => {
     try {
-        // const signupDateString = req.query.SignupDate; // Extract SignupDate from query parameters
-        // const subscriptionType = req.query.subscriptionType; // Extract subscriptionType from query parameters
-        // const subscriptionStartDateString = req.query.subscriptionStartDate; // Extract subscriptionStartDate from query parameters
-        // const subscriptionEndDateString = req.query.subscriptionEndDate; // Extract subscriptionEndDate from query parameters
+        let signupDateString, subscriptionType, subscriptionStartDateString, subscriptionEndDateString;
 
-        const { signupDateString, subscriptionType, subscriptionStartDateString, subscriptionEndDateString } = req.body;
+        if (req.method === "GET") {
+            signupDateString = req.query.signupDateString;
+            subscriptionType = req.query.subscriptionType;
+            subscriptionStartDateString = req.query.subscriptionStartDateString;
+            subscriptionEndDateString = req.query.subscriptionEndDateString;
+        } else {
+            signupDateString = req.body.signupDateString;
+            subscriptionType = req.body.subscriptionType;
+            subscriptionStartDateString = req.body.subscriptionStartDateString;
+            subscriptionEndDateString = req.body.subscriptionEndDateString;
+        }
 
         if (!signupDateString) {
-            return res.status(400).json({ message: "SignupDate is required in the query parameters." });
+            return res.status(400).json({ message: "SignupDate is required in the body" });
         }
 
         const currentDate = moment();
