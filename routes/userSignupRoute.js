@@ -19,6 +19,7 @@ const jwtAuth = require('../jwtAuth');
 const checkSubscription = require('../routes/subscription');
 
 
+
 aws.config.update({
     secretAccessKey: 'YJTJljNdeg1IgSWZKcY4aPd4ObTgeAyN3+hBjceF',
     accessKeyId: 'AKIAQV7PAMQ75KVD3CZM',
@@ -469,7 +470,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
         AadharImage:req.body.AadharImage,
         PanImage:req.body.PanImage,
         DriverName:req.body.DriverName,
-        DriverNumber:req.body.DriverNumber
+        DriverNumber:req.body.DriverNumber,
        }
    
        var data=   { $push: { Drivers: body }}
