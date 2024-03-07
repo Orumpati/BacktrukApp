@@ -113,7 +113,7 @@ SignupDate:{
 },
 subscriptionType:{
    type:String,
-   default:null
+   default:"free"
 },
 subscriptionStartDate:{
    type:String,
