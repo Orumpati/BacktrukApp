@@ -82,6 +82,7 @@ router.post("/payment/:userId", async (req, res) => {
 router.post("/validate", async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId, externalids } = req.body;
+     console.log(req.body)
 
     const razorpaySecret = process.env.KEY_SECRET;
 
