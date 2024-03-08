@@ -87,7 +87,6 @@ const checkSubscription = async (req, res, next) => {
             subscriptionType = req.query.subscriptionType;
             subscriptionStartDateString = req.query.subscriptionStartDateString;
             subscriptionEndDateString = req.query.subscriptionEndDateString;
-            externalids =['74d62717-66ce-43d4-8b5e-3794cac297c2','859aa0b1-9e68-45ef-909a-c8e920e5a70c'];
             externalids = req.query.externalids.split(',');
 
         } else {
