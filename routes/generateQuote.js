@@ -126,7 +126,7 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
 
 //all Loads
 
-router.get('/allQuotes', async (req, res) => {
+router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const quotes = await quoteGenerate.find();
         res.status(200).json({ Loads: quotes });

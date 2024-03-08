@@ -101,5 +101,41 @@ async function sendnotification(mess,Name,externalids){
     
     }
 
-module.exports = {sendnotification};
+async function sendnotificationSubscription(mess,externalids){
+        logger.info(externalids)
+            const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
+        
+        const app_key_provider = {
+            getToken() {
+                return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
+            }
+        };
+        
+        const configuration = OneSignal.createConfiguration({
+            authMethods: {
+                app_key: {
+                    tokenProvider: app_key_provider
+                }
+            }
+        });
+        const client = new OneSignal.DefaultApi(configuration);
+        
+        const notification = new OneSignal.Notification();
+        notification.app_id = ONESIGNAL_APP_ID;
+        //notification.included_segments = ['Subscribed Users'];
+        //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+        notification.include_external_user_ids = externalids;
+        notification.contents = {
+            en:mess,
+        };
+        const {id} = await client.createNotification(notification);
+        
+        const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+        logger.info('notification response',id)
+        logger.info('notification message',response )
+        //res.json(response)
+        
+        }
+
+module.exports = {sendnotification, sendnotificationSubscription};
 
