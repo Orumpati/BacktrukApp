@@ -37,6 +37,11 @@ router.post("/payment/:userId", async (req, res) => {
 
     const options = req.body;
 
+    const externalids =req.body;
+    
+
+    await sendnotificationSubscription("Payment successfull", externalids);
+
     const order = await razorpay.orders.create(options);
 
     if (!order) {
