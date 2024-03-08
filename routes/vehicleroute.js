@@ -150,9 +150,9 @@ router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, async (req, res
 });
 // GetbymobileNo API
 
- router.get('/allVehicles/:trukOwnerNumber',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
+ router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
-    AddVehicle.find({trukOwnerNumber:req.params.trukOwnerNumber}).exec().then(
+    AddVehicle.find({trukOwnerNumber:req.query.trukOwnerNumber}).exec().then(
          docs =>{
              res.status(200).json({
                         data: docs
@@ -197,7 +197,7 @@ router.put('/updateLoads/:id',jwtAuth.verifyToken,checkSubscription, async (req,
 // deactive API
 router.put('/TrukDeactive/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['trukisActive'] // updates that are allowed
+    const allowedUpdates = ['trukisActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)
