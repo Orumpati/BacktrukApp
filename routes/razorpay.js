@@ -3,6 +3,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require('dotenv').config();
 const User = require('../models/userSignup');
+const { sendnotificationSubscription } = require('../routes/notificationroute');
 
 // function to calculate the date and type of subscription
 function calculateEndDateAndType(amount) {
@@ -80,7 +81,7 @@ router.post("/payment/:userId", async (req, res) => {
 
 router.post("/validate", async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId, externalids } = req.body;
 
     const razorpaySecret = process.env.KEY_SECRET;
 
@@ -108,6 +109,8 @@ router.post("/validate", async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
+
+    await sendnotificationSubscription("Payment successfull", externalids);
 
     res.json({
       msg: "success",
