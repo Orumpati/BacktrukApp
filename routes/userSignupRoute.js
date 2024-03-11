@@ -299,6 +299,11 @@ router.put('/putprofile/:id',jwtAuth.verifyToken,(req, res)=>{
         landMark:req.body.landMark,
        city:req.body.city,
        pincode:req.body.pincode,
+       signupDateString:req.body.signupDateString,
+       subscriptionType:req.body.subscriptionType,
+       subscriptionStartDateString:req.body.subscriptionStartDateString,
+       subscriptionEndDateString:req.body.subscriptionEndDateString,
+       externalids:req.body.externalids
        
      };
 

@@ -171,7 +171,7 @@ router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, async (req, res
 
 router.put('/updateLoads/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['trukvehiclenumber', 'trukcurrentLocation','trukoperatingRoutes','trukcapacity','trukname','trukdate','trukOwnerNumber'] // updates that are allowed
+    const allowedUpdates = ['trukvehiclenumber', 'trukcurrentLocation','trukoperatingRoutes','trukcapacity','trukname','trukdate','trukOwnerNumber', 'signupDateString','subscriptionType','subscriptionStartDateString','subscriptionEndDateString','externalids'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)
@@ -197,7 +197,7 @@ router.put('/updateLoads/:id',jwtAuth.verifyToken,checkSubscription, async (req,
 // deactive API
 router.put('/TrukDeactive/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['trukisActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString'] // updates that are allowed
+    const allowedUpdates = ['trukisActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString', 'externalids'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         console.log(isValidOperation)
@@ -224,7 +224,7 @@ router.put('/TrukDeactive/:id',jwtAuth.verifyToken,checkSubscription, async (req
 
 router.put('/vehicleinprogress/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['trukisActive'] // updates that are allowed
+    const allowedUpdates = ['trukisActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString', 'externalids'] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         return res.status(400).json({ error: 'invalid updates' })

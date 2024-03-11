@@ -250,7 +250,8 @@ router.get('/quoteById/:id',checkSubscription, async (req, res) => {
 router.put('/updateQuotes/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
     const allowedUpdates = ['OriginLocation', 'DestinationLocation', 'Number', 'product', 'Quantity', 'expectedPrice','dropupState','pickupState',
-        'date', 'typeOfPay', 'comments', 'data'] // updates that are allowed
+        'date', 'typeOfPay', 'comments', 'data', 'signupDateString','subscriptionType', 'subscriptionStartDateString','subscriptionEndDateString',
+        'externalids' ] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         return res.status(400).json({ error: 'invalid updates' })
@@ -275,7 +276,7 @@ router.put('/updateQuotes/:id',jwtAuth.verifyToken,checkSubscription, async (req
 //update NegoSghiy
 router.put('/updateNego/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['TohideNegoshit'] // updates that are allowed
+    const allowedUpdates = ['TohideNegoshit', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString', 'externalids' ] // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         return res.status(400).json({ error: 'invalid updates' })
@@ -300,7 +301,7 @@ router.put('/updateNego/:id',jwtAuth.verifyToken,checkSubscription, async (req, 
 //previous not working
 router.put('/quoteDeactivate/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     const updates = Object.keys(req.body) //keys will be stored in updates ==> req body fields
-    const allowedUpdates = ['isActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString']; // updates that are allowed
+    const allowedUpdates = ['isActive', 'signupDateString', 'subscriptionType', 'subscriptionStartDateString', 'subscriptionEndDateString', 'externalids']; // updates that are allowed
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update)) // validating the written key in req.body with the allowed updates
     if (!isValidOperation) {
         return res.status(400).json({ error: 'invalid updates' })
