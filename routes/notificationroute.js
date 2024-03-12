@@ -61,6 +61,8 @@
 const express = require("express");
 const notification = express.Router();
 require('dotenv').config();
+const UserSignup = require('../models/userSignup');
+const cron = require('node-cron');
 
 const OneSignal = require('@onesignal/node-onesignal');
 const logger = require('../logger');
@@ -136,6 +138,63 @@ async function sendnotificationSubscription(mess,externalids){
         //res.json(response)
         
         }
+
+
+        async function sendReminderNotifications() {
+            try {
+                // Fetch users who need reminder notifications
+                const users = await UserSignup.find({
+                    $or: [
+                        { aadharVerify: 'notVerified', gstVerify: 'notVerified' },
+                        { aadharVerify: 'notVerified', gstVerify: 'Verified' },
+                        { aadharVerify: 'Verified', gstVerify: 'notVerified' }
+                    ]
+                });
+        
+                // Filter users with unique device IDs
+                const usersWithUniqueDeviceIds = users.filter(user => user.uniqueDeviceId);
+        
+                // Check if there are users to send notifications
+                if (usersWithUniqueDeviceIds.length === 0) {
+                    logger.info('No users to send notifications.');
+                    return;
+                }
+        
+                // Prepare and send notifications
+                for (const user of usersWithUniqueDeviceIds) {
+                    let message;
+                    if (user.role === 'Shipper') {
+                        if (user.aadharVerify === 'notVerified') {
+                            message = 'Please verify your Aadhar to complete your KYC.';
+                        } else {
+                            // Skip sending notification for Shipper if Aadhar is verified
+                            message = 'Congratulations your KYC is completed.'
+                            continue;
+                        }
+                    } else {
+                        if (user.aadharVerify === 'notVerified' && user.gstVerify === 'notVerified') {
+                            message = 'Please complete your KYC by verifying Aadhar and GST.';
+                        } else if (user.aadharVerify === 'notVerified') {
+                            message = 'Please verify your Aadhar to complete your KYC.';
+                        } else {
+                            message = 'Please verify your GST to complete your KYC.';
+                        }
+                    }
+        
+                    // Send reminder notification
+                    await sendnotificationSubscription(message, [user.uniqueDeviceId]);
+                }
+            } catch (error) {
+                logger.error('Error sending reminder notifications:', error.message);
+            }
+        }
+        
+//         // Schedule to run every 10 minutes using cron job
+// cron.schedule('*/10 * * * *', sendReminderNotifications);
+        
+       // Schedule to run once every 24 hours
+cron.schedule('0 0 * * *', sendReminderNotifications);
+
 
 module.exports = {sendnotification, sendnotificationSubscription};
 
