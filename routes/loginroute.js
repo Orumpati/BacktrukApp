@@ -12,66 +12,132 @@ router.use(bodyParser.json());
 
 
 
-router.post('/loginDetails',async(req,res,next)=>{
-    var mobileNo = req.body.mobileNo ;
+// router.post('/loginDetails',async(req,res,next)=>{
+//     var mobileNo = req.body.mobileNo ;
     
-    console.log(mobileNo)
-     registerModel.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
-     console.log("Response",doc.mobileNo)  
+//     console.log(mobileNo)
+//      registerModel.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
+//      console.log("Response",doc.mobileNo)  
          
-         var em = req.body.mobileNo;
+//          var em = req.body.mobileNo;
 
-         const mobileNo = doc.mobileNo;
-         const token = jwtAuth.generateToken(mobileNo);
-         const refreshToken = jwtAuth.generateRefreshToken(mobileNo);
+//          const mobileNo = doc.mobileNo;
+//          const token = jwtAuth.generateToken(mobileNo);
+//          const refreshToken = jwtAuth.generateRefreshToken(mobileNo);
      
 
-         if(em == doc.mobileNo){
+//          if(em == doc.mobileNo){
             
-             res.status(200).json({Authentication :doc._id,
-                         message:"success",
-                         status:"success",
-                         mobileNo:doc.mobileNo,
-                         firstName:doc.firstName,
-                         lastName:doc.lastName,
-                         role:doc.role,
-                         city:doc.city,
-                         companyName:doc.companyName,
-                         aadharVerify:doc.aadharVerify,
-                         gstVerify:doc.gstVerify,
-                         uniqueDeviceId:doc.uniqueDeviceId,
-                         data:doc,
-                         userRole:doc.userRole,
-                         Availability:doc.Availability,
-                         DriverName:doc.DriverName,
-                         TrukCapacity:doc.TrukCapacity,
-                         TrukNumber:doc.TrukNumber,
-                         TrukType:doc.TrukType,
-                         referalCode:doc.referalCode,
-                         referTo:doc.refferedTo,
-                         signupReferalCode:doc.signupReferalCod,
-                         token,
-                         refreshToken ,
-                         subscriptionType:doc.subscriptionType,
-                         subscriptionStartDate:doc.subscriptionStartDate,
-                         subscriptionEndDate:doc.subscriptionEndDate,
-                         payment_history:doc.payment_history,
-                         SignupDate:doc.SignupDate
+//              res.status(200).json({Authentication :doc._id,
+//                          message:"success",
+//                          status:"success",
+//                          mobileNo:doc.mobileNo,
+//                          firstName:doc.firstName,
+//                          lastName:doc.lastName,
+//                          role:doc.role,
+//                          city:doc.city,
+//                          companyName:doc.companyName,
+//                          aadharVerify:doc.aadharVerify,
+//                          gstVerify:doc.gstVerify,
+//                          uniqueDeviceId:doc.uniqueDeviceId,
+//                          data:doc,
+//                          userRole:doc.userRole,
+//                          Availability:doc.Availability,
+//                          DriverName:doc.DriverName,
+//                          TrukCapacity:doc.TrukCapacity,
+//                          TrukNumber:doc.TrukNumber,
+//                          TrukType:doc.TrukType,
+//                          referalCode:doc.referalCode,
+//                          referTo:doc.refferedTo,
+//                          signupReferalCode:doc.signupReferalCod,
+//                          token,
+//                          refreshToken ,
+//                          subscriptionType:doc.subscriptionType,
+//                          subscriptionStartDate:doc.subscriptionStartDate,
+//                          subscriptionEndDate:doc.subscriptionEndDate,
+//                          payment_history:doc.payment_history,
+//                          SignupDate:doc.SignupDate
 
-                    })   
-                }else{
-             res.status(400).json({Authentication:"failed to Read Mobile NO",
-                    message:"failed",
-                    status:"failed",     
+//                     })   
+//                 }else{
+//              res.status(400).json({Authentication:"failed to Read Mobile NO",
+//                     message:"failed",
+//                     status:"failed",     
+//             });
+//          }
+//      }).catch(err =>{
+//          console.log(err);
+//          res.status(500).json({error :err,
+//             status:"failed"
+//         });
+//      });
+//      });
+
+
+router.post('/loginDetails', async (req, res, next) => {
+    const mobileNo = req.body.mobileNo;
+
+    try {
+        const doc = await registerModel.findOne({ mobileNo: mobileNo }).exec();
+        if (!doc) {
+            return res.status(400).json({
+                Authentication: "failed to Read Mobile NO",
+                message: "failed",
+                status: "failed"
             });
-         }
-     }).catch(err =>{
-         console.log(err);
-         res.status(500).json({error :err,
-            status:"failed"
+        }
+
+        // Update uniqueDeviceId
+        const newUniqueDeviceId = req.body.uniqueDeviceId;
+        doc.uniqueDeviceId = newUniqueDeviceId;
+        await doc.save();
+
+        // Generate tokens
+        const token = jwtAuth.generateToken(mobileNo);
+        const refreshToken = jwtAuth.generateRefreshToken(mobileNo);
+
+        // Prepare response
+        const response = {
+            Authentication: doc._id,
+            message: "success",
+            status: "success",
+            mobileNo: doc.mobileNo,
+            firstName: doc.firstName,
+            lastName: doc.lastName,
+            role: doc.role,
+            city: doc.city,
+            companyName: doc.companyName,
+            aadharVerify: doc.aadharVerify,
+            gstVerify: doc.gstVerify,
+            uniqueDeviceId: doc.uniqueDeviceId, // Updated uniqueDeviceId
+            data: doc,
+            userRole: doc.userRole,
+            Availability: doc.Availability,
+            DriverName: doc.DriverName,
+            TrukCapacity: doc.TrukCapacity,
+            TrukNumber: doc.TrukNumber,
+            TrukType: doc.TrukType,
+            referalCode: doc.referalCode,
+            referTo: doc.refferedTo,
+            signupReferalCode: doc.signupReferalCod,
+            token,
+            refreshToken,
+            subscriptionType: doc.subscriptionType,
+            subscriptionStartDate: doc.subscriptionStartDate,
+            subscriptionEndDate: doc.subscriptionEndDate,
+            payment_history: doc.payment_history,
+            SignupDate: doc.SignupDate
+        };
+
+        return res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: error,
+            status: "failed"
         });
-     });
-     });
+    }
+});
 
 
      router.post('/refresh-token', (req, res) => {
