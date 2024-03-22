@@ -91,6 +91,7 @@ router.post('/loginDetails', async (req, res, next) => {
         const newUniqueDeviceId = req.body.uniqueDeviceId;
         doc.uniqueDeviceId = newUniqueDeviceId;
         await doc.save();
+        console.log(newUniqueDeviceId)
 
         // Generate tokens
         const token = jwtAuth.generateToken(mobileNo);
@@ -128,7 +129,7 @@ router.post('/loginDetails', async (req, res, next) => {
             payment_history: doc.payment_history,
             SignupDate: doc.SignupDate
         };
-
+            
         return res.status(200).json(response);
     } catch (error) {
         console.error(error);
