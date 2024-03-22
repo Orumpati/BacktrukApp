@@ -60,8 +60,10 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
             const quote = new quoteGenerate({
                 _id: new mongoose.Types.ObjectId,
                 OriginLocation: req.body.OriginLocation,
+                origin_pincode_state_district:req.body.origin_pincode_state_district,
                 Number: req.body.Number,
                 DestinationLocation: req.body.DestinationLocation,
+                destination_pincode_state_district:req.body.destination_pincode_state_district,
                 dropupState:req.body.dropupState,
                 product: req.body.product,
                 Quantity: req.body.Quantity,

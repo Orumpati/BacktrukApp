@@ -97,9 +97,15 @@ const generateQuoteSchema = mongoose.Schema({
     type:String,
     //required:true
 },
+origin_pincode_state_district:{
+type:String,
+},
 DestinationLocation:{
     type:String,
    // required:true
+},
+destination_pincode_state_district:{
+    type:String
 },
 Number:{
     type:String,
