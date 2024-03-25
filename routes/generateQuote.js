@@ -234,7 +234,7 @@ router.post('/contactusStatusAndNumber',jwtAuth.verifyToken,checkSubscription, a
 })
 //get by id
 
-router.get('/quoteById/:id',checkSubscription, async (req, res) => {
+router.get('/quoteById/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const quote = await quoteGenerate.find({ _id: req.params.id })
         console.log(quote)
