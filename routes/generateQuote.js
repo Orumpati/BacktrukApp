@@ -101,7 +101,8 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 res.status(200).json({
                     message: "quote generate and sent succeesfully",
                     status: "success",
-                    Id: result._id
+                    Id: result._id,
+                    data:result
                 });
 
             }).catch(err => {
@@ -235,7 +236,7 @@ router.post('/contactusStatusAndNumber',jwtAuth.verifyToken,checkSubscription, a
 })
 //get by id
 
-router.get('/quoteById/:id',checkSubscription, async (req, res) => {
+router.get('/quoteById/:id',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const quote = await quoteGenerate.find({ _id: req.params.id })
         console.log(quote)
