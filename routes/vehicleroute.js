@@ -135,19 +135,19 @@ if(!vehicle){
 });
 
 //get vehicles
-// router.get('/allVehicles', async (req, res) => {
-//     try {
-//         const Load = await AddVehicle.find()
+router.get('/allVehicles', async (req, res) => {
+    try {
+        const Load = await AddVehicle.find()
 
 
-//         res.status(200).json({
-//             TotalProducts: Load.length,
-//             Load
-//         })
-//     } catch (error) {
-//         res.status(401).send(error)
-//     }
-// });
+        res.status(200).json({
+            TotalProducts: Load.length,
+            Load
+        })
+    } catch (error) {
+        res.status(401).send(error)
+    }
+});
 // GetbymobileNo API
 
  router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
