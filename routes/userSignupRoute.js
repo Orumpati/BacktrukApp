@@ -373,47 +373,123 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
     
 
     //update profile
-    router.put('/updateprofile/:_id',jwtAuth.verifyToken,checkSubscription,(req, res)=>{
-       // var mobileNo = req.body.mobileNo ;
-        /* if(!ObjectId.isValid(req.params.id))
-         return res.status(400).send(`no record with id :${req.params.id}`);*/
-      var data=  req.body;
+    // router.put('/updateprofile/:_id',jwtAuth.verifyToken,checkSubscription,(req, res)=>{
+    //    // var mobileNo = req.body.mobileNo ;
+    //     /* if(!ObjectId.isValid(req.params.id))
+    //      return res.status(400).send(`no record with id :${req.params.id}`);*/
+    //   var data=  req.body;
     
-      // UserSignup.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
+    //   // UserSignup.findOne({mobileNo:mobileNo}).select().exec().then( doc =>{
 
-       // var em = req.body.mobileNo;
-       // if(em == doc.mobileNo){
-            UserSignup.findByIdAndUpdate(req.params._id,
-                {$set:
-                    data
-                }  , {new: true},(err,docs)=>{
-                    if(!err){
-                        res.send(docs);
-                    }else if(err.codeName == 'Duplicatekey'){
-                               console.log('num alraedy exist')
-                    }
-                    else{
-                        console.log('error in status  update:' +JSON.stringify(err,undefined,2));
-                    }
-                })
+    //    // var em = req.body.mobileNo;
+    //    // if(em == doc.mobileNo){
+    //         UserSignup.findByIdAndUpdate(req.params._id,
+    //             {$set:
+    //                 data
+    //             }  , {new: true},(err,docs)=>{
+    //                 if(!err){
+    //                     res.send(docs);
+    //                 }else if(err.codeName == 'Duplicatekey'){
+    //                            console.log('num alraedy exist')
+    //                 }
+    //                 else{
+    //                     console.log('error in status  update:' +JSON.stringify(err,undefined,2));
+    //                 }
+    //             })
    
                
            
-       // }
+    //    // }
    
-           /* else{
-            res.status(400).json({Authentication:"Mobile NO already exist",
-                   message:"failed",
-                   status:"failed",
+    //        /* else{
+    //         res.status(400).json({Authentication:"Mobile NO already exist",
+    //                message:"failed",
+    //                status:"failed",
                
                    
-           });
+    //        });
          
-        }*/
+    //     }*/
 
     
-    })
-
+    // })
+    router.put("/update-user/:_id", async (req, res) => {
+        const updates = Object.keys(req.body);
+        // const userId = req.params.id;
+        const allowedUpdates = [
+          "firstName",
+          "lastName",
+          "role",
+          "city",
+          "companyName",
+          "routes",
+          "addressType",
+          "doorNo",
+          "areaName",
+          "landMark",
+          "pincode",
+          "aboutCompany",
+          "aadharVerify",
+          "gstVerify",
+          "uniqueDeviceId",
+          "firstTimeSignup",
+          "Drivers",
+          "TrukType",
+          "TrukNumber",
+          "TrukCapacity",
+          "TrukImage",
+          "RcImage",
+          "DrivingLienceImage",
+          "AadharImage",
+          "PanImage",
+          "DriverName",
+          "Availability",
+          "userRole",
+          "referalCode",
+          "signupReferalCode",
+          "refferedTo",
+          "SignupDate",
+          "subscriptionType",
+          "subscriptionStartDate",
+          "subscriptionEndDate",
+          "payment_history",
+          "accDetails",
+          "TotalCoins",
+          "PermanetCoins",
+          "gstDetails",
+          "widthdrawStatus"
+        ];
+        
+        const isValidOperation = updates.every((update) =>
+          allowedUpdates.includes(update)
+        );
+      
+        if (!isValidOperation) {
+          return res.status(400).json({ error: "Invalid updates" });
+        }
+      
+        try {
+          const userDetails = await UserSignup.findById(req.params._id);
+      
+          if (!userDetails) {
+            return res.status(404).json({ message: "User not found" });
+          }
+      
+          updates.forEach((update) => {
+            userDetails[update] = req.body[update];
+          });
+      
+          const updatedDetails = await userDetails.save();
+      
+          res.json({
+            updatedDetails,
+            message: "User details updated successfully",
+          });
+        } catch (error) {
+          res.status(500).json({ error: "Internal server error" });
+        }
+      });
+      
 
         // })
 
