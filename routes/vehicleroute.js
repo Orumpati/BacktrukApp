@@ -135,7 +135,7 @@ if(!vehicle){
 });
 
 //get vehicles
-router.get('/allVehicles',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
+router.get('/allVehicles', async (req, res) => {
     try {
         const Load = await AddVehicle.find()
 

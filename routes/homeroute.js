@@ -38,7 +38,7 @@ router.get('/gethome',jwtAuth.verifyToken,checkSubscription, async (req, res) =>
 
        res.status(200).json({
            TotalProducts: Load.length,
-          data: Load
+          data: Load,
        })
    } catch (error) {
        res.status(401).send(error)

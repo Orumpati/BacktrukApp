@@ -101,7 +101,8 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 res.status(200).json({
                     message: "quote generate and sent succeesfully",
                     status: "success",
-                    Id: result._id
+                    Id: result._id,
+                    data:result
                 });
 
             }).catch(err => {
@@ -131,6 +132,7 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
 router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
     try {
         const quotes = await quoteGenerate.find();
+        console.log(quotes)
         res.status(200).json({ Loads: quotes });
     } catch (error) {
         console.error("Error:", error);

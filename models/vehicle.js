@@ -46,7 +46,7 @@ const Vehicle = mongoose.Schema({
     isTrukOpenOrClose:{
         type:String
     },
-    typeOfHyva:{
+    typeofHyva:{
         type:String
     },
     typeOfTrailer:{

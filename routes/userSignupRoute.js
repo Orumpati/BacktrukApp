@@ -752,19 +752,19 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
 
 
     
-router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
-    try {
-        const quote = await quoteGenerate.find()
+// router.get('/allQuotes',jwtAuth.verifyToken,checkSubscription, async (req, res) => {
+//     try {
+//         const quote = await quoteGenerate.find()
 
 
-        res.status(200).json({
+//         res.status(200).json({
 
-            Loads: quote
-        })
-    } catch (error) {
-        res.status(401).send(error)
-    }
-});
+//             Loads: quote
+//         })
+//     } catch (error) {
+//         res.status(401).send(error)
+//     }
+// });
 
 
 //Loads in mkyloads tab for specific user number
