@@ -413,7 +413,7 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
 
     
     // })
-    router.put("/update-user/:_id", async (req, res) => {
+    router.put("/updateprofile/:_id", async (req, res) => {
         const updates = Object.keys(req.body);
         // const userId = req.params.id;
         const allowedUpdates = [
