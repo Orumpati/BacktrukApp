@@ -79,6 +79,9 @@ const UserProfileSchema = mongoose.Schema({
    uniqueDeviceId:{
       type:String
    },
+   externalids:{
+      type:Array
+   },
    firstTimeSignup:{
       type:String,
       default:"first"
