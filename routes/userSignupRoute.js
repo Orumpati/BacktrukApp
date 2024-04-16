@@ -413,86 +413,109 @@ router.put('/putroutes/:id',jwtAuth.verifyToken,(req, res)=>{
 
     
     // })
-    router.put("/updateprofile/:_id", async (req, res) => {
-        const updates = Object.keys(req.body);
-        // const userId = req.params.id;
-        console.log(req.body)
-        const allowedUpdates = [
-          "firstName",
-          "lastName",
-          "role",
-          "city",
-          "mobileNo",
-          "companyName",
-          "routes",
-          "addressType",
-          "doorNo",
-          "areaName",
-          "landMark",
-          "pincode",
-          "aboutCompany",
-          "aadharVerify",
-          "gstVerify",
-          "uniqueDeviceId",
-          "externalids",
-          "firstTimeSignup",
-          "Drivers",
-          "TrukType",
-          "TrukNumber",
-          "TrukCapacity",
-          "TrukImage",
-          "RcImage",
-          "DrivingLienceImage",
-          "AadharImage",
-          "PanImage",
-          "DriverName",
-          "Availability",
-          "userRole",
-          "referalCode",
-          "signupReferalCode",
-          "refferedTo",
-          "SignupDate",
-          "subscriptionType",
-          "subscriptionStartDate",
-          "subscriptionEndDate",
-          "payment_history",
-          "accDetails",
-          "TotalCoins",
-          "PermanetCoins",
-          "gstDetails",
-          "widthdrawStatus"
-        ];
+    // router.put("/updateprofile/:_id", async (req, res) => {
+    //     const updates = Object.keys(req.body);
+    //     // const userId = req.params.id;
+    //     console.log(req.body)
+    //     const allowedUpdates = [
+    //       "firstName",
+    //       "lastName",
+    //       "role",
+    //       "city",
+    //       "mobileNo",
+    //       "companyName",
+    //       "routes",
+    //       "addressType",
+    //       "doorNo",
+    //       "areaName",
+    //       "landMark",
+    //       "pincode",
+    //       "aboutCompany",
+    //       "aadharVerify",
+    //       "gstVerify",
+    //       "uniqueDeviceId",
+    //       "externalids",
+    //       "firstTimeSignup",
+    //       "Drivers",
+    //       "TrukType",
+    //       "TrukNumber",
+    //       "TrukCapacity",
+    //       "TrukImage",
+    //       "RcImage",
+    //       "DrivingLienceImage",
+    //       "AadharImage",
+    //       "PanImage",
+    //       "DriverName",
+    //       "Availability",
+    //       "userRole",
+    //       "referalCode",
+    //       "signupReferalCode",
+    //       "refferedTo",
+    //       "SignupDate",
+    //       "subscriptionType",
+    //       "subscriptionStartDate",
+    //       "subscriptionEndDate",
+    //       "payment_history",
+    //       "accDetails",
+    //       "TotalCoins",
+    //       "PermanetCoins",
+    //       "gstDetails",
+    //       "widthdrawStatus"
+    //     ];
         
-        const isValidOperation = updates.every((update) =>
-          allowedUpdates.includes(update)
-        );
+    //     const isValidOperation = updates.every((update) =>
+    //       allowedUpdates.includes(update)
+    //     );
       
-        if (!isValidOperation) {
-          return res.status(400).json({ error: "Invalid updates" });
-        }
+    //     if (!isValidOperation) {
+    //       return res.status(400).json({ error: "Invalid updates" });
+    //     }
       
+    //     try {
+    //       const userDetails = await UserSignup.findById(req.params._id);
+      
+    //       if (!userDetails) {
+    //         return res.status(404).json({ message: "User not found" });
+    //       }
+      
+    //       updates.forEach((update) => {
+    //         userDetails[update] = req.body[update];
+    //       });
+      
+    //       const updatedDetails = await userDetails.save();
+      
+    //       res.json({
+    //         updatedDetails,
+    //         message: "User details updated successfully",
+    //       });
+    //     } catch (error) {
+    //       res.status(500).json({ error: "Internal server error" });
+    //     }
+    //   });
+      
+
+    router.put("/updateprofile/:_id", async (req, res) => {
         try {
-          const userDetails = await UserSignup.findById(req.params._id);
-      
-          if (!userDetails) {
-            return res.status(404).json({ message: "User not found" });
-          }
-      
-          updates.forEach((update) => {
-            userDetails[update] = req.body[update];
-          });
-      
-          const updatedDetails = await userDetails.save();
-      
-          res.json({
-            updatedDetails,
-            message: "User details updated successfully",
-          });
+            const userDetails = await UserSignup.findById(req.params._id);
+    
+            if (!userDetails) {
+                return res.status(404).json({ message: "User not found" });
+            }
+    
+            // Assign all updates from request body to user details object
+            Object.assign(userDetails, req.body);
+
+            const updatedDetails = await userDetails.save();
+    
+            res.json({
+                updatedDetails,
+                message: "User details updated successfully",
+            });
         } catch (error) {
-          res.status(500).json({ error: "Internal server error" });
+            res.status(500).json({ error: "Internal server error" });
         }
-      });
-      
+    });
+    
 
         // })
 
