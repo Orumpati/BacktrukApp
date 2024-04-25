@@ -936,6 +936,101 @@ router.post('/attachVehicleToLoad',checkSubscription, (req, res, next)=>{
         })
 })
 
+router.post('/shareContact',checkSubscription, (req, res, next)=>{
+
+    //data needed for attaching load
+    const vehicleData={
+      vehicleNo:req.body.vehicleNo,
+      vehicleType:req.body.vehicleType,
+      vehicleCurrentLocation:req.body.vehicleCurrentLocation,
+      vehicleCapacity:req.body.vehicleCapacity, 
+      agentNo:req.body.agentNo,
+      BidID:req.body.BidID,
+      DriverName:req.body.DriverName,
+      DriverNumber:req.body.DriverNumber,
+      operatingRoutes:req.body.operatingRoutes,
+      date:req.body.date,
+      transporterName:req.body.transporterName,
+      companyName:req.body.companyName,
+      mobileNumber:req.body.mobileNumber,
+      city:req.body.city
+      
+    }
+
+   
+    //query find by the IDAddDrivers
+   var query={"_id":req.body._id};
+    //form the query here
+    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact ,contactSharedNum:req.body.contactSharedNum,"multi": true}}  //$set for setting the variable value
+    console.log(query)
+    //find the docID or quote ID
+
+       quoteGenerate.findOneAndUpdate(query,updateData).select().exec().then(
+        doc=>{
+            console.log(doc)
+            //check if it has matching docs then send response
+            if(doc){
+                sendnotificationforContactSharing(req.body.mess,req.body.Name,req.body.BidPrice,uniqId)
+            res.status(200).json({
+                data: doc,
+                message:"attaching load to the vehicle",
+                status:"success"
+            })
+        }else{
+            res.status(400).json({
+                message:"no vehicles attached",
+                status:"failed"
+            })
+
+        }
+        }
+    ).catch(err=>{
+        res.status(400).json({
+            message:"failed to attach vehicle",
+            status: "failed",
+            error:err
+        })
+
+
+        })
+});
+
+
+async function sendnotificationforContactSharing(mess,Name,BidPrice,uniqId){
+    
+    const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
+
+const app_key_provider = {
+    getToken() {
+        return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
+    }
+};
+
+const configuration = OneSignal.createConfiguration({
+    authMethods: {
+        app_key: {
+            tokenProvider: app_key_provider
+        }
+    }
+});
+const client = new OneSignal.DefaultApi(configuration);
+
+const notification = new OneSignal.Notification();
+notification.app_id = ONESIGNAL_APP_ID;
+//notification.included_segments = ['Subscribed Users'];
+//notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+notification.include_external_user_ids = [uniqId];
+notification.contents = {
+    en:  Name +" "+mess+" "+BidPrice
+};
+const {id} = await client.createNotification(notification);
+
+const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+console.log(response)
+//res.json(response)
+
+}
+
 router.post('/attachPod',jwtAuth.verifyToken,checkSubscription, (req, res, next)=>{
 
     //     console.log(new Date().getTime());
@@ -1195,6 +1290,8 @@ async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     //res.json(response)
     
     }
+
+
 
 
    
