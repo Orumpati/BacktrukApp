@@ -936,65 +936,206 @@ router.post('/attachVehicleToLoad',checkSubscription, (req, res, next)=>{
         })
 })
 
-router.post('/shareContact',checkSubscription, (req, res, next)=>{
+// router.post('/shareContact',checkSubscription, (req, res, next)=>{
 
-    //data needed for attaching load
-    const vehicleData={
-      vehicleNo:req.body.vehicleNo,
-      vehicleType:req.body.vehicleType,
-      vehicleCurrentLocation:req.body.vehicleCurrentLocation,
-      vehicleCapacity:req.body.vehicleCapacity, 
-      agentNo:req.body.agentNo,
-      BidID:req.body.BidID,
-      DriverName:req.body.DriverName,
-      DriverNumber:req.body.DriverNumber,
-      operatingRoutes:req.body.operatingRoutes,
-      date:req.body.date,
-      transporterName:req.body.transporterName,
-      companyName:req.body.companyName,
-      mobileNumber:req.body.mobileNumber,
-      city:req.body.city
+//     //data needed for attaching load
+//     const vehicleData={
+//       vehicleNo:req.body.vehicleNo,
+//       vehicleType:req.body.vehicleType,
+//       vehicleCurrentLocation:req.body.vehicleCurrentLocation,
+//       vehicleCapacity:req.body.vehicleCapacity, 
+//       agentNo:req.body.agentNo,
+//       BidID:req.body.BidID,
+//       DriverName:req.body.DriverName,
+//       DriverNumber:req.body.DriverNumber,
+//       operatingRoutes:req.body.operatingRoutes,
+//       date:req.body.date,
+//       transporterName:req.body.transporterName,
+//       companyName:req.body.companyName,
+//       mobileNumber:req.body.mobileNumber,
+//       city:req.body.city
       
-    }
+//     }
 
    
-    //query find by the IDAddDrivers
-   var query={"_id":req.body._id};
-    //form the query here
-    var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact ,contactSharedNum:req.body.contactSharedNum,"multi": true}}  //$set for setting the variable value
-    console.log(query)
-    //find the docID or quote ID
+//     //query find by the IDAddDrivers
+//    var query={"_id":req.body._id};
+//     //form the query here
+//     var updateData=   { $set: {vehicleInformation: vehicleData, isVehicleAttached:true,shareContact:req.body.shareContact ,contactSharedNum:req.body.contactSharedNum,"multi": true}}  //$set for setting the variable value
+//     console.log(query)
+//     //find the docID or quote ID
 
-       quoteGenerate.findOneAndUpdate(query,updateData).select().exec().then(
-        doc=>{
-            console.log(doc)
-            //check if it has matching docs then send response
-            if(doc){
-                sendnotificationforContactSharing(req.body.mess,req.body.Name,req.body.BidPrice,uniqId)
+    
+//        quoteGenerate.findOneAndUpdate(query,updateData).select().exec().then(
+//         doc=>{
+//             console.log(doc)
+//             //check if it has matching docs then send response
+//             if(doc){
+//                 console.log("number for unqId",doc.Number);
+//                 const shipperNumber = doc.Number;
+//                 const user = UserSignup.findOne({mobileNo:shipperNumber});
+//                 console.log("shipper",user);
+//                 const uniqId = user.uniqueDeviceId;
+//                 sendnotificationforContactSharing(req.body.mess,req.body.Name,req.body.BidPrice,uniqId)
+//             res.status(200).json({
+//                 data: doc,
+//                 message:"attaching load to the vehicle",
+//                 status:"success"
+//             })
+//         }else{
+//             res.status(400).json({
+//                 message:"no vehicles attached",
+//                 status:"failed"
+//             })
+
+//         }
+//         }
+//     ).catch(err=>{
+//         res.status(400).json({
+//             message:"failed to attach vehicle",
+//             status: "failed",
+//             error:err
+//         })
+
+
+//         })
+// });
+
+
+// async function sendnotificationforContactSharing(mess,Name,BidPrice,uniqId){
+    
+//     const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
+
+// const app_key_provider = {
+//     getToken() {
+//         return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
+//     }
+// };
+
+// const configuration = OneSignal.createConfiguration({
+//     authMethods: {
+//         app_key: {
+//             tokenProvider: app_key_provider
+//         }
+//     }
+// });
+// const client = new OneSignal.DefaultApi(configuration);
+
+// const notification = new OneSignal.Notification();
+// notification.app_id = ONESIGNAL_APP_ID;
+// //notification.included_segments = ['Subscribed Users'];
+// //notification.include_external_user_ids=["86744b78-55c9-42a7-92ee-5d93e1434d2b"];
+// notification.include_external_user_ids = [uniqId];
+// notification.contents = {
+//     en:  Name +" "+mess+" "+BidPrice
+// };
+// const {id} = await client.createNotification(notification);
+
+// const response = await client.getNotification(ONESIGNAL_APP_ID, id);
+// console.log(response)
+// //res.json(response)
+
+// }
+
+router.post('/shareContact', checkSubscription, async (req, res, next) => {
+    try {
+        const vehicleData = {
+            vehicleNo: req.body.vehicleNo,
+            vehicleType: req.body.vehicleType,
+            vehicleCurrentLocation: req.body.vehicleCurrentLocation,
+            vehicleCapacity: req.body.vehicleCapacity,
+            agentNo: req.body.agentNo,
+            BidID: req.body.BidID,
+            DriverName: req.body.DriverName,
+            DriverNumber: req.body.DriverNumber,
+            operatingRoutes: req.body.operatingRoutes,
+            date: req.body.date,
+            transporterName: req.body.transporterName,
+            companyName: req.body.companyName,
+            mobileNumber: req.body.mobileNumber,
+            city: req.body.city
+        };
+        console.log("request body",req.body)
+
+        const query = { "_id": req.body._id };
+        const updateData = { 
+            $set: {
+                vehicleInformation: vehicleData,
+                isVehicleAttached: true,
+                shareContact: req.body.shareContact,
+                contactSharedNum: req.body.contactSharedNum,
+                "multi": true
+            }
+        };
+
+        const doc = await quoteGenerate.findOneAndUpdate(query, updateData).select();
+
+        if (doc) {
+            console.log("number for unqId", doc.Number);
+            const shipperNumber = doc.Number;
+            const user = await UserSignup.findOne({ mobileNo: shipperNumber }).lean();
+            console.log("shipper", user);
+            const uniqId = user.uniqueDeviceId;
+            console.log ("uniqId",uniqId);
+            sendnotificationforContactSharing(req.body.mess, req.body.Name, req.body.BidPrice, uniqId);
+
             res.status(200).json({
                 data: doc,
-                message:"attaching load to the vehicle",
-                status:"success"
-            })
-        }else{
+                message: "attaching load to the vehicle",
+                status: "success"
+            });
+        } else {
             res.status(400).json({
-                message:"no vehicles attached",
-                status:"failed"
-            })
-
+                message: "no vehicles attached",
+                status: "failed"
+            });
         }
-        }
-    ).catch(err=>{
+    } catch (err) {
+        console.error(err);
         res.status(400).json({
-            message:"failed to attach vehicle",
+            message: "failed to attach vehicle",
             status: "failed",
-            error:err
-        })
-
-
-        })
+            error: err
+        });
+    }
 });
 
+
+// async function sendnotificationforContactSharing(mess, Name, BidPrice, uniqId) {
+//     const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
+
+//     const app_key_provider = {
+//         getToken() {
+//             return 'OWE5OTk1MTctMjM1NC00ZTZiLWFhNTgtMmY2MTlkNTY0NWZm';
+//         }
+//     };
+
+//     const configuration = OneSignal.createConfiguration({
+//         authMethods: {
+//             app_key: {
+//                 tokenProvider: app_key_provider
+//             }
+//         }
+//     });
+//     const client = new OneSignal.DefaultApi(configuration);
+
+//     const notification = new OneSignal.Notification();
+//     notification.app_id = ONESIGNAL_APP_ID;
+//     notification.contents = {
+//         en: Name + " " + mess + " " + BidPrice
+//     };
+//      notification.include_player_ids = [uniqId]; // Specify the recipient
+//     // notification.include_player_ids = ['dc4ba927-ffba-49ab-bb40-241daa4015ad'];
+
+//     try {
+//         const { id } = await client.createNotification(notification);
+//         console.log("Notification sent with ID:", id);
+//         // Handle success
+//     } catch (error) {
+//         console.error("Error sending notification:", error);
+//         // Handle error
+//     }
+// }
 
 async function sendnotificationforContactSharing(mess,Name,BidPrice,uniqId){
     
