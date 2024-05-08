@@ -68,7 +68,8 @@ const OneSignal = require('@onesignal/node-onesignal');
 const logger = require('../logger');
 
 async function sendnotification(mess,Name,Heading,externalids){
-    logger.info(externalids)
+    try{
+    logger.info("Id Headings",externalids)
         const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
     
     const app_key_provider = {
@@ -104,7 +105,9 @@ async function sendnotification(mess,Name,Heading,externalids){
     logger.info('notification message',response )
     //res.json(response)
     
-    }
+    }catch(err){
+        logger.error('notification func error', err)
+    }}
 
 async function sendnotificationSubscription(mess,externalids,Heading){
         logger.info(externalids)
