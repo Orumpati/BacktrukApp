@@ -91,8 +91,9 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 TruckMarketVehicle: truckMarketVehicleData,
                 LoadId:req.body.LoadId,
                 UserName:req.body.LoadPosterName,
-                Heading:req.body.Heading
+                
             });
+            const Heading = "New load Alert!"
 
             quote.save().then(result => {
                 console.log(result);
