@@ -425,7 +425,7 @@ router.post('/placeBid',jwtAuth.verifyToken,checkSubscription, (req, res, next)=
              console.log(doc)
              //check if it has matching docs then send response
              if(doc){
-                const Heading = "New Bid";
+                const Heading = "New Bid !";
                 sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
              res.status(200).json({
                  data: doc,
@@ -534,7 +534,7 @@ router.post('/updateBids',jwtAuth.verifyToken,checkSubscription, (req, res, next
                      message:"got the matching loads based on the profile",
                      status:"success"
                  })
-                 const Heading = "New Bid"
+                 const Heading = "New Bid !"
                  sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId,Heading)
                
              }else{
@@ -826,7 +826,7 @@ router.post('/initialacceptbyshipper',jwtAuth.verifyToken,checkSubscription,(req
                 message:doc,
                 status:"success"
             })
-            const Heading ="Bid Accepted!"
+            const Heading ="Bid Accepted !"
             sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
         } )
     })

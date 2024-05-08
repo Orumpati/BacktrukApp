@@ -189,7 +189,7 @@ async function sendnotificationSubscription(mess,externalids,Heading){
                             message = 'Please verify your GST to complete your KYC.';
                         }
                     }
-                    const Heading = "KYC alert";
+                    const Heading = "KYC alert !";
         
                     // Send reminder notification
                     await sendnotificationSubscription(message,Heading, [user.uniqueDeviceId]);
