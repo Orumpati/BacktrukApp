@@ -93,12 +93,12 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 UserName:req.body.LoadPosterName,
                 
             });
-            const Heading = "New load Alert!"
+            
 
             quote.save().then(result => {
                 console.log(result);
            
-                sendnotification(req.body.mess,req.body.LoadPosterName,externalids,Heading)
+                sendnotification(req.body.mess,req.body.LoadPosterName,externalids)
                 //send mobile notification to every user in the array with their quote ID in notification
                 res.status(200).json({
                     message: "quote generate and sent succeesfully",

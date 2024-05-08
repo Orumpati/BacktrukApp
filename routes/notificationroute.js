@@ -67,7 +67,7 @@ const cron = require('node-cron');
 const OneSignal = require('@onesignal/node-onesignal');
 const logger = require('../logger');
 
-async function sendnotification(mess,Name,Heading,externalids){
+async function sendnotification(mess,Name,externalids){
     try{
     logger.info("Id Headings",externalids)
         const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
@@ -96,7 +96,7 @@ async function sendnotification(mess,Name,Heading,externalids){
         en:Name+" "+ mess 
     };
     notification.headings={
-        en: Heading
+        en: "New load Alert!"
     }
     const {id} = await client.createNotification(notification);
     
