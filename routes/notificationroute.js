@@ -67,7 +67,7 @@ const cron = require('node-cron');
 const OneSignal = require('@onesignal/node-onesignal');
 const logger = require('../logger');
 
-async function sendnotification(mess,Name,externalids){
+async function sendnotification(mess,Name,Heading,externalids){
     logger.info(externalids)
         const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
     
@@ -94,6 +94,9 @@ async function sendnotification(mess,Name,externalids){
     notification.contents = {
         en:Name+" "+ mess 
     };
+    notification.headings={
+        en: Heading
+    }
     const {id} = await client.createNotification(notification);
     
     const response = await client.getNotification(ONESIGNAL_APP_ID, id);
@@ -103,7 +106,7 @@ async function sendnotification(mess,Name,externalids){
     
     }
 
-async function sendnotificationSubscription(mess,externalids){
+async function sendnotificationSubscription(mess,externalids,Heading){
         logger.info(externalids)
             const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
         
@@ -130,6 +133,9 @@ async function sendnotificationSubscription(mess,externalids){
         notification.contents = {
             en:mess,
         };
+        notification.headings={
+            en: Heading
+        }
         const {id} = await client.createNotification(notification);
         
         const response = await client.getNotification(ONESIGNAL_APP_ID, id);
@@ -180,9 +186,10 @@ async function sendnotificationSubscription(mess,externalids){
                             message = 'Please verify your GST to complete your KYC.';
                         }
                     }
+                    const Heading = "KYC alert";
         
                     // Send reminder notification
-                    await sendnotificationSubscription(message, [user.uniqueDeviceId]);
+                    await sendnotificationSubscription(message,Heading, [user.uniqueDeviceId]);
                 }
             } catch (error) {
                 logger.error('Error sending reminder notifications:', error.message);

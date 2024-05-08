@@ -90,13 +90,14 @@ router.post('/generateQuote',jwtAuth.verifyToken,checkSubscription, (req, res, n
                 bids: bids,
                 TruckMarketVehicle: truckMarketVehicleData,
                 LoadId:req.body.LoadId,
-                UserName:req.body.LoadPosterName
+                UserName:req.body.LoadPosterName,
+                Heading:req.body.Heading
             });
 
             quote.save().then(result => {
                 console.log(result);
            
-                sendnotification(req.body.mess,req.body.LoadPosterName,externalids)
+                sendnotification(req.body.mess,req.body.LoadPosterName,externalids,Heading)
                 //send mobile notification to every user in the array with their quote ID in notification
                 res.status(200).json({
                     message: "quote generate and sent succeesfully",
@@ -423,7 +424,7 @@ router.post('/placeBid',jwtAuth.verifyToken,checkSubscription, (req, res, next)=
              console.log(doc)
              //check if it has matching docs then send response
              if(doc){
-                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+                sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
              res.status(200).json({
                  data: doc,
                  message:"got the matching loads based on the profile",
@@ -531,7 +532,7 @@ router.post('/updateBids',jwtAuth.verifyToken,checkSubscription, (req, res, next
                      message:"got the matching loads based on the profile",
                      status:"success"
                  })
-                 sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId)
+                 sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.price,uniqId,Heading)
                
              }else{
                  res.status(400).json({
@@ -822,7 +823,7 @@ router.post('/initialacceptbyshipper',jwtAuth.verifyToken,checkSubscription,(req
                 message:doc,
                 status:"success"
             })
-            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
         } )
     })
 })
@@ -844,7 +845,7 @@ router.post('/finalacceptbyagent',jwtAuth.verifyToken,checkSubscription,(req,res
       }
     quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
         doc=>{
-            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId)
+            sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
             console.log(doc)
             res.status(200).json({
                 message:doc,
@@ -1077,7 +1078,7 @@ router.post('/shareContact', checkSubscription, async (req, res, next) => {
             console.log("shipper", user);
             const uniqId = user.uniqueDeviceId;
             console.log ("uniqId",uniqId);
-            sendnotificationforContactSharing(req.body.mess, req.body.Name, req.body.BidPrice, uniqId);
+            sendnotificationforContactSharing(req.body.mess, req.body.Name, req.body.BidPrice, uniqId,Heading);
 
             res.status(200).json({
                 data: doc,
@@ -1137,7 +1138,7 @@ router.post('/shareContact', checkSubscription, async (req, res, next) => {
 //     }
 // }
 
-async function sendnotificationforContactSharing(mess,Name,BidPrice,uniqId){
+async function sendnotificationforContactSharing(mess,Name,BidPrice,uniqId,Heading){
     
     const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
 
@@ -1164,6 +1165,9 @@ notification.include_external_user_ids = [uniqId];
 notification.contents = {
     en:  Name +" "+mess+" "+BidPrice
 };
+notification.headings={
+    en: Heading
+}
 const {id} = await client.createNotification(notification);
 
 const response = await client.getNotification(ONESIGNAL_APP_ID, id);
@@ -1397,7 +1401,7 @@ console.log(query)
 
 
 
-async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
+async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId,Heading){
     
         const ONESIGNAL_APP_ID = '8fda6cf4-bdbe-4f2e-a709-24f8990ad307';
     
@@ -1424,6 +1428,9 @@ async function sendnotificationforplacebid(mess,Name,BidPrice,uniqId){
     notification.contents = {
         en:  Name +" "+mess+" "+BidPrice
     };
+    notification.headings={
+        en: Heading
+    }
     const {id} = await client.createNotification(notification);
     
     const response = await client.getNotification(ONESIGNAL_APP_ID, id);
