@@ -826,6 +826,7 @@ router.post('/initialacceptbyshipper',jwtAuth.verifyToken,checkSubscription,(req
                 message:doc,
                 status:"success"
             })
+            const Heading ="Bid Accepted!"
             sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
         } )
     })
@@ -848,6 +849,7 @@ router.post('/finalacceptbyagent',jwtAuth.verifyToken,checkSubscription,(req,res
       }
     quoteGenerate.findOneAndUpdate(query,update).select().exec().then(
         doc=>{
+            const Heading = "Bid Accepted!"
             sendnotificationforplacebid(req.body.mess,req.body.Name,req.body.Bidprice,uniqId,Heading)
             console.log(doc)
             res.status(200).json({
@@ -1081,6 +1083,7 @@ router.post('/shareContact', checkSubscription, async (req, res, next) => {
             console.log("shipper", user);
             const uniqId = user.uniqueDeviceId;
             console.log ("uniqId",uniqId);
+            const Heading = "Contact details";
             sendnotificationforContactSharing(req.body.mess, req.body.Name, req.body.BidPrice, uniqId,Heading);
 
             res.status(200).json({
